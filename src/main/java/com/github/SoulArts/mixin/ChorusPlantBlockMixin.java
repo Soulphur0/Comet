@@ -2,8 +2,11 @@ package com.github.SoulArts.mixin;
 
 import com.github.SoulArts.Comet;
 import net.minecraft.block.*;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +23,7 @@ public class ChorusPlantBlockMixin extends ConnectingBlock {
     // * Injects
 
     @Inject(cancellable = true, at = @At(value = "RETURN", ordinal = 0), method = "withConnectionProperties")
-    public void canPlaceAtReturnZero(BlockView world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
+    public void withConnectionPropertiesInject(BlockView world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         BlockState blockState = world.getBlockState(pos.down());
         BlockState blockState2 = world.getBlockState(pos.up());
         BlockState blockState3 = world.getBlockState(pos.north());
@@ -34,6 +37,16 @@ public class ChorusPlantBlockMixin extends ConnectingBlock {
                 with(EAST, blockState4.isOf(this) || blockState4.isOf(Blocks.CHORUS_FLOWER))).
                 with(SOUTH, blockState5.isOf(this) || blockState5.isOf(Blocks.CHORUS_FLOWER))).
                 with(WEST, blockState6.isOf(this) || blockState6.isOf(Blocks.CHORUS_FLOWER)));
+    }
+
+    @Inject(cancellable = true, at = @At(value = "HEAD"), method="getStateForNeighborUpdate")
+    private void getStateForNeightborUpdateInject(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir){
+        if (!state.canPlaceAt(world, pos)) {
+            world.createAndScheduleBlockTick(pos, this, 1);
+            cir.setReturnValue(super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos));
+        }
+        boolean bl = neighborState.isOf(this) || neighborState.isOf(Blocks.CHORUS_FLOWER) || (direction == Direction.DOWN && (neighborState.isOf(Blocks.END_STONE) || neighborState.isOf(Comet.CHORUS_HUMUS) || neighborState.isOf(Comet.CHORUS_HUMUS2)));
+        cir.setReturnValue((BlockState)state.with((Property)FACING_PROPERTIES.get(direction), bl));
     }
 
     @Inject(cancellable = true, at = @At(value = "HEAD"), method = "canPlaceAt")
