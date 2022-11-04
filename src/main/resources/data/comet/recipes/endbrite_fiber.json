@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "comet:endbrite_shard"
+  },
+  "result": "comet:endbrite_fiber",
+  "experience": 2.0,
+  "cookingtime": 1600
+}

@@ -1,0 +1,39 @@
+{
+  "variants": {
+    "tubes=1": [
+      {
+        "model": "comet:block/endbrite_tube"
+      }
+    ],
+    "tubes=2": [
+      {
+        "model": "comet:block/endbrite_tube_two"
+      }
+    ],
+    "tubes=3": [
+      {
+        "model": "comet:block/endbrite_tube_three"
+      }
+    ],
+    "tubes=4": [
+      {
+        "model": "comet:block/endbrite_tube_four"
+      }
+    ],
+    "tubes=5": [
+      {
+        "model": "comet:block/endbrite_tube_five"
+      }
+    ],
+    "tubes=6": [
+      {
+        "model": "comet:block/endbrite_tube_six"
+      }
+    ],
+    "tubes=7": [
+      {
+        "model": "comet:block/endbrite_tube_seven"
+      }
+    ]
+  }
+}

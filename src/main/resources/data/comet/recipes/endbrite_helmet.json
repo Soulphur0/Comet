@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "minecraft:diamond_helmet"
+  },
+  "addition": {
+    "item": "comet:endbrite_ingot"
+  },
+  "result": {
+    "item": "comet:endbrite_helmet"
+  }
+}

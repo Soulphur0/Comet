@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.github.SoulArts.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ChorusFlowerBlockInvoker",
+    "ChorusFlowerBlockMixin",
+    "ChorusPlantBlockMixin"
+  ],
+  "client": [
+    "ArmorStandEntityRendererMixin",
+    "ExampleMixin",
+    "LivingEntityMixin",
+    "ModelLoaderAccessor",
+    "PersistentProjectileEntityMixin",
+    "SpriteAtlasTextureMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

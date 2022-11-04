@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "minecraft:diamond_chestplate"
+  },
+  "addition": {
+    "item": "comet:endbrite_ingot"
+  },
+  "result": {
+    "item": "comet:endbrite_chestplate"
+  }
+}

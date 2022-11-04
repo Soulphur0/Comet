@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "endbrite_ingot",
+  "ingredients": [
+    {
+      "item": "comet:endbrite_fiber"
+    },
+    {
+      "item": "comet:endbrite_fiber"
+    },
+    {
+      "item": "comet:endbrite_fiber"
+    },
+    {
+      "item": "comet:endbrite_fiber"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+	{
+      "item": "minecraft:dragon_breath"
+    }
+  ],
+  "result": {
+    "item": "comet:endbrite_ingot"
+  }
+}
