@@ -30,6 +30,7 @@ public class EndbriteHelmetModel extends EntityModel<Entity> {
 		this.antennae = root.getChild("antennae");
 	}
 
+	// TODO: Make antennae tilt backwards when moving, a bit when running, a bit more when flying.
 	// TODO: get head pitch right with the armor stand's/Entity head rotation
 	// TODO: Scale's the helmet and antennae properly.
 	// TODO: Add to the project's schema all learned & used with the Endbrite Helmet
@@ -50,13 +51,13 @@ public class EndbriteHelmetModel extends EntityModel<Entity> {
 	@Override
 	public void setAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (entity instanceof ArmorStandEntity armorStandEntity){
-			this.helmet.pitch = 0.017453292F * armorStandEntity.getHeadRotation().getPitch();
-			this.helmet.yaw = 0.017453292F * armorStandEntity.getHeadRotation().getYaw();
-			this.helmet.roll = 0.017453292F * armorStandEntity.getHeadRotation().getRoll();
+			this.helmet.pitch = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getPitch();
+			this.helmet.yaw = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getYaw();
+			this.helmet.roll = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getRoll();
 
-			this.antennae.pitch = 0.017453292F * armorStandEntity.getHeadRotation().getPitch();
-			this.antennae.yaw = 0.017453292F * armorStandEntity.getHeadRotation().getYaw();
-			this.antennae.roll = 0.017453292F * armorStandEntity.getHeadRotation().getRoll();
+			this.antennae.pitch = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getPitch();
+			this.antennae.yaw = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getYaw();
+			this.antennae.roll = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getRoll();
 		}
 	}
 

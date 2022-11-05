@@ -1,7 +1,8 @@
-package com.github.SoulArts.mixin;
+package com.github.SoulArts.mixin.entityRenderer;
 
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteChestplateModel;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteHelmetModel;
 import net.fabricmc.fabric.mixin.client.rendering.EntityModelLayersAccessor;
 import net.minecraft.client.render.entity.ArmorStandEntityRenderer;
@@ -23,7 +24,7 @@ import java.util.Iterator;
 @Mixin(ArmorStandEntityRenderer.class)
 public class ArmorStandEntityRendererMixin extends LivingEntityRenderer<ArmorStandEntity, ArmorStandArmorEntityModel> {
 
-    // * INHERITED METHODS ---------------------------------------------------------------------------------------------
+    // * INHERITED -----------------------------------------------------------------------------------------------------
     public ArmorStandEntityRendererMixin(EntityRendererFactory.Context ctx, ArmorStandArmorEntityModel model, float shadowRadius) {
         super(ctx, model, shadowRadius);
     }
@@ -35,8 +36,8 @@ public class ArmorStandEntityRendererMixin extends LivingEntityRenderer<ArmorSta
     }
 
     // * INJECTED METHODS ----------------------------------------------------------------------------------------------
+
     // ? Get renderer context from the armor feature renderer.
-    // ? Add custom feature renderer to armor stand using the previously extracted context.
 
     EntityRendererFactory.Context context;
 
@@ -46,9 +47,12 @@ public class ArmorStandEntityRendererMixin extends LivingEntityRenderer<ArmorSta
         return context;
     }
 
-    // ENDBRITE HELMET
+    // ? Add custom feature renderer to armor stand using the previously extracted context.
     @Inject(method = "<init>(Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;)V", at = @At(value = "TAIL", target = "Lnet/minecraft/client/render/entity/ArmorStandEntityRenderer;<init>(Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;)V"))
     public void addCometFeatureRenderer(CallbackInfo ci){
-        this.addFeature(new CometArmorFeatureRenderer(this, new EndbriteHelmetModel(context.getPart(CometClient.ENDBRITE_HELMET_MODEL_LAYER))));
+        this.addFeature(new CometArmorFeatureRenderer(this,
+                new EndbriteHelmetModel(context.getPart(CometClient.ENDBRITE_HELMET_MODEL_LAYER)),
+                new EndbriteChestplateModel(context.getPart(CometClient.ENDBRITE_CHESTPLATE_MODEL_LAYER))
+        ));
     }
 }

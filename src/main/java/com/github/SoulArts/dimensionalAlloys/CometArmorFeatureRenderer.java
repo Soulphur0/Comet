@@ -21,22 +21,22 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEntityModel<T>, A extends EntityModel<T>> extends FeatureRenderer<T, M>  {
     private static final Identifier ENDBRITE_HELMET_TEXTURE = new Identifier("textures/endbrite_helmet.png");
-
-    //private static final Identifier ENDBRITE_RUDDERS_TEXTURE = new Identifier("textures/endbrite_rudders.png");
+    private static final Identifier ENDBRITE_CHESTPLATE_TEXTURE = new Identifier("textures/endbrite_chestplate.png");
 
     private final A endbriteHelmet;
+    private final A endbriteChestplate;
 
-    //private final EndbriteRudderArmModel_Left<T> endbriteRudderArmLeft = new EndbriteRudderArmModel_Left();
-    //private final EndbriteRudderArmModel_Right<T> endbriteRudderArmRight = new EndbriteRudderArmModel_Right();
-
-    public CometArmorFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext, A endbriteHelmet) {
+    public CometArmorFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext, A endbriteHelmet, A endbriteChestplate) {
         super(featureRendererContext);
         this.endbriteHelmet = endbriteHelmet;
+        this.endbriteChestplate = endbriteChestplate;
     }
 
     public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
         ItemStack headItem = livingEntity.getEquippedStack(EquipmentSlot.HEAD);
-        //ItemStack chestItem = livingEntity.getEquippedStack(EquipmentSlot.CHEST);
+        ItemStack chestItem = livingEntity.getEquippedStack(EquipmentSlot.CHEST);
+
+        // - Render helmet
         if (headItem.getItem() == Comet.ENDBRITE_HELMET) {
             matrixStack.push();
             matrixStack.translate(0.0D, 0.0625D, 0.0D);
@@ -47,24 +47,15 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
             matrixStack.pop();
         }
 
-        // Para los rudders del peto
-        /*
+        // - Render chestplate
         if (chestItem.getItem() == Comet.ENDBRITE_CHESTPLATE){
             matrixStack.push();
-            matrixStack.translate(0.0D, 0.0D, 0.125D);
-            this.getContextModel().copyStateTo(this.endbriteRudderArmLeft);
-            this.endbriteRudderArmLeft.setAngles(livingEntity, f, g, j, k, l);
-            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumerProvider, RenderLayer.getArmorCutoutNoCull(ENDBRITE_RUDDERS_TEXTURE), false, headItem.hasGlint());
-            this.endbriteRudderArmLeft.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
+            matrixStack.translate(0.0D, 0.0D, 0.0D);
+            this.getContextModel().copyStateTo(this.endbriteChestplate);
+            this.endbriteChestplate.setAngles(livingEntity, f, g, j, k, l);
+            VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumerProvider, RenderLayer.getArmorCutoutNoCull(ENDBRITE_CHESTPLATE_TEXTURE), false, headItem.hasGlint());
+            this.endbriteChestplate.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
             matrixStack.pop();
-
-            matrixStack.push();
-            matrixStack.translate(0.0D, 0.0D, 0.125D);
-            this.getContextModel().copyStateTo(this.endbriteRudderArmRight);
-            this.endbriteRudderArmRight.setAngles(livingEntity, f, g, j, k, l);
-            VertexConsumer vertexConsumer2 = ItemRenderer.getArmorGlintConsumer(vertexConsumerProvider, RenderLayer.getArmorCutoutNoCull(ENDBRITE_RUDDERS_TEXTURE), false, headItem.hasGlint());
-            this.endbriteRudderArmRight.render(matrixStack, vertexConsumer2, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
-            matrixStack.pop();
-        }*/
+        }
     }
 }

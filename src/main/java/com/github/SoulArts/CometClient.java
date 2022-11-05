@@ -1,5 +1,6 @@
 package com.github.SoulArts;
 
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteChestplateModel;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteHelmetModel;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -15,10 +16,12 @@ import net.minecraft.util.Identifier;
 public class CometClient implements ClientModInitializer {
 
     public static final EntityModelLayer ENDBRITE_HELMET_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_helmet"), "endbrite_helmet");
+    public static final EntityModelLayer ENDBRITE_CHESTPLATE_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_chestplate"), "endbrite_chestplate");
 
     @Override
     public void onInitializeClient(){
         BlockRenderLayerMap.INSTANCE.putBlock(Comet.ENDBRITE_TUBE, RenderLayer.getCutout());
         EntityModelLayerRegistry.registerModelLayer(ENDBRITE_HELMET_MODEL_LAYER, EndbriteHelmetModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ENDBRITE_CHESTPLATE_MODEL_LAYER, EndbriteChestplateModel::getTexturedModelData);
     }
 }

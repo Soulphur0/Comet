@@ -9,12 +9,14 @@
     "ChorusPlantBlockMixin"
   ],
   "client": [
-    "ArmorStandEntityRendererMixin",
     "ExampleMixin",
     "LivingEntityMixin",
     "ModelLoaderAccessor",
     "PersistentProjectileEntityMixin",
-    "SpriteAtlasTextureMixin"
+    "SpriteAtlasTextureMixin",
+    "entityRenderer.ArmorStandEntityRendererMixin",
+    "entityRenderer.HuskEntityRendererMixin",
+    "entityRenderer.PiglinEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
