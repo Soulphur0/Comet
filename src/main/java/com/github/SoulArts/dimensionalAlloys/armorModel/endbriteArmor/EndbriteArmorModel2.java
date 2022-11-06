@@ -4,12 +4,15 @@
 
 package com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.CrossbowPosing;
+import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -98,13 +101,17 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
 
     @Override
     public void setAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entity instanceof ArmorStandEntity armorStandEntity){
+        /*if (entity instanceof ArmorStandEntity armorStandEntity){
             setAnglesForArmorStand(armorStandEntity);
             return;
-        }
+        }*/
 
         setAnglesForLivingEntity(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+    }
 
+    @Override
+    protected Iterable<ModelPart> getBodyParts() {
+        return Iterables.concat(super.getBodyParts(), ImmutableList.of(this.inner_body, this.left_foot, this.right_foot));
     }
 
     @Override
@@ -176,6 +183,9 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
     public float leaningPitch;
 
     private void setAnglesForLivingEntity(T livingEntity, float f, float g, float h, float i, float j){
+        System.out.println("BODY PITCH" + this.body.pitch);
+        System.out.println("INNER BODY PITCH" + this.inner_body.pitch);
+
         boolean bl3;
         boolean bl = ((LivingEntity)livingEntity).getRoll() > 4;
         boolean bl2 = ((LivingEntity)livingEntity).isInSwimmingPose();
@@ -214,8 +224,8 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
         this.left_leg.roll = 0.0f;
         this.left_foot.roll = 0.0f;
         if (this.riding) {
-            this.rightArm.pitch += -0.62831855f;
-            this.leftArm.pitch += -0.62831855f;
+            this.right_arm.pitch += -0.62831855f;
+            this.left_arm.pitch += -0.62831855f;
             this.right_leg.pitch = -1.4137167f;
             this.right_leg.yaw = 0.31415927f;
             this.right_leg.roll = 0.07853982f;

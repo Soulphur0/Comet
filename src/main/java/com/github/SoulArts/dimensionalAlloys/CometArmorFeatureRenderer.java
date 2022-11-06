@@ -12,14 +12,12 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.AnimalModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.DyeableArmorItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +27,7 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
     private static final Identifier ENDBRITE_ARMOR_TEXTURE = new Identifier("textures/endbrite_layer_1.png");
     private final A endbriteArmorModel;
 
-    public CometArmorFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext, A endbriteArmorModel) {
+    public CometArmorFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext,A endbriteArmorModel) {
         super(featureRendererContext);
         this.endbriteArmorModel = endbriteArmorModel;
     }
@@ -81,7 +79,7 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
     }
 
     protected void setVisible(BipedEntityModel bipedModel, EquipmentSlot slot) {
-        if (bipedModel instanceof EndbriteArmorModel2 endbriteArmorModel){
+        if (bipedModel instanceof EndbriteArmorModel2){
             setVisibleEndbrite((EndbriteArmorModel2) bipedModel, slot);
         }
     }

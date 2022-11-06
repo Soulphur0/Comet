@@ -18,7 +18,7 @@ public class CometClient implements ClientModInitializer {
     public static final EntityModelLayer ENDBRITE_HELMET_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_helmet"), "endbrite_helmet");
     public static final EntityModelLayer ENDBRITE_CHESTPLATE_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_chestplate"), "endbrite_chestplate");
     */
-    public static final EntityModelLayer ENDBRITE_ARMOR_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_armor"), "endbrite_armor");
+    public static final EntityModelLayer ENDBRITE_ARMOR_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_armor"), "endbrite_armor_outer");
     @Override
     public void onInitializeClient(){
         BlockRenderLayerMap.INSTANCE.putBlock(Comet.ENDBRITE_TUBE, RenderLayer.getCutout());

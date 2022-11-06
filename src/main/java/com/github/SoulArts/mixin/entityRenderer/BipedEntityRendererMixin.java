@@ -51,8 +51,9 @@ public class BipedEntityRendererMixin<T extends MobEntity, M extends BipedEntity
     // ? Add custom feature renderer to biped entity using the previously extracted context.
     @Inject(method = "<init>(Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;Lnet/minecraft/client/render/entity/model/BipedEntityModel;FFFF)V", at = @At(value="TAIL", target="<init>(Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;Lnet/minecraft/client/render/entity/model/BipedEntityModel;F)V"))
     public void addCometFeatureRenderer(EntityRendererFactory.Context ctx, BipedEntityModel<net.minecraft.entity.LivingEntity> model, float shadowRadius, float scaleX, float scaleY, float scaleZ, CallbackInfo ci){
+        /*
         this.addFeature(new CometArmorFeatureRenderer(this,
                 new EndbriteArmorModel2(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
-        ));
+        ));*/
     }
 }
