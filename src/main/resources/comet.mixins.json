@@ -15,8 +15,7 @@
     "PersistentProjectileEntityMixin",
     "SpriteAtlasTextureMixin",
     "entityRenderer.ArmorStandEntityRendererMixin",
-    "entityRenderer.HuskEntityRendererMixin",
-    "entityRenderer.PiglinEntityRendererMixin"
+    "entityRenderer.HuskEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

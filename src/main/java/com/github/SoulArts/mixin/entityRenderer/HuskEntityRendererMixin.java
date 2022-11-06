@@ -2,7 +2,7 @@ package com.github.SoulArts.mixin.entityRenderer;
 
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteChestplateModel;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteHelmetModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.HuskEntityRenderer;
@@ -47,8 +47,7 @@ public class HuskEntityRendererMixin extends ZombieEntityRenderer {
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void addCometFeatureRenderer(EntityRendererFactory.Context context, CallbackInfo ci){
         this.addFeature(new CometArmorFeatureRenderer(this,
-                new EndbriteHelmetModel(context.getPart(CometClient.ENDBRITE_HELMET_MODEL_LAYER)),
-                new EndbriteChestplateModel(context.getPart(CometClient.ENDBRITE_CHESTPLATE_MODEL_LAYER))
+                new EndbriteArmorModel2(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
         ));
     }
 }
