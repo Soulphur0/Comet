@@ -1,6 +1,7 @@
 package com.github.SoulArts.dimensionalAlloys;
 
 import com.github.SoulArts.Comet;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.OverlayTexture;
@@ -18,6 +19,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.DyeableArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -49,8 +51,15 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
         if (armorItem.getSlotType() != armorSlot) {
             return;
         }
-        ((BipedEntityModel)this.getContextModel()).setAttributes(model);
-        this.setVisible(model, armorSlot);
+        this.getContextModel().setAttributes(model);
+
+        // - Hide comet armor models.
+        hideEndbriteArmorModel((EndbriteArmorModel2)model);
+
+        // - Un-hide comet armor models if a comet item is equipped.
+        if (checkIfCometItem(itemStack))
+            this.setVisible(model, armorSlot);
+
         boolean bl2 = itemStack.hasGlint();
         if (armorItem instanceof DyeableArmorItem) {
             int i = ((DyeableArmorItem)armorItem).getColor(itemStack);
@@ -64,29 +73,54 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
         }
     }
 
-    protected void setVisible(A bipedModel, EquipmentSlot slot) {
-        ((BipedEntityModel)bipedModel).setVisible(false);
+    private boolean checkIfCometItem(ItemStack itemStack){
+        return  itemStack.isOf(Comet.ENDBRITE_HELMET) ||
+                itemStack.isOf(Comet.ENDBRITE_CHESTPLATE) ||
+                itemStack.isOf(Comet.ENDBRITE_LEGGINGS) ||
+                itemStack.isOf(Comet.ENDBRITE_BOOTS);
+    }
+
+    protected void setVisible(BipedEntityModel bipedModel, EquipmentSlot slot) {
+        if (bipedModel instanceof EndbriteArmorModel2 endbriteArmorModel){
+            setVisibleEndbrite((EndbriteArmorModel2) bipedModel, slot);
+        }
+    }
+
+    private void hideEndbriteArmorModel(EndbriteArmorModel2 bipedModel){
+        bipedModel.head.visible = false;
+
+        bipedModel.body.visible = false;
+        bipedModel.inner_body.visible = false;
+
+        bipedModel.right_arm.visible = false;
+        bipedModel.left_arm.visible = false;
+
+        bipedModel.right_leg.visible = false;
+        bipedModel.left_leg.visible =false;
+
+        bipedModel.right_foot.visible = false;
+        bipedModel.left_foot.visible = false;
+    }
+
+    private void setVisibleEndbrite(EndbriteArmorModel2 model, EquipmentSlot slot){
         switch (slot) {
-            case HEAD: {
-                ((BipedEntityModel)bipedModel).head.visible = true;
-                ((BipedEntityModel)bipedModel).hat.visible = true;
-                break;
+            case HEAD -> {
+                model.head.visible = true;
+                model.hat.visible = true;
             }
-            case CHEST: {
-                ((BipedEntityModel)bipedModel).body.visible = true;
-                ((BipedEntityModel)bipedModel).rightArm.visible = true;
-                ((BipedEntityModel)bipedModel).leftArm.visible = true;
-                break;
+            case CHEST -> {
+                model.body.visible = true;
+                model.right_arm.visible = true;
+                model.left_arm.visible = true;
             }
-            case LEGS: {
-                ((BipedEntityModel)bipedModel).body.visible = true;
-                ((BipedEntityModel)bipedModel).rightLeg.visible = true;
-                ((BipedEntityModel)bipedModel).leftLeg.visible = true;
-                break;
+            case LEGS -> {
+                model.inner_body.visible = true;
+                model.right_leg.visible = true;
+                model.left_leg.visible = true;
             }
-            case FEET: {
-                ((BipedEntityModel)bipedModel).rightLeg.visible = true;
-                ((BipedEntityModel)bipedModel).leftLeg.visible = true;
+            case FEET -> {
+                model.right_foot.visible = true;
+                model.left_foot.visible = true;
             }
         }
     }

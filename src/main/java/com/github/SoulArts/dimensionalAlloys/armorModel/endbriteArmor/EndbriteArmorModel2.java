@@ -22,26 +22,33 @@ import static net.minecraft.client.render.entity.model.BipedEntityModel.ArmPose.
 
 @Environment(EnvType.CLIENT)
 public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityModel<T> {
-    private final ModelPart head;
-    private final ModelPart hat;
-    private final ModelPart antennae;
-    private final ModelPart body;
-    private final ModelPart left_arm;
-    private final ModelPart right_arm;
-    private final ModelPart left_leg;
-    private final ModelPart right_leg;
+
+    // * Vanilla
+    public final ModelPart hat;
+    public final ModelPart head;
+    public final ModelPart body;
+    public final ModelPart left_arm;
+    public final ModelPart right_arm;
+    public final ModelPart left_leg;
+    public final ModelPart right_leg;
+
+    public final ModelPart inner_body;
+    public final ModelPart right_foot;
+    public final ModelPart left_foot;
 
     public EndbriteArmorModel2(ModelPart root) {
         super(root);
+        this.hat = root.getChild("hat");
         this.head = root.getChild("head");
-        this.antennae = root.getChild("antennae");
         this.body = root.getChild("body");
         this.left_arm = root.getChild("left_arm");
         this.right_arm = root.getChild("right_arm");
-
-        this.hat = root.getChild("hat");
         this.left_leg = root.getChild("left_leg");
         this.right_leg = root.getChild("right_leg");
+
+        this.inner_body = root.getChild("inner_body");
+        this.right_foot = root.getChild("right_foot");
+        this.left_foot = root.getChild("left_foot");
     }
 
     // TODO: Make antennae tilt backwards when moving, a bit when running, a bit more when flying.
@@ -56,9 +63,13 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
-        ModelPartData head = modelPartData.addChild("head", ModelPartBuilder.create().uv(8, 38).cuboid(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(1.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
-        ModelPartData antennae = modelPartData.addChild("antennae", ModelPartBuilder.create().uv(10, 57).cuboid(-4.0F, -10.0F, -4.0F, 8.0F, 1.0F, 1.0F, new Dilation(1.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        // _ Vanilla biped entity model parts.
+
+        ModelPartData hat = modelPartData.addChild("hat", ModelPartBuilder.create().uv(0, 0).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+
+        ModelPartData head = modelPartData.addChild("head", ModelPartBuilder.create().uv(8, 38).cuboid(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new Dilation(1.0F))
+        .uv(10, 57).cuboid(-4.0F, -10.0F, -4.0F, 8.0F, 1.0F, 1.0F, new Dilation(1.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
         ModelPartData body = modelPartData.addChild("body", ModelPartBuilder.create().uv(8, 2).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new Dilation(1.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
@@ -68,15 +79,21 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
         ModelPartData right_arm = modelPartData.addChild("right_arm", ModelPartBuilder.create().uv(24, 25).cuboid(-3.0f, -2.0f, -2.0f, 4.0f, 12.0f, 4.0f, new Dilation(1.0F))
         .uv(32, 10).mirrored().cuboid(-7.5f, -2.0f, 1.0f, 3.0F, 4.0F, 1.0F, new Dilation(1.0F)).mirrored(false), ModelTransform.pivot(-5.0f, 2.0f, 0.0f));
 
-        // --
+        ModelPartData left_leg = modelPartData.addChild("left_leg", ModelPartBuilder.create().uv(40, 22).mirrored().cuboid(-2.0F, -0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.6F)).mirrored(false)
+        .uv(52, 8).cuboid(2.5F, -0.0F, 0.0F, 1.0F, 7.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(1.9F, 12.0F, 0.0F));
 
-        ModelPartData hat = modelPartData.addChild("hat", ModelPartBuilder.create().uv(0, 0).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData left_leg = modelPartData.addChild("left_leg", ModelPartBuilder.create().uv(0, 0).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData right_leg = modelPartData.addChild("right_leg", ModelPartBuilder.create().uv(0, 0).cuboid(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData right_leg = modelPartData.addChild("right_leg", ModelPartBuilder.create().uv(40, 22).cuboid(-2.0F, -0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.6F))
+        .uv(52, 8).cuboid(-3.5F, -0.0F, 0.0F, 1.0F, 7.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-1.9F, 12.0F, 0.0F));
 
-        // --
+        // _ Endbrite armor parts and different vanilla part setup
 
-        return TexturedModelData.of(modelData, 32, 24);
+        ModelPartData inner_body = modelPartData.addChild("inner_body", ModelPartBuilder.create().uv(32, 6).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new Dilation(0.6F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+
+        ModelPartData right_foot = modelPartData.addChild("right_foot", ModelPartBuilder.create().uv(8, 22).cuboid(-2.0F, -0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(1.0F)), ModelTransform.pivot(-1.9F, 12.0F, 0.0F));
+
+        ModelPartData left_foot = modelPartData.addChild("left_foot", ModelPartBuilder.create().uv(8, 22).mirrored().cuboid(-2.0F, -0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(1.0F)).mirrored(false), ModelTransform.pivot(1.9F, 12.0F, 0.0F));
+
+        return TexturedModelData.of(modelData, 64, 64);
     }
 
     @Override
@@ -93,27 +110,39 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
     @Override
     public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
         head.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
-        //antennae.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+
         body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+
         left_arm.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
         right_arm.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+
+        left_leg.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+        right_leg.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+
+        inner_body.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+
+        right_foot.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+        left_foot.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 
     // * Extras --------------------------------------------------------------------------------------------------------
 
     private void setAnglesForArmorStand(ArmorStandEntity armorStandEntity){
+        // - Head related elements.
         this.head.pitch = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getPitch();
         this.head.yaw = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getYaw();
         this.head.roll = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getRoll();
 
-        this.antennae.pitch = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getPitch();
-        this.antennae.yaw = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getYaw();
-        this.antennae.roll = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getRoll();
-
+        // - Body related elements.
         this.body.pitch = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getPitch();
         this.body.yaw = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getYaw();
         this.body.roll = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getRoll();
 
+        this.inner_body.pitch = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getPitch();
+        this.inner_body.yaw = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getYaw();
+        this.inner_body.roll = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getRoll();
+
+        // - Arm related elements
         this.left_arm.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getPitch();
         this.left_arm.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getYaw();
         this.left_arm.roll = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getRoll();
@@ -121,6 +150,23 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
         this.right_arm.pitch = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getPitch();
         this.right_arm.yaw = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getYaw();
         this.right_arm.roll = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getRoll();
+
+        // - Leg related elements.
+        this.left_leg.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getPitch();
+        this.left_leg.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getYaw();
+        this.left_leg.roll = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getRoll();
+
+        this.right_leg.pitch = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getPitch();
+        this.right_leg.yaw = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getYaw();
+        this.right_leg.roll = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getRoll();
+
+        this.left_foot.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getPitch();
+        this.left_foot.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getYaw();
+        this.left_foot.roll = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getRoll();
+
+        this.right_foot.pitch = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getPitch();
+        this.right_foot.yaw = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getYaw();
+        this.right_foot.roll = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getRoll();
     }
 
     // * Method for posing the armor model extracted from BipedEntityModel
@@ -136,6 +182,7 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
         this.head.yaw = i * ((float)Math.PI / 180);
         this.head.pitch = bl ? -0.7853982f : (this.leaningPitch > 0.0f ? (bl2 ? this.lerpAngle(this.leaningPitch, this.head.pitch, -0.7853982f) : this.lerpAngle(this.leaningPitch, this.head.pitch, j * ((float)Math.PI / 180))) : j * ((float)Math.PI / 180));
         this.body.yaw = 0.0f;
+        this.inner_body.yaw = 0.0f;
         this.right_arm.pivotZ = 0.0f;
         this.right_arm.pivotX = -5.0f;
         this.left_arm.pivotZ = 0.0f;
@@ -155,20 +202,32 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
         this.left_arm.roll = 0.0f;
 
         this.right_leg.pitch = MathHelper.cos(f * 0.6662f) * 1.4f * g / k;
+        this.right_foot.pitch = MathHelper.cos(f * 0.6662f) * 1.4f * g / k;
         this.left_leg.pitch = MathHelper.cos(f * 0.6662f + (float)Math.PI) * 1.4f * g / k;
+        this.left_foot.pitch = MathHelper.cos(f * 0.6662f + (float)Math.PI) * 1.4f * g / k;
         this.right_leg.yaw = 0.0f;
+        this.right_foot.yaw = 0.0f;
         this.left_leg.yaw = 0.0f;
+        this.left_foot.yaw = 0.0f;
         this.right_leg.roll = 0.0f;
+        this.right_foot.roll = 0.0f;
         this.left_leg.roll = 0.0f;
+        this.left_foot.roll = 0.0f;
         if (this.riding) {
             this.rightArm.pitch += -0.62831855f;
             this.leftArm.pitch += -0.62831855f;
             this.right_leg.pitch = -1.4137167f;
             this.right_leg.yaw = 0.31415927f;
             this.right_leg.roll = 0.07853982f;
+            this.right_foot.pitch = -1.4137167f;
+            this.right_foot.yaw = 0.31415927f;
+            this.right_foot.roll = 0.07853982f;
             this.left_leg.pitch = -1.4137167f;
             this.left_leg.yaw = -0.31415927f;
             this.left_leg.roll = -0.07853982f;
+            this.left_foot.pitch = -1.4137167f;
+            this.left_foot.yaw = -0.31415927f;
+            this.left_foot.roll = -0.07853982f;
         }
 
         this.right_arm.yaw = 0.0f;
@@ -194,24 +253,36 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
         this.animateArms(livingEntity, h);
         if (this.sneaking) {
             this.body.pitch = 0.5f;
+            this.inner_body.pitch = 0.5f;
             this.right_arm.pitch += 0.4f;
             this.left_arm.pitch += 0.4f;
             this.right_leg.pivotZ = 4.0f;
+            this.right_foot.pivotZ = 4.0f;
             this.left_leg.pivotZ = 4.0f;
+            this.left_foot.pivotZ = 4.0f;
             this.right_leg.pivotY = 12.2f;
+            this.right_foot.pivotY = 12.2f;
             this.left_leg.pivotY = 12.2f;
+            this.left_foot.pivotY = 12.2f;
             this.head.pivotY = 4.2f;
             this.body.pivotY = 3.2f;
+            this.inner_body.pivotY = 3.2f;
             this.left_arm.pivotY = 5.2f;
             this.right_arm.pivotY = 5.2f;
         } else {
             this.body.pitch = 0.0f;
+            this.inner_body.pitch = 0.0f;
             this.right_leg.pivotZ = 0.1f;
+            this.right_foot.pivotZ = 0.1f;
             this.left_leg.pivotZ = 0.1f;
+            this.left_foot.pivotZ = 0.1f;
             this.right_leg.pivotY = 12.0f;
+            this.right_foot.pivotY = 12.0f;
             this.left_leg.pivotY = 12.0f;
+            this.left_foot.pivotY = 12.0f;
             this.head.pivotY = 0.0f;
             this.body.pivotY = 0.0f;
+            this.inner_body.pivotY = 0.0f;
             this.left_arm.pivotY = 2.0f;
             this.right_arm.pivotY = 2.0f;
         }
@@ -257,7 +328,9 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
             o = 0.3f;
             float p = 0.33333334f;
             this.left_leg.pitch = MathHelper.lerp(this.leaningPitch, this.left_leg.pitch, 0.3f * MathHelper.cos(f * 0.33333334f + (float)Math.PI));
+            this.left_foot.pitch = MathHelper.lerp(this.leaningPitch, this.left_foot.pitch, 0.3f * MathHelper.cos(f * 0.33333334f + (float)Math.PI));
             this.right_leg.pitch = MathHelper.lerp(this.leaningPitch, this.right_leg.pitch, 0.3f * MathHelper.cos(f * 0.33333334f));
+            this.right_foot.pitch = MathHelper.lerp(this.leaningPitch, this.right_foot.pitch, 0.3f * MathHelper.cos(f * 0.33333334f));
         }
         this.hat.copyTransform(this.head);
     }
