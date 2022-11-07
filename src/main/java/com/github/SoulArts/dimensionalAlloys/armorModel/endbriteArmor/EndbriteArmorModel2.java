@@ -506,7 +506,7 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
     }
 
     private void setAnglesForDrowned(T mobEntity, float f, float g, float h, float i, float j){
-        super.setAngles(mobEntity, f, g, h, i, j);
+        // super.setAngles(mobEntity, f, g, h, i, j); // To not overwrite set position for arms
         if (this.leftArmPose == BipedEntityModel.ArmPose.THROW_SPEAR) {
             this.left_arm.pitch = this.left_arm.pitch * 0.5f - (float)Math.PI;
             this.left_arm.yaw = 0.0f;
