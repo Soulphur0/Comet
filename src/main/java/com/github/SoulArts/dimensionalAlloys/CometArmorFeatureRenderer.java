@@ -54,7 +54,7 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
         // - Hide comet armor models.
         hideEndbriteArmorModel((EndbriteArmorModel2)model);
 
-        model.setAngles(entity, f, g, h, j, k, l);
+        model.setAngles(entity, f, g, h, j, k);
 
         // - Un-hide comet armor models if a comet item is equipped.
         if (checkIfCometItem(itemStack))
