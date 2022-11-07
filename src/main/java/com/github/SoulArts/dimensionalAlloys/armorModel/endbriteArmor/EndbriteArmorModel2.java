@@ -10,6 +10,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.model.AbstractZombieModel;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.CrossbowPosing;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
@@ -17,6 +18,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.mob.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
@@ -101,12 +105,31 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
 
     @Override
     public void setAngles(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        /*if (entity instanceof ArmorStandEntity armorStandEntity){
+        this.leaningPitch = entity.getLeaningPitch(ageInTicks);
+
+        // _ Setangles for all common entity elements
+        setAnglesForLivingEntity(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+
+        // _ Setangles for armor stand body parts
+        if (entity instanceof ArmorStandEntity armorStandEntity){
             setAnglesForArmorStand(armorStandEntity);
             return;
-        }*/
+        }
 
-        setAnglesForLivingEntity(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        // _ Setangles for skeleton arms
+        if (entity instanceof SkeletonEntity || entity instanceof WitherSkeletonEntity || entity instanceof StrayEntity){
+            setAnglesForSkeleton(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        }
+
+        // _ Setangles for zombie arms
+        if (entity instanceof ZombieEntity){
+            setAnglesForZombie(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        }
+
+        if (entity instanceof DrownedEntity){
+            setAnglesForDrowned(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            animateDrownedModel(entity, limbSwing, limbSwingAmount, ageInTicks);
+        }
     }
 
     @Override
@@ -134,58 +157,13 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
 
     // * Extras --------------------------------------------------------------------------------------------------------
 
-    private void setAnglesForArmorStand(ArmorStandEntity armorStandEntity){
-        // - Head related elements.
-        this.head.pitch = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getPitch();
-        this.head.yaw = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getYaw();
-        this.head.roll = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getRoll();
-
-        // - Body related elements.
-        this.body.pitch = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getPitch();
-        this.body.yaw = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getYaw();
-        this.body.roll = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getRoll();
-
-        this.inner_body.pitch = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getPitch();
-        this.inner_body.yaw = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getYaw();
-        this.inner_body.roll = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getRoll();
-
-        // - Arm related elements
-        this.left_arm.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getPitch();
-        this.left_arm.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getYaw();
-        this.left_arm.roll = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getRoll();
-
-        this.right_arm.pitch = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getPitch();
-        this.right_arm.yaw = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getYaw();
-        this.right_arm.roll = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getRoll();
-
-        // - Leg related elements.
-        this.left_leg.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getPitch();
-        this.left_leg.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getYaw();
-        this.left_leg.roll = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getRoll();
-
-        this.right_leg.pitch = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getPitch();
-        this.right_leg.yaw = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getYaw();
-        this.right_leg.roll = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getRoll();
-
-        this.left_foot.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getPitch();
-        this.left_foot.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getYaw();
-        this.left_foot.roll = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getRoll();
-
-        this.right_foot.pitch = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getPitch();
-        this.right_foot.yaw = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getYaw();
-        this.right_foot.roll = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getRoll();
-    }
-
-    // * Method for posing the armor model extracted from BipedEntityModel
+    // * Method for posing the armor model extracted from BipedEntityModel, handles common body poses
 
     public BipedEntityModel.ArmPose leftArmPose = BipedEntityModel.ArmPose.EMPTY;
     public BipedEntityModel.ArmPose rightArmPose = BipedEntityModel.ArmPose.EMPTY;
     public float leaningPitch;
 
     private void setAnglesForLivingEntity(T livingEntity, float f, float g, float h, float i, float j){
-        System.out.println("BODY PITCH" + this.body.pitch);
-        System.out.println("INNER BODY PITCH" + this.inner_body.pitch);
-
         boolean bl3;
         boolean bl = ((LivingEntity)livingEntity).getRoll() > 4;
         boolean bl2 = ((LivingEntity)livingEntity).isInSwimmingPose();
@@ -459,5 +437,107 @@ public class EndbriteArmorModel2<T extends LivingEntity> extends BipedEntityMode
             f -= (float)Math.PI * 2;
         }
         return angleTwo + angleOne * f;
+    }
+
+    // $ Set angles for the different biped mobs
+    private void setAnglesForArmorStand(ArmorStandEntity armorStandEntity){
+        // - Head related elements.
+        this.head.pitch = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getPitch();
+        this.head.yaw = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getYaw();
+        this.head.roll = (float)Math.PI / 180 * armorStandEntity.getHeadRotation().getRoll();
+
+        // - Body related elements.
+        this.body.pitch = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getPitch();
+        this.body.yaw = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getYaw();
+        this.body.roll = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getRoll();
+
+        this.inner_body.pitch = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getPitch();
+        this.inner_body.yaw = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getYaw();
+        this.inner_body.roll = (float)Math.PI / 180 * armorStandEntity.getBodyRotation().getRoll();
+
+        // - Arm related elements
+        this.left_arm.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getPitch();
+        this.left_arm.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getYaw();
+        this.left_arm.roll = (float)Math.PI / 180 * armorStandEntity.getLeftArmRotation().getRoll();
+
+        this.right_arm.pitch = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getPitch();
+        this.right_arm.yaw = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getYaw();
+        this.right_arm.roll = (float)Math.PI / 180 * armorStandEntity.getRightArmRotation().getRoll();
+
+        // - Leg related elements.
+        this.left_leg.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getPitch();
+        this.left_leg.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getYaw();
+        this.left_leg.roll = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getRoll();
+
+        this.right_leg.pitch = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getPitch();
+        this.right_leg.yaw = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getYaw();
+        this.right_leg.roll = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getRoll();
+
+        this.left_foot.pitch = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getPitch();
+        this.left_foot.yaw = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getYaw();
+        this.left_foot.roll = (float)Math.PI / 180 * armorStandEntity.getLeftLegRotation().getRoll();
+
+        this.right_foot.pitch = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getPitch();
+        this.right_foot.yaw = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getYaw();
+        this.right_foot.roll = (float)Math.PI / 180 * armorStandEntity.getRightLegRotation().getRoll();
+    }
+
+    private void setAnglesForSkeleton(T mobEntity, float f, float g, float h, float i, float j){
+        super.setAngles(mobEntity, f, g, h, i, j);
+        ItemStack itemStack = ((LivingEntity)mobEntity).getMainHandStack();
+        if (((MobEntity)mobEntity).isAttacking() && (itemStack.isEmpty() || !itemStack.isOf(Items.BOW))) {
+            float k = MathHelper.sin(this.handSwingProgress * (float)Math.PI);
+            float l = MathHelper.sin((1.0f - (1.0f - this.handSwingProgress) * (1.0f - this.handSwingProgress)) * (float)Math.PI);
+            this.rightArm.roll = 0.0f;
+            this.leftArm.roll = 0.0f;
+            this.rightArm.yaw = -(0.1f - k * 0.6f);
+            this.leftArm.yaw = 0.1f - k * 0.6f;
+            this.rightArm.pitch = -1.5707964f;
+            this.leftArm.pitch = -1.5707964f;
+            this.rightArm.pitch -= k * 1.2f - l * 0.4f;
+            this.leftArm.pitch -= k * 1.2f - l * 0.4f;
+            CrossbowPosing.swingArms(this.rightArm, this.leftArm, h);
+        }
+    }
+
+    private void setAnglesForZombie(T mobEntity, float f, float g, float h, float i, float j){
+        super.setAngles(mobEntity, f, g, h, i, j);
+        CrossbowPosing.meleeAttack(this.leftArm, this.rightArm, ((ZombieEntity)mobEntity).isAttacking(), this.handSwingProgress, h);
+    }
+
+    private void setAnglesForDrowned(T mobEntity, float f, float g, float h, float i, float j){
+        super.setAngles(mobEntity, f, g, h, i, j);
+        if (this.leftArmPose == BipedEntityModel.ArmPose.THROW_SPEAR) {
+            this.left_arm.pitch = this.left_arm.pitch * 0.5f - (float)Math.PI;
+            this.left_arm.yaw = 0.0f;
+        }
+        if (this.rightArmPose == BipedEntityModel.ArmPose.THROW_SPEAR) {
+            this.right_arm.pitch = this.right_arm.pitch * 0.5f - (float)Math.PI;
+            this.right_arm.yaw = 0.0f;
+        }
+
+        if (this.leaningPitch > 0.0f) {
+            this.right_arm.pitch = this.lerpAngle(this.leaningPitch, this.right_arm.pitch, -2.5132742f) + this.leaningPitch * 0.35f * MathHelper.sin(0.1f * h);
+            this.left_arm.pitch = this.lerpAngle(this.leaningPitch, this.left_arm.pitch, -2.5132742f) - this.leaningPitch * 0.35f * MathHelper.sin(0.1f * h);
+            this.right_arm.roll = this.lerpAngle(this.leaningPitch, this.right_arm.roll, -0.15f);
+            this.left_arm.roll = this.lerpAngle(this.leaningPitch, this.left_arm.roll, 0.15f);
+            this.leftLeg.pitch -= this.leaningPitch * 0.55f * MathHelper.sin(0.1f * h);
+            this.rightLeg.pitch += this.leaningPitch * 0.55f * MathHelper.sin(0.1f * h);
+            this.head.pitch = 0.0f;
+        }
+    }
+
+    public void animateDrownedModel(T zombieEntity, float f, float g, float h) {
+        this.rightArmPose = BipedEntityModel.ArmPose.EMPTY;
+        this.leftArmPose = BipedEntityModel.ArmPose.EMPTY;
+        ItemStack itemStack = ((LivingEntity)zombieEntity).getStackInHand(Hand.MAIN_HAND);
+        if (itemStack.isOf(Items.TRIDENT) && ((MobEntity)zombieEntity).isAttacking()) {
+            if (((MobEntity)zombieEntity).getMainArm() == Arm.RIGHT) {
+                this.rightArmPose = BipedEntityModel.ArmPose.THROW_SPEAR;
+            } else {
+                this.leftArmPose = BipedEntityModel.ArmPose.THROW_SPEAR;
+            }
+        }
+        super.animateModel(zombieEntity, f, g, h);
     }
 }
