@@ -34,13 +34,13 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
 
     @Override
     public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
-        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.CHEST, i, endbriteArmorModel);
-        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.LEGS, i, endbriteArmorModel);
-        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.FEET, i, endbriteArmorModel);
-        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.HEAD, i, endbriteArmorModel);
+        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.CHEST, i, endbriteArmorModel, f, g, h, j, k, l);
+        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.LEGS, i, endbriteArmorModel, f, g, h, j, k, l);
+        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.FEET, i, endbriteArmorModel, f, g, h, j, k, l);
+        this.renderArmor(matrixStack, vertexConsumerProvider, livingEntity, EquipmentSlot.HEAD, i, endbriteArmorModel, f, g, h, j, k, l);
     }
 
-    private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model) {
+    private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, float f, float g, float h, float j, float k, float l) {
         ItemStack itemStack = ((LivingEntity)entity).getEquippedStack(armorSlot);
         if (!(itemStack.getItem() instanceof ArmorItem)) {
             return;
@@ -53,6 +53,8 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
 
         // - Hide comet armor models.
         hideEndbriteArmorModel((EndbriteArmorModel2)model);
+
+        model.setAngles(entity, f, g, h, j, k, l);
 
         // - Un-hide comet armor models if a comet item is equipped.
         if (checkIfCometItem(itemStack))
