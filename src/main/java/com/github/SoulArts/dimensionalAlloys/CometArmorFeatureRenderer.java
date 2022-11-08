@@ -55,7 +55,7 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
         hideEndbriteArmorModel((EndbriteArmorModel2)model);
 
         // - Rotate comet armor model.
-        ((EndbriteArmorModel2)model).setAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        ((EndbriteArmorModel2)model).specialSetAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, model);
 
         // - Un-hide comet armor models if a comet item is equipped.
         if (checkIfCometItem(itemStack))

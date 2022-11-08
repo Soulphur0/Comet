@@ -17,6 +17,7 @@
     "entityRenderer.ArmorStandEntityRendererMixin",
     "entityRenderer.DrownedEntityRendererMixin",
     "entityRenderer.HuskEntityRendererMixin",
+    "entityRenderer.PiglinEntityRendererMixin",
     "entityRenderer.PlayerEntityRendererMixin",
     "entityRenderer.SkeletonEntityRendererMixin",
     "entityRenderer.StrayEntityRendererMixin",
