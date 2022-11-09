@@ -1,7 +1,7 @@
 package com.github.SoulArts.dimensionalAlloys;
 
 import com.github.SoulArts.Comet;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.OverlayTexture;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M>  {
-    private static final Identifier ENDBRITE_ARMOR_TEXTURE = new Identifier("textures/endbrite_layer_1.png");
+    private static final Identifier ENDBRITE_ARMOR_TEXTURE = new Identifier("/textures/models/armor/endbrite_layer_1.png");
     private final A endbriteArmorModel;
 
     public CometArmorFeatureRenderer(FeatureRendererContext<T, M> featureRendererContext,A endbriteArmorModel) {
@@ -52,10 +52,10 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
         this.getContextModel().setAttributes(model);
 
         // - Hide comet armor models.
-        hideEndbriteArmorModel((EndbriteArmorModel2)model);
+        hideEndbriteArmorModel((EndbriteArmorModel)model);
 
         // - Rotate comet armor model.
-        ((EndbriteArmorModel2)model).specialSetAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, model);
+        ((EndbriteArmorModel)model).specialSetAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, model);
 
         // - Un-hide comet armor models if a comet item is equipped.
         if (checkIfCometItem(itemStack))
@@ -82,12 +82,12 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
     }
 
     protected void setVisible(BipedEntityModel bipedModel, EquipmentSlot slot) {
-        if (bipedModel instanceof EndbriteArmorModel2){
-            setVisibleEndbrite((EndbriteArmorModel2) bipedModel, slot);
+        if (bipedModel instanceof EndbriteArmorModel){
+            setVisibleEndbrite((EndbriteArmorModel) bipedModel, slot);
         }
     }
 
-    private void hideEndbriteArmorModel(EndbriteArmorModel2 bipedModel){
+    private void hideEndbriteArmorModel(EndbriteArmorModel bipedModel){
         bipedModel.head.visible = false;
 
         bipedModel.body.visible = false;
@@ -103,7 +103,7 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
         bipedModel.left_foot.visible = false;
     }
 
-    private void setVisibleEndbrite(EndbriteArmorModel2 model, EquipmentSlot slot){
+    private void setVisibleEndbrite(EndbriteArmorModel model, EquipmentSlot slot){
         switch (slot) {
             case HEAD -> {
                 model.head.visible = true;

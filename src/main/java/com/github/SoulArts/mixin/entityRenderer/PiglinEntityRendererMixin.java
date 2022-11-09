@@ -2,8 +2,7 @@ package com.github.SoulArts.mixin.entityRenderer;
 
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteHelmetModel;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -64,7 +63,7 @@ public class PiglinEntityRendererMixin extends BipedEntityRenderer<MobEntity, Pi
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void addCometFeatureRenderer(EntityRendererFactory.Context ctx, EntityModelLayer mainLayer, EntityModelLayer innerArmorLayer, EntityModelLayer outerArmorLayer, boolean zombie, CallbackInfo ci){
         this.addFeature(new CometArmorFeatureRenderer(this,
-                new EndbriteArmorModel2(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
+                new EndbriteArmorModel(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
         ));
     }
 }

@@ -1,13 +1,11 @@
 package com.github.SoulArts;
 
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteHelmetModel;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
@@ -26,6 +24,6 @@ public class CometClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(ENDBRITE_HELMET_MODEL_LAYER, EndbriteHelmetModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(ENDBRITE_CHESTPLATE_MODEL_LAYER, EndbriteChestplateModel::getTexturedModelData);
         */
-        EntityModelLayerRegistry.registerModelLayer(ENDBRITE_ARMOR_MODEL_LAYER, EndbriteArmorModel2::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ENDBRITE_ARMOR_MODEL_LAYER, EndbriteArmorModel::getTexturedModelData);
     }
 }

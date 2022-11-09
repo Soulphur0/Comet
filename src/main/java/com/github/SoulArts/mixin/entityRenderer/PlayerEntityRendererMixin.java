@@ -2,12 +2,11 @@ package com.github.SoulArts.mixin.entityRenderer;
 
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,7 +45,7 @@ public class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClie
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void addCometFeatureRenderer(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci){
         this.addFeature(new CometArmorFeatureRenderer(this,
-                new EndbriteArmorModel2(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
+                new EndbriteArmorModel(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
         ));
     }
 }

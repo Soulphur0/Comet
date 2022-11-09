@@ -2,7 +2,7 @@ package com.github.SoulArts.mixin.entityRenderer;
 
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.ZombieBaseEntityRenderer;
 import net.minecraft.client.render.entity.ZombieEntityRenderer;
@@ -40,7 +40,7 @@ public class ZombieEntityRendererMixin extends ZombieBaseEntityRenderer<ZombieEn
     @Inject(method = "<init>(Lnet/minecraft/client/render/entity/EntityRendererFactory$Context;Lnet/minecraft/client/render/entity/model/EntityModelLayer;Lnet/minecraft/client/render/entity/model/EntityModelLayer;Lnet/minecraft/client/render/entity/model/EntityModelLayer;)V", at = @At(value = "TAIL"))
     public void addCometFeatureRenderer(EntityRendererFactory.Context ctx, EntityModelLayer layer, EntityModelLayer legsArmorLayer, EntityModelLayer bodyArmorLayer, CallbackInfo ci){
         this.addFeature(new CometArmorFeatureRenderer(this,
-                new EndbriteArmorModel2(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
+                new EndbriteArmorModel(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
         ));
     }
 }

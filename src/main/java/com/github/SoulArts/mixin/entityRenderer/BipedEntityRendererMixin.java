@@ -1,14 +1,9 @@
 package com.github.SoulArts.mixin.entityRenderer;
 
-import com.github.SoulArts.CometClient;
-import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel2;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteHelmetModel;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.PiglinEntityModel;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -53,7 +48,7 @@ public class BipedEntityRendererMixin<T extends MobEntity, M extends BipedEntity
     public void addCometFeatureRenderer(EntityRendererFactory.Context ctx, BipedEntityModel<net.minecraft.entity.LivingEntity> model, float shadowRadius, float scaleX, float scaleY, float scaleZ, CallbackInfo ci){
         /*
         this.addFeature(new CometArmorFeatureRenderer(this,
-                new EndbriteArmorModel2(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
+                new EndbriteArmorModel(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
         ));*/
     }
 }
