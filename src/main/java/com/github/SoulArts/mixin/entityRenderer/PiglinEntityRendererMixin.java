@@ -2,13 +2,13 @@ package com.github.SoulArts.mixin.entityRenderer;
 
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteChestplateModel;
-import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteHelmetModel;
+import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.PiglinEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.EntityModelLoader;
 import net.minecraft.client.render.entity.model.PiglinEntityModel;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
@@ -26,8 +26,16 @@ public class PiglinEntityRendererMixin extends BipedEntityRenderer<MobEntity, Pi
 
     private static final Map<EntityType<?>, Identifier> TEXTURES = ImmutableMap.of(EntityType.PIGLIN, new Identifier("textures/entity/piglin/piglin.png"), EntityType.ZOMBIFIED_PIGLIN, new Identifier("textures/entity/piglin/zombified_piglin.png"), EntityType.PIGLIN_BRUTE, new Identifier("textures/entity/piglin/piglin_brute.png"));
 
-    public PiglinEntityRendererMixin(EntityRendererFactory.Context ctx, PiglinEntityModel<MobEntity> model, float shadowRadius) {
-        super(ctx, model, shadowRadius);
+    public PiglinEntityRendererMixin(EntityRendererFactory.Context ctx, EntityModelLayer mainLayer, EntityModelLayer innerArmorLayer, EntityModelLayer outerArmorLayer, boolean zombie) {
+        super(ctx, getPiglinModel(ctx.getModelLoader(), mainLayer, zombie), 0.5f, 1.0019531f, 1.0f, 1.0019531f);
+    }
+
+    private static PiglinEntityModel<MobEntity> getPiglinModel(EntityModelLoader modelLoader, EntityModelLayer layer, boolean zombie) {
+        PiglinEntityModel<MobEntity> piglinEntityModel = new PiglinEntityModel<MobEntity>(modelLoader.getModelPart(layer));
+        if (zombie) {
+            piglinEntityModel.rightEar.visible = false;
+        }
+        return piglinEntityModel;
     }
 
     @Override
@@ -55,8 +63,7 @@ public class PiglinEntityRendererMixin extends BipedEntityRenderer<MobEntity, Pi
     @Inject(method = "<init>", at = @At(value = "TAIL"))
     public void addCometFeatureRenderer(EntityRendererFactory.Context ctx, EntityModelLayer mainLayer, EntityModelLayer innerArmorLayer, EntityModelLayer outerArmorLayer, boolean zombie, CallbackInfo ci){
         this.addFeature(new CometArmorFeatureRenderer(this,
-                new EndbriteHelmetModel(context.getPart(CometClient.ENDBRITE_HELMET_MODEL_LAYER)),
-                new EndbriteChestplateModel(context.getPart(CometClient.ENDBRITE_CHESTPLATE_MODEL_LAYER))
+                new EndbriteArmorModel(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
         ));
     }
 }

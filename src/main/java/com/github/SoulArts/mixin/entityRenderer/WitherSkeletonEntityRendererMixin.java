@@ -4,9 +4,9 @@ import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.HuskEntityRenderer;
-import net.minecraft.client.render.entity.ZombieEntityRenderer;
-import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.client.render.entity.SkeletonEntityRenderer;
+import net.minecraft.client.render.entity.WitherSkeletonEntityRenderer;
+import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,19 +14,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HuskEntityRenderer.class)
-public class HuskEntityRendererMixin extends ZombieEntityRenderer {
+@Mixin(WitherSkeletonEntityRenderer.class)
+public class WitherSkeletonEntityRendererMixin extends SkeletonEntityRenderer {
 
     // * INHERITED -----------------------------------------------------------------------------------------------------
 
-    private static final Identifier TEXTURE = new Identifier("textures/entity/zombie/husk.png");
+    private static final Identifier TEXTURE = new Identifier("textures/entity/skeleton/wither_skeleton.png");
 
-    public HuskEntityRendererMixin(EntityRendererFactory.Context context) {
+    public WitherSkeletonEntityRendererMixin(EntityRendererFactory.Context context) {
         super(context);
     }
 
     @Override
-    public Identifier getTexture(ZombieEntity zombieEntity) {
+    public Identifier getTexture(AbstractSkeletonEntity abstractSkeletonEntity) {
         return TEXTURE;
     }
 

@@ -15,8 +15,14 @@
     "PersistentProjectileEntityMixin",
     "SpriteAtlasTextureMixin",
     "entityRenderer.ArmorStandEntityRendererMixin",
+    "entityRenderer.DrownedEntityRendererMixin",
     "entityRenderer.HuskEntityRendererMixin",
-    "entityRenderer.PiglinEntityRendererMixin"
+    "entityRenderer.PiglinEntityRendererMixin",
+    "entityRenderer.PlayerEntityRendererMixin",
+    "entityRenderer.SkeletonEntityRendererMixin",
+    "entityRenderer.StrayEntityRendererMixin",
+    "entityRenderer.WitherSkeletonEntityRendererMixin",
+    "entityRenderer.ZombieEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -3,10 +3,11 @@ package com.github.SoulArts.mixin.entityRenderer;
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.HuskEntityRenderer;
-import net.minecraft.client.render.entity.ZombieEntityRenderer;
-import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,20 +15,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HuskEntityRenderer.class)
-public class HuskEntityRendererMixin extends ZombieEntityRenderer {
+@Mixin(PlayerEntityRenderer.class)
+public class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
 
     // * INHERITED -----------------------------------------------------------------------------------------------------
 
-    private static final Identifier TEXTURE = new Identifier("textures/entity/zombie/husk.png");
-
-    public HuskEntityRendererMixin(EntityRendererFactory.Context context) {
-        super(context);
+    public PlayerEntityRendererMixin(EntityRendererFactory.Context ctx, PlayerEntityModel<AbstractClientPlayerEntity> model, float shadowRadius) {
+        super(ctx, model, shadowRadius);
     }
 
     @Override
-    public Identifier getTexture(ZombieEntity zombieEntity) {
-        return TEXTURE;
+    public Identifier getTexture(AbstractClientPlayerEntity abstractClientPlayerEntity) {
+        return abstractClientPlayerEntity.getSkinTexture();
     }
 
     // * INJECTED METHODS ----------------------------------------------------------------------------------------------
@@ -44,7 +43,7 @@ public class HuskEntityRendererMixin extends ZombieEntityRenderer {
 
     // ? Add custom feature renderer to entity using the previously extracted context.
     @Inject(method = "<init>", at = @At(value = "TAIL"))
-    public void addCometFeatureRenderer(EntityRendererFactory.Context context, CallbackInfo ci){
+    public void addCometFeatureRenderer(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci){
         this.addFeature(new CometArmorFeatureRenderer(this,
                 new EndbriteArmorModel(context.getPart(CometClient.ENDBRITE_ARMOR_MODEL_LAYER))
         ));

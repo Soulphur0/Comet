@@ -3,9 +3,11 @@ package com.github.SoulArts.mixin.entityRenderer;
 import com.github.SoulArts.CometClient;
 import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
+import net.minecraft.client.render.entity.DrownedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.HuskEntityRenderer;
-import net.minecraft.client.render.entity.ZombieEntityRenderer;
+import net.minecraft.client.render.entity.ZombieBaseEntityRenderer;
+import net.minecraft.client.render.entity.model.DrownedEntityModel;
+import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,15 +16,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HuskEntityRenderer.class)
-public class HuskEntityRendererMixin extends ZombieEntityRenderer {
+@Mixin(DrownedEntityRenderer.class)
+public class DrownedEntityRendererMixin extends ZombieBaseEntityRenderer<DrownedEntity, DrownedEntityModel<DrownedEntity>> {
 
     // * INHERITED -----------------------------------------------------------------------------------------------------
 
-    private static final Identifier TEXTURE = new Identifier("textures/entity/zombie/husk.png");
+    private static final Identifier TEXTURE = new Identifier("textures/entity/zombie/drowned.png");
 
-    public HuskEntityRendererMixin(EntityRendererFactory.Context context) {
-        super(context);
+    protected DrownedEntityRendererMixin(EntityRendererFactory.Context ctx, DrownedEntityModel<DrownedEntity> bodyModel, DrownedEntityModel<DrownedEntity> legsArmorModel, DrownedEntityModel<DrownedEntity> bodyArmorModel) {
+        super(ctx, bodyModel, legsArmorModel, bodyArmorModel);
     }
 
     @Override
