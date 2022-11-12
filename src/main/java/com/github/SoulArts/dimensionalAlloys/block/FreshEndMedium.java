@@ -57,9 +57,6 @@ public class FreshEndMedium extends TransparentBlock implements CrystallizedEnti
 
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        int crystallizedTicks = ((CrystallizedEntityMethods)entity).getCrystallizedTicks();
-        ((CrystallizedEntityMethods)entity).setCrystallizedTicks(Math.min(((CrystallizedEntityMethods)entity).getCrystallizationFinishedTicks(), crystallizedTicks + 2));
+        ((CrystallizedEntityMethods)entity).setInFreshEndMedium(2);
     }
-
-
 }

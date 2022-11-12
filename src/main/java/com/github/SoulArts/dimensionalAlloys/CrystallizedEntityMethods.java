@@ -2,7 +2,7 @@ package com.github.SoulArts.dimensionalAlloys;
 
 public interface CrystallizedEntityMethods {
 
-    default void setInFreshEndMedium(boolean inFreshEndMedium){
+    default void setInFreshEndMedium(int inFreshEndMedium){
 
     }
 

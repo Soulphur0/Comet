@@ -22,7 +22,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     // $ Added methods
 
     @Override
-    public void setInFreshEndMedium(boolean inFreshEndMedium){
+    public void setInFreshEndMedium(int inFreshEndMedium){
         this.inFreshEndMedium = inFreshEndMedium;
     }
 
@@ -62,7 +62,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     @Shadow public abstract BlockPos getBlockPos();
 
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
-    public boolean inFreshEndMedium;
+    public int inFreshEndMedium;
 
     @Inject(method="<init>", at = @At("TAIL"))
     public void addCrystallizedTicksTracker(EntityType type, World world, CallbackInfo ci){
@@ -74,13 +74,11 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     @Inject(method="baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z"))
     public void unsetInFreshEndMedium(CallbackInfo ci){
         // ! DEBUG
-        if (this.world.isClient())
-            System.out.println("Ticks: " + getCrystallizedTicks());
+        if (!this.world.isClient())
+            System.out.println("Is in fresh medium: " + this.inFreshEndMedium);
         // ! DEBUG
 
-
-        if(this.world.isClient())
-            this.inFreshEndMedium = false;
+        this.inFreshEndMedium = Math.max(this.inFreshEndMedium - 1, 0);
     }
 
 }

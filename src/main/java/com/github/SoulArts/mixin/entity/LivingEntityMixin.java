@@ -27,11 +27,11 @@ public abstract class LivingEntityMixin extends EntityMixin {
     @Inject(method="tickMovement", at = @At("HEAD"))
     public void modifyCrystallizedTicks(CallbackInfo ci){
         int crystallizedTicks = this.getCrystallizedTicks();
-        /*
-        if (!this.world.isClient && this.inFreshEndMedium)
+
+        if (!this.world.isClient && this.inFreshEndMedium > 0)
             setCrystallizedTicks(Math.min(this.getCrystallizationFinishedTicks(), crystallizedTicks + 1));
-        else if (!this.world.isClient)*/
-            this.setCrystallizedTicks(Math.max(0, crystallizedTicks-1));
+        else if (!this.world.isClient)
+            this.setCrystallizedTicks(Math.max(0, crystallizedTicks-2));
 
         // ! Debug: damage by standing
         if(!this.world.isClient && this.isCrystallized()){
