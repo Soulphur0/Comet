@@ -8,6 +8,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +39,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     @Override
     public int getCrystallizationFinishedTicks(){
-        return 1400;
+        return 140;
     }
 
     @Override
@@ -59,8 +60,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     @Shadow @Final protected DataTracker dataTracker;
 
-    @Shadow public abstract BlockPos getBlockPos();
-
+    @Shadow public float horizontalSpeed;
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
     public int inFreshEndMedium;
 
@@ -73,12 +73,8 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     // Calls in every tick in case the entity is no longer in FreshEndMedium
     @Inject(method="baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z"))
     public void unsetInFreshEndMedium(CallbackInfo ci){
-        // ! DEBUG
-        if (!this.world.isClient())
-            System.out.println("Is in fresh medium: " + this.inFreshEndMedium);
-        // ! DEBUG
-
-        this.inFreshEndMedium = Math.max(this.inFreshEndMedium - 1, 0);
+        if (!this.world.isClient)
+            this.inFreshEndMedium = Math.max(this.inFreshEndMedium - 1, 0);
     }
 
 }

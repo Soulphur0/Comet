@@ -24,18 +24,26 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
 
+    private static int scSwitch;
     @Inject(method="tickMovement", at = @At("HEAD"))
     public void modifyCrystallizedTicks(CallbackInfo ci){
-        int crystallizedTicks = this.getCrystallizedTicks();
+        if (!this.world.isClient){
+            int crystallizedTicks = this.getCrystallizedTicks();
 
-        if (!this.world.isClient && this.inFreshEndMedium > 0)
-            setCrystallizedTicks(Math.min(this.getCrystallizationFinishedTicks(), crystallizedTicks + 1));
-        else if (!this.world.isClient)
-            this.setCrystallizedTicks(Math.max(0, crystallizedTicks-2));
+            if (this.inFreshEndMedium > 0)
+                setCrystallizedTicks(Math.min(this.getCrystallizationFinishedTicks(), crystallizedTicks + 1));
+            else
+                this.setCrystallizedTicks(0);
 
-        // ! Debug: damage by standing
-        if(!this.world.isClient && this.isCrystallized()){
-            this.damage(DamageSource.DRAGON_BREATH, 5);
+            // ! Debug: damage by standing
+            if(this.isCrystallized())
+                this.damage(DamageSource.DRAGON_BREATH, 5);
+            // ! Debug: damage by standing
+
+            scSwitch = this.inFreshEndMedium;
+        } else {
+            this.setInFreshEndMedium(scSwitch);
         }
+
     }
 }
