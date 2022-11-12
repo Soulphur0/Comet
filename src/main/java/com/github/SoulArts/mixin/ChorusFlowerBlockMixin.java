@@ -1,10 +1,8 @@
 package com.github.SoulArts.mixin;
 
-import com.github.SoulArts.Comet;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.github.SoulArts.registries.CometBlocks;
 import net.minecraft.block.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldView;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,7 +46,7 @@ public abstract class ChorusFlowerBlockMixin extends Block {
     @Inject(cancellable = true, at=@At(value ="HEAD"),  method="canPlaceAt")
     public void canPlaceAtInject(BlockState state, WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir){
         BlockState blockState = world.getBlockState(pos.down());
-        if (blockState.isOf(this.plantBlock) || blockState.isOf(Blocks.END_STONE) || blockState.isOf(Comet.CHORUS_HUMUS) || blockState.isOf(Comet.CHORUS_HUMUS2)) {
+        if (blockState.isOf(this.plantBlock) || blockState.isOf(Blocks.END_STONE) || blockState.isOf(CometBlocks.CHORUS_HUMUS) || blockState.isOf(CometBlocks.FRESH_CHORUS_HUMUS)) {
             cir.setReturnValue(true);
         }
     }

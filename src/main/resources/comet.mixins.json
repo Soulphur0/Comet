@@ -6,14 +6,15 @@
   "mixins": [
     "ChorusFlowerBlockInvoker",
     "ChorusFlowerBlockMixin",
-    "ChorusPlantBlockMixin"
+    "ChorusPlantBlockMixin",
+    "entity.EntityMixin"
   ],
   "client": [
     "ExampleMixin",
-    "LivingEntityMixin",
     "ModelLoaderAccessor",
     "PersistentProjectileEntityMixin",
     "SpriteAtlasTextureMixin",
+    "entity.LivingEntityMixin",
     "entityRenderer.ArmorStandEntityRendererMixin",
     "entityRenderer.DrownedEntityRendererMixin",
     "entityRenderer.HuskEntityRendererMixin",
@@ -22,7 +23,8 @@
     "entityRenderer.SkeletonEntityRendererMixin",
     "entityRenderer.StrayEntityRendererMixin",
     "entityRenderer.WitherSkeletonEntityRendererMixin",
-    "entityRenderer.ZombieEntityRendererMixin"
+    "entityRenderer.ZombieEntityRendererMixin",
+    "gui.InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

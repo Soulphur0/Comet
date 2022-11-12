@@ -1,6 +1,7 @@
 package com.github.SoulArts;
 
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
+import com.github.SoulArts.registries.CometBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -12,18 +13,13 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class CometClient implements ClientModInitializer {
-    /*
-    public static final EntityModelLayer ENDBRITE_HELMET_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_helmet"), "endbrite_helmet");
-    public static final EntityModelLayer ENDBRITE_CHESTPLATE_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_chestplate"), "endbrite_chestplate");
-    */
+
     public static final EntityModelLayer ENDBRITE_ARMOR_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_armor"), "endbrite_armor_outer");
     @Override
     public void onInitializeClient(){
-        BlockRenderLayerMap.INSTANCE.putBlock(Comet.ENDBRITE_TUBE, RenderLayer.getCutout());
-        /*
-        EntityModelLayerRegistry.registerModelLayer(ENDBRITE_HELMET_MODEL_LAYER, EndbriteHelmetModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ENDBRITE_CHESTPLATE_MODEL_LAYER, EndbriteChestplateModel::getTexturedModelData);
-        */
+        BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.ENDBRITE_TUBE, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.FRESH_END_MEDIUM, RenderLayer.getTranslucent());
+
         EntityModelLayerRegistry.registerModelLayer(ENDBRITE_ARMOR_MODEL_LAYER, EndbriteArmorModel::getTexturedModelData);
     }
 }

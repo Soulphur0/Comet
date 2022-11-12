@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "top": "comet:block/chorus_humus2",
+    "top": "comet:block/fresh_chorus_humus",
     "bottom": "minecraft:block/end_stone",
-    "side": "comet:block/chorus_humus_side2"
+    "side": "comet:block/fresh_chorus_humus_side"
   }
 }
