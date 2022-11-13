@@ -38,10 +38,10 @@ public abstract class LivingEntityMixin extends EntityMixin {
             else
                 this.setCrystallizedTicks(0);
 
-            // ! Debug: damage by standing
+            // ! Debug: damage by standing.
             if(this.isCrystallized())
                 this.damage(DamageSource.DRAGON_BREATH, 5);
-            // ! Debug: damage by standing
+            // ! Debug: damage by standing.
 
             if (this.isPlayer()){
                 this.settings = MinecraftClient.getInstance().options;

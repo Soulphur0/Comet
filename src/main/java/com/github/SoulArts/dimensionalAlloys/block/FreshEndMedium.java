@@ -54,7 +54,6 @@ public class FreshEndMedium extends TransparentBlock implements CrystallizedEnti
     }
 
     // _ Entity behaviour
-
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         ((CrystallizedEntityMethods)entity).setInFreshEndMedium(2);

@@ -71,7 +71,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     }
 
     // - Set inFreshEndMedium to false
-    // Calls in every tick in case the entity is no longer in FreshEndMedium
+    // Calls in every tick in case the entity is no longer in FreshEndMedium.
     @Inject(method="baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z"))
     public void unsetInFreshEndMedium(CallbackInfo ci){
         if (!this.world.isClient)
