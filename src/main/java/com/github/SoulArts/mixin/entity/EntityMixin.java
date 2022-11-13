@@ -60,7 +60,8 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     @Shadow @Final protected DataTracker dataTracker;
 
-    @Shadow public float horizontalSpeed;
+    @Shadow public abstract boolean isPlayer();
+
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
     public int inFreshEndMedium;
 
