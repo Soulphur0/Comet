@@ -1,9 +1,13 @@
 package com.github.SoulArts.registries;
 
+import com.github.SoulArts.dimensionalAlloys.block.CrystallizedCreature;
 import com.github.SoulArts.dimensionalAlloys.block.EndbriteTube;
 import com.github.SoulArts.dimensionalAlloys.block.FreshEndMedium;
+import com.github.SoulArts.dimensionalAlloys.block.entity.CrystallizedCreatureBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -50,14 +54,29 @@ public class CometBlocks {
             .sounds(BlockSoundGroup.LODESTONE));
     public static final BlockItem END_MEDIUM_BLOCK_ITEM = new BlockItem(END_MEDIUM, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
+    // $ Fresh end medium
     public static final Block FRESH_END_MEDIUM = new FreshEndMedium(FabricBlockSettings
             .of(Material.GLASS, MapColor.PALE_PURPLE)
             .strength(0.3f)
             .velocityMultiplier(0.9f)
             .sounds(BlockSoundGroup.GLASS)
             .nonOpaque().blockVision(CometBlocks::never));
-
     public static final BlockItem FRESH_END_MEDIUM_BLOCK_ITEM = new BlockItem(FRESH_END_MEDIUM, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    // $ Crystallized creature
+    public static final Block CRYSTALLIZED_CREATURE = new CrystallizedCreature(FabricBlockSettings
+            .of(Material.GLASS, MapColor.PALE_PURPLE)
+            .strength(0.3f)
+            .sounds(BlockSoundGroup.GLASS)
+            .nonOpaque());
+    public static final BlockItem CRYSTALLIZED_CREATURE_BLOCK_ITEM = new BlockItem(CRYSTALLIZED_CREATURE, new Item.Settings().group(ItemGroup.DECORATIONS));
+
+    // Block entity
+    public static final BlockEntityType<CrystallizedCreatureBlockEntity> CRYSTALLIZED_CREATURE_BLOCK_ENTITY = Registry.register(
+            Registry.BLOCK_ENTITY_TYPE,
+            new Identifier("comet", "crystallized"),
+            FabricBlockEntityTypeBuilder.create(CrystallizedCreatureBlockEntity::new, CRYSTALLIZED_CREATURE).build()
+    );
 
     // _ Block predicates
     private static boolean never(BlockState blockState, BlockView blockView, BlockPos blockPos) {
@@ -103,5 +122,9 @@ public class CometBlocks {
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "fresh_end_medium"), FRESH_END_MEDIUM);
         Registry.register(Registry.ITEM, new Identifier("comet", "fresh_end_medium"), FRESH_END_MEDIUM_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "crystallized_creature"), CRYSTALLIZED_CREATURE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "crystallized_creature"), CRYSTALLIZED_CREATURE_BLOCK_ITEM);
+
     }
 }

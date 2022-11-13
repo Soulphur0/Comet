@@ -62,6 +62,12 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     @Shadow public abstract boolean isPlayer();
 
+    @Shadow public abstract BlockPos getBlockPos();
+
+    @Shadow public abstract void setInvulnerable(boolean invulnerable);
+
+    @Shadow public abstract Vec3d getPos();
+
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
     public int inFreshEndMedium;
 

@@ -1,7 +1,7 @@
 package com.github.SoulArts.mixin.entityRenderer;
 
 import com.github.SoulArts.CometClient;
-import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
+import com.github.SoulArts.dimensionalAlloys.client.render.entity.feature.CometArmorFeatureRenderer;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;

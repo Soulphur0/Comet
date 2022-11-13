@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "comet:block/end_medium_top_dark",
+    "side": "comet:block/end_medium_top_dark",
+    "top": "comet:block/end_medium_top"
+  }
+}

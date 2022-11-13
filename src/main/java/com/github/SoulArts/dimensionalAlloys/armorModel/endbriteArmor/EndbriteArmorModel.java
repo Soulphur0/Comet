@@ -45,15 +45,10 @@ public class EndbriteArmorModel<T extends LivingEntity> extends BipedEntityModel
         this.left_foot = root.getChild("left_foot");
     }
 
-    // TODO: Make antennae tilt backwards when moving, a bit when running, a bit more when flying.
-    // TODO: get head pitch right with the armor stand's/Entity head rotation
-    // TODO: Scale's the helmet and antennae properly.
+
+    // TODO: Scale's the helmet and antennae properly so enchantments don't glitch out.
     // TODO: Add to the project's schema all learned & used with the Endbrite Helmet
-    // TODO: Add feature renderers/models for mobs and players.
-    // TODO: Add texture to bottom pieces.
-    // TODO: Change helmet texture
-    // TODO: Tone down and even out body textures
-    // TODO: Add extra attributes and special behaviour.
+    // TODO: Add extra attributes and special behaviour to armor.
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();

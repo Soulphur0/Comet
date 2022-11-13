@@ -1,7 +1,7 @@
 /*
 package com.github.SoulArts.mixin;
 
-import com.github.SoulArts.dimensionalAlloys.CometArmorFeatureRenderer;
+import com.github.SoulArts.dimensionalAlloys.client.render.entity.feature.CometArmorFeatureRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.LivingEntityRenderer;

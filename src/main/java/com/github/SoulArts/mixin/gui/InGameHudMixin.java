@@ -34,7 +34,7 @@ public abstract class InGameHudMixin extends DrawableHelper implements Crystalli
 
     @Inject(method = "render", at = @At("TAIL"))
     public void renderOverlay(MatrixStack matrices, float tickDelta, CallbackInfo ci){
-        if (((CrystallizedEntityMethods)this.client.player).getCrystallizedTicks() > 0){
+        if (this.client.player != null && ((CrystallizedEntityMethods)this.client.player).getCrystallizedTicks() > 0){
             this.renderOverlay(POWDER_SNOW_OUTLINE, ((CrystallizedEntityMethods)this.client.player).getCrystallizationScale());
         }
     }

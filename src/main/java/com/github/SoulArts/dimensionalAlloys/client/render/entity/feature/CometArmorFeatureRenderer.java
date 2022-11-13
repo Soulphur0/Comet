@@ -1,4 +1,4 @@
-package com.github.SoulArts.dimensionalAlloys;
+package com.github.SoulArts.dimensionalAlloys.client.render.entity.feature;
 
 import com.github.SoulArts.Comet;
 import com.github.SoulArts.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
