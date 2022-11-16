@@ -1,23 +1,15 @@
 package com.github.SoulArts.mixin.entity;
 
-import com.github.SoulArts.Comet;
 import com.github.SoulArts.registries.CometBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.input.Input;
-import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends EntityMixin {
+
+    // $ Comet ---------------------------------------------------------------------------------------------------------
 
     private boolean isPlayerEntityMoving(){
         return this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() ||
@@ -51,8 +45,6 @@ public abstract class LivingEntityMixin extends EntityMixin {
     }
 
     // $ Injected ------------------------------------------------------------------------------------------------------
-
-    @Shadow public abstract boolean damage(DamageSource source, float amount);
 
     GameOptions settings;
 
@@ -90,11 +82,15 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 }
 
                 if (!this.isPlayer()){
-                    ItemPlacementContext itemPlacementContext =
-                            new ItemPlacementContext(this.world, null, Hand.MAIN_HAND, new ItemStack(CometBlocks.CRYSTALLIZED_CREATURE.asItem()),
-                                    new BlockHitResult(this.getPos(), Direction.DOWN,this.getBlockPos(),false));
+                    NbtCompound nbtCompound = new NbtCompound();
+                    this.saveNbt(nbtCompound);
 
-                    this.world.setBlockState(this.getBlockPos(), CometBlocks.CRYSTALLIZED_CREATURE.getPlacementState(itemPlacementContext));
+                    this.world.setBlockState(this.getBlockPos(), CometBlocks.CRYSTALLIZED_CREATURE.getDefaultState());
+                    this.world.getBlockEntity(this.getBlockPos(), CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) -> {
+                        blockEntity.writeData(nbtCompound);
+                    });
+
+                    this.discard();
                 }
             } else {
                 this.finishedCrystallization = false;
@@ -106,6 +102,5 @@ public abstract class LivingEntityMixin extends EntityMixin {
         } else {
             this.setInFreshEndMedium(scSwitch);
         }
-
     }
 }

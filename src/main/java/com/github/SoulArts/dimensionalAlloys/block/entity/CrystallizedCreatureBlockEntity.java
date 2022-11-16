@@ -1,6 +1,7 @@
 package com.github.SoulArts.dimensionalAlloys.block.entity;
 
 import com.github.SoulArts.registries.CometBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.BlockItem;
@@ -55,23 +56,25 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
     // $ Comet methods
 
     // ? Write data to block entity.
-    public void writeDataTest(NbtCompound mobData){
+    public void writeData(NbtCompound mobData){
         this.mobData = mobData;
     }
 
-    // ? Retrieve data from block entity.
+    // ? Retrieve data from item stack.
     public void readNbtFromItemStack(ItemStack itemStack){
-        NbtCompound nbtCompound = BlockItem.getBlockEntityNbt(itemStack);
+        NbtCompound nbtCompound;
+        nbtCompound = BlockItem.getBlockEntityNbt(itemStack);
+
         if (nbtCompound != null)
             this.mobData = nbtCompound.getCompound("mobData");
     }
 
-    // ? Write NBT data to dropped ItemStack
+    // ? Write NBT data to middle-click picked ItemStack
     // TODO make this return mob data nbt in the item form, rn it return dummy data
     public ItemStack getPickStack() {
         ItemStack itemStack = new ItemStack(CometBlocks.CRYSTALLIZED_CREATURE);
         NbtCompound nbtCompound = new NbtCompound();
-        nbtCompound.putString("testItemPick", "This is a total test");
+        nbtCompound.putString("getPickStack", "getPickStack method is not finished");
         BlockItem.setBlockEntityNbt(itemStack, this.getType(), nbtCompound);
 
         // ? Implement custom name in the future.

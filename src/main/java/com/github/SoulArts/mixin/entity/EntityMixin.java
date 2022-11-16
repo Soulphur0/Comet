@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -67,6 +68,14 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     @Shadow public abstract void setInvulnerable(boolean invulnerable);
 
     @Shadow public abstract Vec3d getPos();
+
+    @Shadow public abstract void setInvisible(boolean invisible);
+
+    @Shadow public abstract void setPos(double x, double y, double z);
+
+    @Shadow public abstract void discard();
+
+    @Shadow public abstract boolean saveNbt(NbtCompound nbt);
 
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
     public int inFreshEndMedium;

@@ -37,19 +37,6 @@ public class CrystallizedCreature extends Block implements BlockEntityProvider, 
         return new CrystallizedCreatureBlockEntity(pos, state);
     }
 
-    // todo remove this debug method
-    // ! Debug, the nbt data should be written by the living entity mixin
-    @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof CrystallizedCreatureBlockEntity){
-            NbtCompound nbtCompound = new NbtCompound();
-            entity.saveNbt(nbtCompound);
-            ((CrystallizedCreatureBlockEntity) blockEntity).writeDataTest(nbtCompound);
-        }
-
-    }
-
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (world.isClient){
