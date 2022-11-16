@@ -74,7 +74,7 @@ public class CometBlocks {
     // Block entity
     public static final BlockEntityType<CrystallizedCreatureBlockEntity> CRYSTALLIZED_CREATURE_BLOCK_ENTITY = Registry.register(
             Registry.BLOCK_ENTITY_TYPE,
-            new Identifier("comet", "crystallized"),
+            new Identifier("comet", "crystallized_creature"),
             FabricBlockEntityTypeBuilder.create(CrystallizedCreatureBlockEntity::new, CRYSTALLIZED_CREATURE).build()
     );
 
