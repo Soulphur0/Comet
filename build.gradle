@@ -39,6 +39,10 @@ dependencies {
 	include(annotationProcessor("com.github.LlamaLad7:MixinExtras:0.1.0"))
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/comet.accesswidener")
+}
+
 processResources {
 	inputs.property "version", project.version
 
