@@ -10,20 +10,20 @@ public interface CrystallizedEntityMethods {
         return false;
     }
 
-    default void setCrystallizedTicks(int crystallizedTicks){
-
-    }
+    default void setCrystallizedTicks(int crystallizedTicks){}
 
     default int getCrystallizedTicks(){
         return 0;
     }
 
-    default int getCrystallizationFinishedTicks(){
-        return 0;
-    }
+    //default void setCrystallized(boolean isCrystallized) {}
 
     default boolean isCrystallized(){
         return false;
+    }
+
+    default int getCrystallizationFinishedTicks(){
+        return 0;
     }
 
     /** <p>Used to get a value between 1.0 and 0.0; which determines how much crystallization

@@ -43,13 +43,13 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     }
 
     @Override
-    public int getCrystallizationFinishedTicks(){
-        return 140;
+    public boolean isCrystallized(){
+        return this.getCrystallizedTicks() >= this.getCrystallizationFinishedTicks();
     }
 
     @Override
-    public boolean isCrystallized(){
-        return this.getCrystallizedTicks() >= this.getCrystallizationFinishedTicks();
+    public int getCrystallizationFinishedTicks(){
+        return 140;
     }
 
     @Override

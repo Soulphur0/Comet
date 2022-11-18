@@ -17,7 +17,6 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
         super(context);
     }
 
-    // TODO manage to render entity decal with transparency.
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         VertexConsumer vertexConsumer;
@@ -25,6 +24,9 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
 
         float scale = ((CrystallizedEntityMethods)entity).getCrystallizationScale();
 
-        this.getContextModel().render(matrices, vertexConsumer, light, 0, 0.5F, 0.5F, 0.5F, 0.95F);
+        if (!entity.isCrystallized())
+            this.getContextModel().render(matrices, vertexConsumer, light, 0, 1.0F, 1.0F, 1.0F, scale);
+        else
+            this.getContextModel().render(matrices, vertexConsumer, light, 0, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }
