@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.SoulArts.Comet"
+      "com.github.Soulphur0.Comet"
     ],
     "client":[
-      "com.github.SoulArts.CometClient"
+      "com.github.Soulphur0.CometClient"
     ],
     "preLaunch": [
       "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
@@ -43,7 +43,7 @@
 
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_1297": ["com/github/SoulArts/dimensionalAlloys/CrystallizedEntityMethods"]
+      "net/minecraft/class_1297": ["com/github/Soulphur0/dimensionalAlloys/CrystallizedEntityMethods"]
     }
   }
 

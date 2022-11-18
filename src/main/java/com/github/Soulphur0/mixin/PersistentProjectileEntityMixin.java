@@ -39,5 +39,3 @@ public abstract class PersistentProjectileEntityMixin extends ProjectileEntity {
         }
     }
 }
-
-// Entity línea 2742
