@@ -20,6 +20,7 @@
     "entityRenderer.HuskEntityRendererMixin",
     "entityRenderer.MobEntityRendererMixin",
     "entityRenderer.PiglinEntityRendererMixin",
+    "entityRenderer.PlayerEntityRendererMixin",
     "entityRenderer.SkeletonEntityRendererMixin",
     "entityRenderer.StrayEntityRendererMixin",
     "entityRenderer.WitherSkeletonEntityRendererMixin",

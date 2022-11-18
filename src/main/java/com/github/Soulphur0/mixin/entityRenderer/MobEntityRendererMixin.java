@@ -25,6 +25,8 @@ public class MobEntityRendererMixin<T extends MobEntity, M extends EntityModel<T
         return null;
     }
 
+    // * Injections ----------------------------------------------------------------------------------------------------
+
     @Inject(method="<init>", at = @At(value = "TAIL"))
     public void addCometFeatureRenderer(EntityRendererFactory.Context context, M entityModel, float f, CallbackInfo ci){
         this.addFeature(new CrystallizationFeatureRenderer(this));
