@@ -1,9 +1,11 @@
 package com.github.Soulphur0.registries;
 
 import com.github.Soulphur0.dimensionalAlloys.block.CrystallizedCreature;
+import com.github.Soulphur0.dimensionalAlloys.block.EndIronOre;
 import com.github.Soulphur0.dimensionalAlloys.block.EndbriteTube;
 import com.github.Soulphur0.dimensionalAlloys.block.FreshEndMedium;
 import com.github.Soulphur0.dimensionalAlloys.block.entity.CrystallizedCreatureBlockEntity;
+import com.github.Soulphur0.dimensionalAlloys.block.entity.EndIronOreBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.*;
@@ -20,11 +22,24 @@ import net.minecraft.world.BlockView;
 public class CometBlocks {
 
     // $ End iron ore
-    public static final Block END_IRON_ORE = new Block(FabricBlockSettings
+    public static final Block END_IRON_ORE = new EndIronOre(FabricBlockSettings
             .of(Material.STONE)
             .hardness(3f)
             .sounds(BlockSoundGroup.STONE));
     public static final BlockItem END_IRON_ORE_BLOCK_ITEM = new BlockItem(END_IRON_ORE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    // * Revealed block
+    public static final Block END_IRON_ORE_REVEALED = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .hardness(3f)
+            .sounds(BlockSoundGroup.STONE));
+
+    // * Block entity
+    public static final BlockEntityType<EndIronOreBlockEntity> END_IRON_ORE_BLOCK_ENTITY = Registry.register(
+            Registry.BLOCK_ENTITY_TYPE,
+            new Identifier("comet", "end_iron_ore"),
+            FabricBlockEntityTypeBuilder.create(EndIronOreBlockEntity::new, END_IRON_ORE).build()
+    );
 
     // $ Endbrite tube
     public static final Block ENDBRITE_TUBE = new EndbriteTube(FabricBlockSettings
@@ -70,7 +85,7 @@ public class CometBlocks {
             .nonOpaque());
     public static final BlockItem CRYSTALLIZED_CREATURE_BLOCK_ITEM = new BlockItem(CRYSTALLIZED_CREATURE, new Item.Settings().group(ItemGroup.DECORATIONS));
 
-    // Block entity
+    // * Block entity
     public static final BlockEntityType<CrystallizedCreatureBlockEntity> CRYSTALLIZED_CREATURE_BLOCK_ENTITY = Registry.register(
             Registry.BLOCK_ENTITY_TYPE,
             new Identifier("comet", "crystallized_creature"),
@@ -106,6 +121,8 @@ public class CometBlocks {
     public static void register(){
         Registry.register(Registry.BLOCK, new Identifier("comet","end_iron_ore"), END_IRON_ORE);
         Registry.register(Registry.ITEM, new Identifier("comet", "end_iron_ore"), END_IRON_ORE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet","end_iron_ore_revealed"), END_IRON_ORE_REVEALED);
 
         Registry.register(Registry.BLOCK, new Identifier("comet","endbrite_tube"), ENDBRITE_TUBE);
         Registry.register(Registry.ITEM, new Identifier("comet","endbrite_tube"), ENDBRITE_TUBE_BLOCK_ITEM);

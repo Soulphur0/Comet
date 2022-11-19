@@ -21,7 +21,9 @@ public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRende
     MobEntity mobEntity;
     private static final ItemStack stack = new ItemStack(Items.JUKEBOX, 1);
 
-    public CrystallizedCreatureBlockEntityRenderer(BlockEntityRendererFactory.Context ctx){}
+    public CrystallizedCreatureBlockEntityRenderer(BlockEntityRendererFactory.Context ctx){
+
+    }
 
     @Override
     public void render(CrystallizedCreatureBlockEntity entityBlock, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
@@ -38,7 +40,6 @@ public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRende
             MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(entity).render(entity,entity.getYaw(),0,matrices,vertexConsumers,light);
             matrices.pop();
         }
-
 
     }
 }

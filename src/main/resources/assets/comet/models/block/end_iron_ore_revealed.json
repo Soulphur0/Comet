@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "minecraft:block/end_stone"
+    "all": "comet:block/end_iron_ore_revealed"
   }
 }
