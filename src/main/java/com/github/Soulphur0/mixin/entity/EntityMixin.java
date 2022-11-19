@@ -8,6 +8,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -71,15 +72,15 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     @Shadow public abstract void setInvulnerable(boolean invulnerable);
 
-    @Shadow public abstract Vec3d getPos();
-
-    @Shadow public abstract void setInvisible(boolean invisible);
-
-    @Shadow public abstract void setPos(double x, double y, double z);
-
     @Shadow public abstract void discard();
 
     @Shadow public abstract boolean saveNbt(NbtCompound nbt);
+
+    @Shadow public abstract float getHeadYaw();
+
+    @Shadow public abstract void setNoGravity(boolean noGravity);
+
+    @Shadow public abstract boolean isSpectator();
 
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
     public int inFreshEndMedium;

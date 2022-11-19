@@ -6,28 +6,40 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends EntityMixin {
 
     // $ Comet ---------------------------------------------------------------------------------------------------------
 
-    @Shadow
-    public static DefaultAttributeContainer.Builder createLivingAttributes() {
-        return null;
-    }
+    @Shadow public abstract float getHeadYaw();
 
+    @Shadow public abstract boolean isAlive();
+
+    @Shadow public abstract boolean isClimbing();
+
+    @Shadow public abstract DamageTracker getDamageTracker();
+
+    GameOptions settings = MinecraftClient.getInstance().options;
     private boolean isPlayerEntityMoving(){
-        return this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() ||
-                this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed();
+        boolean playerMoved = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed();
+
+        if (this.finishedCrystallization && this.getHeadYaw() != onCrystallizationRotation){
+            playerMoved = true;
+        }
+
+        return playerMoved;
     }
 
     private void playBreakFreeSound(){
@@ -50,27 +62,29 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     // $ Injected ------------------------------------------------------------------------------------------------------
 
-    GameOptions settings;
-
     private static int scSwitch;
     private boolean finishedCrystallization = false;
+    float onCrystallizationRotation;
+
     @Inject(method="tickMovement", at = @At("HEAD"))
     public void modifyCrystallizedTicks(CallbackInfo ci){
         if (!this.world.isClient){
             int crystallizedTicks = this.getCrystallizedTicks();
 
-            // Update ticks whether the entity is in or left medium.
+            // - Update ticks for entities in end medium.
+            // * Update ticks whether the entity is in, or left medium.
+            // Completely crystallized creatures (exclusively the player since others de-spawn) remain crystallized.
             if (this.inFreshEndMedium > 0)
                 setCrystallizedTicks(Math.min(this.getCrystallizationFinishedTicks(), crystallizedTicks + 1));
-            else {
+            else if (!this.isCrystallized()) {
                 this.playBreakFreeSound();
                 this.setCrystallizedTicks(0);
             }
 
-            // Update ticks if the player moved while in medium.
+            // * Update ticks if the player moved while in medium.
             if (this.isPlayer()){
-                this.settings = MinecraftClient.getInstance().options;
-                if (this.isPlayerEntityMoving()){
+                // ! this.settings =
+                if (this.isPlayerEntityMoving() || this.getDamageTracker().hasDamage()){
                     if (crystallizedTicks >= 20)
                         this.playBreakFreeSound();
                     this.setCrystallizedTicks(0);
@@ -78,13 +92,20 @@ public abstract class LivingEntityMixin extends EntityMixin {
             }
 
             // - Apply effects for fully crystallized entities
-            // todo make it so player is invulnerable if crystallized, but not remove player invulnerability in every tick
             if (this.isCrystallized()){
+                // * Apply on-crystallization effects.
                 if (!this.finishedCrystallization){
+                    if (this.isPlayer()){
+                        // Set player invulnerable.
+                        this.setNoGravity(true);
+                        this.setInvulnerable(true);
+                        this.onCrystallizationRotation = this.getHeadYaw();
+                    }
                     this.playFinishedCrystallizationSound();
                     this.finishedCrystallization = true;
                 }
 
+                // * Turn non-player entities into blocks.
                 if (!this.isPlayer()){
                     NbtCompound nbtCompound = new NbtCompound();
                     this.saveNbt(nbtCompound);
@@ -95,11 +116,14 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     });
 
                     this.discard();
-                } else {
-                    createLivingAttributes().add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 10.0F).build();
                 }
             } else {
-                this.finishedCrystallization = false;
+                // * Remove player invulnerability.
+                if (this.finishedCrystallization){
+                    this.setNoGravity(false);
+                    this.setInvulnerable(false);
+                    this.finishedCrystallization = false;
+                }
             }
 
             // Sync client
@@ -107,5 +131,10 @@ public abstract class LivingEntityMixin extends EntityMixin {
         } else {
             this.setInFreshEndMedium(scSwitch);
         }
+    }
+
+    @Inject(method="isPushable", at=@At("HEAD"), cancellable = true)
+    public void isPushableInject(CallbackInfoReturnable<Boolean> cir){
+        cir.setReturnValue(this.isAlive() && !this.isSpectator() && !this.isClimbing() && !this.isCrystallized());
     }
 }
