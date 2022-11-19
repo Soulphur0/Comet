@@ -15,6 +15,7 @@
     "PersistentProjectileEntityMixin",
     "SpriteAtlasTextureMixin",
     "entity.LivingEntityMixin",
+    "entityModel.PlayerEntityModelMixin",
     "entityRenderer.ArmorStandEntityRendererMixin",
     "entityRenderer.DrownedEntityRendererMixin",
     "entityRenderer.HuskEntityRendererMixin",

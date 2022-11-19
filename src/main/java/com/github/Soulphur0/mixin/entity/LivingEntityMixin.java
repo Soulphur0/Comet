@@ -4,10 +4,13 @@ import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -16,6 +19,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LivingEntityMixin extends EntityMixin {
 
     // $ Comet ---------------------------------------------------------------------------------------------------------
+
+    @Shadow
+    public static DefaultAttributeContainer.Builder createLivingAttributes() {
+        return null;
+    }
 
     private boolean isPlayerEntityMoving(){
         return this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() ||
@@ -87,6 +95,8 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     });
 
                     this.discard();
+                } else {
+                    createLivingAttributes().add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 10.0F).build();
                 }
             } else {
                 this.finishedCrystallization = false;
