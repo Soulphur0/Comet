@@ -1,6 +1,8 @@
 package com.github.Soulphur0.dimensionalAlloys.block.entity;
 
+import com.github.Soulphur0.dimensionalAlloys.block.AbstractCrystallizedCreatureBlock;
 import com.github.Soulphur0.dimensionalAlloys.block.CrystallizedCreature;
+import com.github.Soulphur0.dimensionalAlloys.block.TrimmedCrystallizedCreature;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,29 +21,25 @@ import org.jetbrains.annotations.Nullable;
 public class CrystallizedCreatureBlockEntity extends BlockEntity {
 
     private NbtCompound mobData;
-    private boolean blockStateData;
 
     public CrystallizedCreatureBlockEntity(BlockPos pos, BlockState state){
         super(CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY, pos, state);
     }
 
     // $ Tick
-
     public static void tick(World world, BlockPos pos, BlockState state, CrystallizedCreatureBlockEntity be) {
         if (world.getFluidState(pos).getFluid() == Fluids.WATER){
-            if (state.getBlock() instanceof CrystallizedCreature cc){
-                cc.releaseMob(world, pos);
+            Block block = state.getBlock();
+            if (block instanceof AbstractCrystallizedCreatureBlock accb){
+                accb.releaseMob(world, pos);
             }
         }
     }
 
     // $ Write and retrieve data from NBT
-
     @Override
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-
-        nbt.putBoolean("blockStateData", blockStateData);
 
         if (mobData != null)
             nbt.put("mobData", mobData);
@@ -54,12 +52,10 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
 
         if (nbt != null){
             this.mobData = nbt.getCompound("mobData");
-            this.blockStateData = nbt.getBoolean("blockStateData");
         }
     }
 
     // $ Sync data S2C
-
     @Nullable
     @Override
     public Packet<ClientPlayPacketListener> toUpdatePacket() {
@@ -79,13 +75,6 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
     // Used on block creation in LivingEntityMixin.
     public void writeData(NbtCompound data){
         this.mobData = data.getCompound("mobData");
-        this.blockStateData = data.getBoolean("blockStateData");
-    }
-
-    // ? Write block state data to block entity.
-    // Used in onUse() method of this block.
-    public void writeBlockStateData(boolean blockStateData){
-        this.blockStateData = blockStateData;
     }
 
     // ? Write data from item stack.
@@ -96,7 +85,6 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
 
         if (nbtCompound != null){
             this.mobData = nbtCompound.getCompound("mobData");
-            this.blockStateData = nbtCompound.getBoolean("blockStateData");
         }
     }
 
@@ -105,10 +93,6 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
     // ? Get mob data
     public NbtCompound getMobData(){
         return mobData;
-    }
-
-    public boolean getBlockStateData(){
-        return blockStateData;
     }
 
     // ? Write NBT data to middle-click picked ItemStack

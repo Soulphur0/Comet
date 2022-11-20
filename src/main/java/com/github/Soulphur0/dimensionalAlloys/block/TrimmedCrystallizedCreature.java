@@ -7,18 +7,16 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.*;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CrystallizedCreature extends AbstractCrystallizedCreatureBlock implements BlockEntityProvider, Waterloggable {
+public class TrimmedCrystallizedCreature extends AbstractCrystallizedCreatureBlock implements BlockEntityProvider, Waterloggable {
 
-    public CrystallizedCreature(Settings settings) {
+    public TrimmedCrystallizedCreature(Settings settings) {
         super(settings);
     }
 
@@ -38,18 +36,15 @@ public class CrystallizedCreature extends AbstractCrystallizedCreatureBlock impl
     // ? Player interaction, turn into baseless block
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        // Todo add end medium item here to restore base.
+        /*
         Item mainHandItem = player.getMainHandStack().getItem();
         if (mainHandItem instanceof PickaxeItem){
-            NbtCompound oldBlockNBT = new NbtCompound();
-            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) ->{
-                oldBlockNBT.put("mobData",blockEntity.getMobData());
-            });
-
-            world.setBlockState(pos, CometBlocks.TRIMMED_CRYSTALLIZED_CREATURE.getDefaultState());
-            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) -> {
-                blockEntity.writeData(oldBlockNBT);
+            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent(blockEntity -> {
+                blockEntity.writeBlockStateData(true);
             });
         }
+        */
         return super.onUse(state, world, pos, player, hand, hit);
     }
 }

@@ -120,7 +120,6 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 // * Turn non-player entities into blocks.
                 if (!this.isPlayer()){
                     NbtCompound nbtCompound = new NbtCompound();
-                    nbtCompound.putBoolean("blockStateData", false);
 
                     NbtCompound mobDataCompound = new NbtCompound();
                     this.saveNbt(mobDataCompound);

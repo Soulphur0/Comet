@@ -83,11 +83,27 @@ public class CometBlocks {
             .nonOpaque());
     public static final BlockItem CRYSTALLIZED_CREATURE_BLOCK_ITEM = new BlockItem(CRYSTALLIZED_CREATURE, new Item.Settings().group(ItemGroup.DECORATIONS));
 
+    // * Trimmed version
+    public static final Block TRIMMED_CRYSTALLIZED_CREATURE = new TrimmedCrystallizedCreature(FabricBlockSettings
+            .of(Material.GLASS, MapColor.PALE_PURPLE)
+            .strength(0.3f)
+            .sounds(BlockSoundGroup.GLASS)
+            .nonOpaque());
+    public static final BlockItem TRIMMED_CRYSTALLIZED_CREATURE_BLOCK_ITEM = new BlockItem(TRIMMED_CRYSTALLIZED_CREATURE, new Item.Settings().group(ItemGroup.DECORATIONS));
+
+    // * Mob statue
+    public static final Block CREATURE_STATUE = new CreatureStatue(FabricBlockSettings
+            .of(Material.STONE, MapColor.LIGHT_BLUE)
+            .strength(0.3f)
+            .sounds(BlockSoundGroup.STONE)
+            .nonOpaque());
+    public static final BlockItem CREATURE_STATUE_BLOCK_ITEM = new BlockItem(CREATURE_STATUE, new Item.Settings().group(ItemGroup.DECORATIONS));
+
     // * Block entity
     public static final BlockEntityType<CrystallizedCreatureBlockEntity> CRYSTALLIZED_CREATURE_BLOCK_ENTITY = Registry.register(
             Registry.BLOCK_ENTITY_TYPE,
             new Identifier("comet", "crystallized_creature"),
-            FabricBlockEntityTypeBuilder.create(CrystallizedCreatureBlockEntity::new, CRYSTALLIZED_CREATURE).build()
+            FabricBlockEntityTypeBuilder.create(CrystallizedCreatureBlockEntity::new, CRYSTALLIZED_CREATURE, TRIMMED_CRYSTALLIZED_CREATURE, CREATURE_STATUE).build()
     );
 
     // _ Block predicates
@@ -140,5 +156,10 @@ public class CometBlocks {
         Registry.register(Registry.BLOCK, new Identifier("comet", "crystallized_creature"), CRYSTALLIZED_CREATURE);
         Registry.register(Registry.ITEM, new Identifier("comet", "crystallized_creature"), CRYSTALLIZED_CREATURE_BLOCK_ITEM);
 
+        Registry.register(Registry.BLOCK, new Identifier("comet", "trimmed_crystallized_creature"), TRIMMED_CRYSTALLIZED_CREATURE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "trimmed_crystallized_creature"), TRIMMED_CRYSTALLIZED_CREATURE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "creature_statue"), CREATURE_STATUE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "creature_statue"), CREATURE_STATUE_BLOCK_ITEM);
     }
 }

@@ -1,14 +1,5 @@
 {
   "variants": {
-    "clear=false": [
-		{ 
-			"model": "comet:block/crystallized_creature" 
-		}
-	],
-	"clear=true": [
-		{ 
-			"model": "comet:block/crystallized_creature_clear" 
-		}
-	]
+    "": { "model": "comet:block/crystallized_creature" }
   }
 }

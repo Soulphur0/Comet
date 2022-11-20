@@ -18,9 +18,6 @@ import net.minecraft.util.math.BlockPos;
 
 public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRenderer<CrystallizedCreatureBlockEntity> {
 
-    MobEntity mobEntity;
-    private static final ItemStack stack = new ItemStack(Items.JUKEBOX, 1);
-
     public CrystallizedCreatureBlockEntityRenderer(BlockEntityRendererFactory.Context ctx){
 
     }
