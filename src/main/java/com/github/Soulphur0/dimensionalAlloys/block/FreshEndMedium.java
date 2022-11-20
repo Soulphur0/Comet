@@ -3,6 +3,11 @@ package com.github.Soulphur0.dimensionalAlloys.block;
 import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.mob.ElderGuardianEntity;
+import net.minecraft.entity.mob.RavagerEntity;
+import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -72,6 +77,8 @@ public class FreshEndMedium extends TransparentBlock implements CrystallizedEnti
     // _ Entity behaviour
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity || entity instanceof ElderGuardianEntity || entity instanceof RavagerEntity || entity instanceof WardenEntity)
+            return;
         ((CrystallizedEntityMethods)entity).setInFreshEndMedium(2);
     }
 
