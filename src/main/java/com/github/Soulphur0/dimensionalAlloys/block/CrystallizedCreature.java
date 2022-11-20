@@ -13,13 +13,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -33,10 +34,12 @@ import org.jetbrains.annotations.Nullable;
 public class CrystallizedCreature extends BlockWithEntity implements BlockEntityProvider, Waterloggable {
 
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    public static final BooleanProperty CLEAR = BooleanProperty.of("clear");
+    public static final BooleanProperty FIXED =BooleanProperty.of("fixed");
 
     public CrystallizedCreature(Settings settings) {
         super(settings);
-        setDefaultState(this.getStateManager().getDefaultState().with(WATERLOGGED,false));
+        setDefaultState(this.getStateManager().getDefaultState().with(WATERLOGGED,false).with(CLEAR, false));
     }
 
     // ? Ticking
@@ -46,7 +49,6 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
         return checkType(type, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY, CrystallizedCreatureBlockEntity::tick);
     }
 
-    // Fix issues when inheriting from BlockWithEntity.
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
@@ -57,6 +59,7 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED);
+        builder.add(CLEAR);
     }
 
     @Nullable
@@ -158,5 +161,16 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
                 }
             }
         }
+    }
+
+    // ? Player interaction
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        Item mainHandItem = player.getMainHandStack().getItem();
+        if (mainHandItem instanceof PickaxeItem)
+            world.setBlockState(pos,state.with(CLEAR, true));
+
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 }
