@@ -43,7 +43,8 @@
 
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_1297": ["com/github/Soulphur0/dimensionalAlloys/CrystallizedEntityMethods"]
+      "net/minecraft/class_1297": ["com/github/Soulphur0/dimensionalAlloys/CrystallizedEntityMethods"],
+      "net/minecraft/class_1293": ["com/github/Soulphur0/dimensionalAlloys/StatusEffectInstanceMethods"]
     }
   }
 

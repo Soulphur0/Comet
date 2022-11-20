@@ -4,14 +4,11 @@ import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,6 +30,10 @@ public abstract class LivingEntityMixin extends EntityMixin {
     @Shadow public abstract boolean isClimbing();
 
     @Shadow public abstract DamageTracker getDamageTracker();
+
+    @Shadow public abstract Collection<StatusEffectInstance> getStatusEffects();
+
+    @Shadow protected abstract void markEffectsDirty();
 
     GameOptions settings = MinecraftClient.getInstance().options;
     private boolean isPlayerEntityMoving(){
@@ -107,6 +108,15 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.finishedCrystallization = true;
                 }
 
+                // * Always hide particle effects.
+                this.getStatusEffects().forEach(effect ->{
+                    if (effect.shouldShowParticles()){
+                        effect.setShowParticles(false);
+                        effect.setHiddenByCrystallization(true);
+                    }
+                });
+                this.markEffectsDirty();
+
                 // * Turn non-player entities into blocks.
                 if (!this.isPlayer()){
                     NbtCompound nbtCompound = new NbtCompound();
@@ -120,11 +130,19 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.discard();
                 }
             } else {
-                // * Remove player invulnerability.
-                if (this.finishedCrystallization){
+                // * Reset player to normal state.
+                if (this.isPlayer() && this.finishedCrystallization){
                     this.setNoGravity(false);
                     this.setInvulnerable(false);
                     this.finishedCrystallization = false;
+
+                    this.getStatusEffects().forEach(effect ->{
+                        if (effect.isHiddenByCrystallization()){
+                            effect.setShowParticles(true);
+                            effect.setHiddenByCrystallization(false);
+                        }
+                    });
+                    this.markEffectsDirty();
                 }
             }
 
