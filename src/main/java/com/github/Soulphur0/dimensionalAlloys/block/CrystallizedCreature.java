@@ -25,10 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
 public class CrystallizedCreature extends BlockWithEntity implements BlockEntityProvider, Waterloggable {
@@ -75,6 +72,11 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        if (!canPlaceAt(state, world, pos)){
+            dropBlockItem((World)world,pos);
+            return Blocks.AIR.getDefaultState();
+        }
+
         if (state.get(WATERLOGGED)){
             world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -95,6 +97,14 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
         return new CrystallizedCreatureBlockEntity(pos, state);
     }
 
+    // ? Block placement behaviour
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        BlockPos blockPos = pos.down();
+        BlockState blockState = world.getBlockState(blockPos);
+        return blockState.isSideSolid(world, blockPos, Direction.UP, SideShapeType.CENTER);
+    }
+
     // ? NBT jugglery
 
     @Override
@@ -109,32 +119,33 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
     @Override
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient && world.getGameRules().getBoolean(GameRules.DO_TILE_DROPS)){
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof CrystallizedCreatureBlockEntity crystallizedCreatureBlockEntity) {
-                ItemStack itemStack = new ItemStack(this);
-
-                // ? Store nbt data to the item if the block entity has nbt data
-                // Blocks without nbt data are not dropped to creative players.
-                if(crystallizedCreatureBlockEntity.mobData != null){
-                    NbtCompound nbtCompound = new NbtCompound();
-                    nbtCompound.put("mobData", crystallizedCreatureBlockEntity.mobData);
-                    BlockItem.setBlockEntityNbt(itemStack, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY,nbtCompound);
-                } else if (player.isCreative()){
-                    return;
-                }
-
-                ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), itemStack);
-                itemEntity.setToDefaultPickupDelay();
-                world.spawnEntity(itemEntity);
-            }
+            dropBlockItem(world, pos);
         }
         super.onBreak(world, pos, state, player);
     }
 
-    // Todo revise later to add functionality
+    private void dropBlockItem(World world, BlockPos pos){
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof CrystallizedCreatureBlockEntity crystallizedCreatureBlockEntity) {
+            ItemStack itemStack = new ItemStack(this);
+
+            // ? Store nbt data to the item if the block entity has nbt data
+            // Blocks without nbt data are not dropped.
+            if(crystallizedCreatureBlockEntity.mobData != null){
+                NbtCompound nbtCompound = new NbtCompound();
+                nbtCompound.put("mobData", crystallizedCreatureBlockEntity.mobData);
+                BlockItem.setBlockEntityNbt(itemStack, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY,nbtCompound);
+            } else
+                return;
+
+            ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), itemStack);
+            itemEntity.setToDefaultPickupDelay();
+            world.spawnEntity(itemEntity);
+        }
+    }
+
     @Override
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
-        System.out.println("getPickStack()");
         BlockEntity blockEntity = world.getBlockEntity(pos);
         return blockEntity instanceof CrystallizedCreatureBlockEntity ? ((CrystallizedCreatureBlockEntity)blockEntity).getPickStack() : super.getPickStack(world, pos, state);
     }
@@ -153,13 +164,12 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
                     Entity entity = EntityType.loadEntityWithPassengers(nbtCompound.getCompound("mobData"), world, (loadedEntity) -> loadedEntity);
 
                     if (entity!=null){
-                        entity.refreshPositionAndAngles(pos.getX(), pos.getY(),pos.getZ(),entity.getYaw(),entity.getPitch());
+                        entity.refreshPositionAndAngles(pos.getX()+0.5D, pos.getY(),pos.getZ()+0.5D,entity.getYaw(),entity.getPitch());
                         world.spawnEntity(entity);
-
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 }
             }
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 

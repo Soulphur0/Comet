@@ -82,19 +82,13 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
     }
 
     // ? Write NBT data to middle-click picked ItemStack
-    // TODO make this return mob data nbt in the item form, rn it return dummy data
     public ItemStack getPickStack() {
         ItemStack itemStack = new ItemStack(CometBlocks.CRYSTALLIZED_CREATURE);
         NbtCompound nbtCompound = new NbtCompound();
-        nbtCompound.putString("getPickStack", "getPickStack method is not finished");
-        BlockItem.setBlockEntityNbt(itemStack, this.getType(), nbtCompound);
+        NbtCompound nbtCompound1 = mobData;
+        nbtCompound.put("mobData", nbtCompound1);
 
-        // ? Implement custom name in the future.
-        /*
-        if (this.customName != null) {
-            itemStack.setCustomName(this.customName);
-        }
-        */
+        BlockItem.setBlockEntityNbt(itemStack, this.getType(), nbtCompound);
 
         return itemStack;
     }
