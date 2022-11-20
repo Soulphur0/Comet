@@ -37,7 +37,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     GameOptions settings = MinecraftClient.getInstance().options;
     private boolean isPlayerEntityMoving(){
-        boolean playerMoved = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed();
+        boolean playerMoved = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed() || this.settings.attackKey.isPressed() || this.settings.useKey.isPressed()|| this.settings.pickItemKey.isPressed();
 
         if (this.finishedCrystallization && this.getHeadYaw() != onCrystallizationRotation){
             playerMoved = true;
