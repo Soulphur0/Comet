@@ -42,8 +42,8 @@ public class EndIronOreBlockEntityRenderer implements BlockEntityRenderer<EndIro
 
         if (clientHasNightVision.get()){
             matrices.push();
-            matrices.scale(1.0125F,1.0125F,1.0125F);
-            matrices.translate(-0.00625F,-0.00625F,-0.00625F);
+            matrices.scale(1.00625F,1.00625F,1.00625F);
+            matrices.translate(-0.0003125F,-0.0003125F,-0.0003125F);
             MinecraftClient.getInstance().getBlockRenderManager().renderBlock(CometBlocks.END_IRON_ORE_REVEALED.getDefaultState(), entity.getPos(), entity.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getTranslucent()), true, Random.create());
             matrices.pop();
         }
