@@ -1,9 +1,6 @@
 package com.github.Soulphur0.registries;
 
-import com.github.Soulphur0.dimensionalAlloys.block.CrystallizedCreature;
-import com.github.Soulphur0.dimensionalAlloys.block.EndIronOre;
-import com.github.Soulphur0.dimensionalAlloys.block.EndbriteTube;
-import com.github.Soulphur0.dimensionalAlloys.block.FreshEndMedium;
+import com.github.Soulphur0.dimensionalAlloys.block.*;
 import com.github.Soulphur0.dimensionalAlloys.block.entity.CrystallizedCreatureBlockEntity;
 import com.github.Soulphur0.dimensionalAlloys.block.entity.EndIronOreBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -62,10 +59,11 @@ public class CometBlocks {
     public static final BlockItem FRESH_CHORUS_HUMUS_ITEM = new BlockItem(FRESH_CHORUS_HUMUS, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ End medium
-    public static final Block END_MEDIUM = new Block(FabricBlockSettings
+    public static final Block END_MEDIUM = new EndMedium(FabricBlockSettings
             .of(Material.METAL, MapColor.PURPLE)
             .strength(1.25f, 4.2f)
-            .sounds(BlockSoundGroup.LODESTONE));
+            .sounds(BlockSoundGroup.LODESTONE)
+            .ticksRandomly());
     public static final BlockItem END_MEDIUM_BLOCK_ITEM = new BlockItem(END_MEDIUM, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ Fresh end medium
