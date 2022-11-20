@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.ParticleEffect;
@@ -15,6 +16,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
 import java.util.Random;
@@ -43,7 +45,7 @@ public class EndbriteTube extends Block {
 
     @Override
     public boolean canReplace(BlockState state, ItemPlacementContext context) {
-        return context.getStack().getItem() == this.asItem() && (Integer)state.get(TUBES) < 7 ? true : super.canReplace(state, context);
+        return context.getStack().getItem() == this.asItem() && (Integer) state.get(TUBES) < 7 || super.canReplace(state, context);
     }
 
     @Override
@@ -51,6 +53,14 @@ public class EndbriteTube extends Block {
         BlockPos blockPos = pos.up();
         BlockState blockState = world.getBlockState(blockPos);
         return blockState.isSideSolidFullSquare(world, blockPos, Direction.DOWN);
+    }
+
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        if (!canPlaceAt(state, world,pos))
+            return Blocks.AIR.getDefaultState();
+
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override

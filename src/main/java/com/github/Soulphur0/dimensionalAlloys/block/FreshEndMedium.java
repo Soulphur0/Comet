@@ -1,9 +1,7 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
 import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.TransparentBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -11,6 +9,8 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 
 public class FreshEndMedium extends TransparentBlock implements CrystallizedEntityMethods {
 
@@ -53,10 +53,30 @@ public class FreshEndMedium extends TransparentBlock implements CrystallizedEnti
         return VoxelShapes.empty();
     }
 
+    // _ Block placement behaviour
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        BlockPos blockPos = pos.down();
+        BlockState blockState = world.getBlockState(blockPos);
+        return blockState.isSideSolidFullSquare(world, blockPos, Direction.UP);
+    }
+
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        if (!canPlaceAt(state, world, pos))
+            return Blocks.AIR.getDefaultState();
+
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    }
+
     // _ Entity behaviour
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         ((CrystallizedEntityMethods)entity).setInFreshEndMedium(2);
     }
 
+    @Override
+    public boolean canMobSpawnInside() {
+        return false;
+    }
 }
