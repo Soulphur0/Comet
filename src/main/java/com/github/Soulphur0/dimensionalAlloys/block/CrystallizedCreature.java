@@ -1,5 +1,6 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
+import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.dimensionalAlloys.block.entity.CrystallizedCreatureBlockEntity;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.*;
@@ -109,9 +110,10 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        if (world.isClient){
+        if (!world.isClient){
             world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) -> {
                 blockEntity.readNbtFromItemStack(itemStack);
+                world.setBlockState(pos,state.with(CLEAR, blockEntity.getBlockStateData()));
             });
         }
     }
@@ -131,10 +133,14 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
 
             // ? Store nbt data to the item if the block entity has nbt data
             // Blocks without nbt data are not dropped.
-            if(crystallizedCreatureBlockEntity.mobData != null){
+            if(crystallizedCreatureBlockEntity.getMobData() != null){
                 NbtCompound nbtCompound = new NbtCompound();
-                nbtCompound.put("mobData", crystallizedCreatureBlockEntity.mobData);
-                BlockItem.setBlockEntityNbt(itemStack, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY,nbtCompound);
+                nbtCompound.put("mobData", crystallizedCreatureBlockEntity.getMobData());
+
+                // Put block state data to nbt
+                nbtCompound.putBoolean("blockStateData", crystallizedCreatureBlockEntity.getBlockStateData());
+
+                BlockItem.setBlockEntityNbt(itemStack, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY, nbtCompound);
             } else
                 return;
 
@@ -156,9 +162,9 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
         if (!world.isClient){
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof CrystallizedCreatureBlockEntity crystallizedCreatureBlockEntity) {
-                if(crystallizedCreatureBlockEntity.mobData != null) {
+                if(crystallizedCreatureBlockEntity.getMobData() != null) {
                     NbtCompound nbtCompound = new NbtCompound();
-                    NbtCompound nbtCompound1 = crystallizedCreatureBlockEntity.mobData;
+                    NbtCompound nbtCompound1 = crystallizedCreatureBlockEntity.getMobData();
                     nbtCompound.put("mobData", nbtCompound1);
 
                     Entity entity = EntityType.loadEntityWithPassengers(nbtCompound.getCompound("mobData"), world, (loadedEntity) -> loadedEntity);
@@ -178,9 +184,13 @@ public class CrystallizedCreature extends BlockWithEntity implements BlockEntity
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Item mainHandItem = player.getMainHandStack().getItem();
-        if (mainHandItem instanceof PickaxeItem)
+        if (mainHandItem instanceof PickaxeItem){
             world.setBlockState(pos,state.with(CLEAR, true));
 
+            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent(blockEntity -> {
+                blockEntity.writeBlockStateData(true);
+            });
+        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 }

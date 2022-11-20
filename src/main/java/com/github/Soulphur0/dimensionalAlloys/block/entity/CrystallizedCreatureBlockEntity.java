@@ -2,6 +2,7 @@ package com.github.Soulphur0.dimensionalAlloys.block.entity;
 
 import com.github.Soulphur0.dimensionalAlloys.block.CrystallizedCreature;
 import com.github.Soulphur0.registries.CometBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.Fluids;
@@ -17,7 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class CrystallizedCreatureBlockEntity extends BlockEntity {
 
-    public NbtCompound mobData;
+    private NbtCompound mobData;
+    private boolean blockStateData;
 
     public CrystallizedCreatureBlockEntity(BlockPos pos, BlockState state){
         super(CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY, pos, state);
@@ -39,6 +41,8 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
     protected void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
 
+        nbt.putBoolean("blockStateData", blockStateData);
+
         if (mobData != null)
             nbt.put("mobData", mobData);
     }
@@ -48,8 +52,10 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
 
-        if (nbt != null)
+        if (nbt != null){
             this.mobData = nbt.getCompound("mobData");
+            this.blockStateData = nbt.getBoolean("blockStateData");
+        }
     }
 
     // $ Sync data S2C
@@ -67,18 +73,42 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
 
     // $ Comet methods
 
+    // _ Write data to block entity.
+
     // ? Write data to block entity.
-    public void writeData(NbtCompound mobData){
-        this.mobData = mobData;
+    // Used on block creation in LivingEntityMixin.
+    public void writeData(NbtCompound data){
+        this.mobData = data.getCompound("mobData");
+        this.blockStateData = data.getBoolean("blockStateData");
     }
 
-    // ? Retrieve data from item stack.
+    // ? Write block state data to block entity.
+    // Used in onUse() method of this block.
+    public void writeBlockStateData(boolean blockStateData){
+        this.blockStateData = blockStateData;
+    }
+
+    // ? Write data from item stack.
+    // Used in onPlace() method of this block.
     public void readNbtFromItemStack(ItemStack itemStack){
         NbtCompound nbtCompound;
         nbtCompound = BlockItem.getBlockEntityNbt(itemStack);
 
-        if (nbtCompound != null)
+        if (nbtCompound != null){
             this.mobData = nbtCompound.getCompound("mobData");
+            this.blockStateData = nbtCompound.getBoolean("blockStateData");
+        }
+    }
+
+    // _ Retrieve data from block entity.
+
+    // ? Get mob data
+    public NbtCompound getMobData(){
+        return mobData;
+    }
+
+    public boolean getBlockStateData(){
+        return blockStateData;
     }
 
     // ? Write NBT data to middle-click picked ItemStack

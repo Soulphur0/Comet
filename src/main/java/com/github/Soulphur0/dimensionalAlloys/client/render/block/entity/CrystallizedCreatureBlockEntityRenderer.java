@@ -28,7 +28,7 @@ public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRende
     @Override
     public void render(CrystallizedCreatureBlockEntity entityBlock, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         NbtCompound nbtCompound = new NbtCompound();
-        NbtCompound nbtCompound1 = entityBlock.mobData;
+        NbtCompound nbtCompound1 = entityBlock.getMobData();
         nbtCompound.put("mobData", nbtCompound1);
 
         Entity entity = EntityType.loadEntityWithPassengers(nbtCompound.getCompound("mobData"), entityBlock.getWorld(), (loadedEntity) -> loadedEntity);
