@@ -6,6 +6,7 @@ import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.*;
 import net.minecraft.item.*;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -26,6 +27,10 @@ public class Comet implements ModInitializer {
 	public static final Item ENDBRITE_LEGGINGS = new ArmorItem(ENDBRITE_ARMOR_MATERIAL, EquipmentSlot.LEGS, new Item.Settings().group(ItemGroup.COMBAT));
 	public static final Item ENDBRITE_BOOTS = new ArmorItem(ENDBRITE_ARMOR_MATERIAL, EquipmentSlot.FEET, new Item.Settings().group(ItemGroup.COMBAT));
 
+	// Sounds
+	public static final SoundEvent CRYSTALLIZATION_GROWS = new SoundEvent(new Identifier("comet", "crystallization_grows"));
+	public static final SoundEvent CRYSTALLIZATION_BREAKS = new SoundEvent(new Identifier("comet", "crystallization_breaks"));
+
 	@Override
 	public void onInitialize() {
 		CometBlocks.register();
@@ -42,5 +47,9 @@ public class Comet implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_chestplate"), ENDBRITE_CHESTPLATE);
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_leggings"), ENDBRITE_LEGGINGS);
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_boots"), ENDBRITE_BOOTS);
+
+		// Sounds
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_grows"), CRYSTALLIZATION_GROWS);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_breaks"), CRYSTALLIZATION_BREAKS);
 	}
 }
