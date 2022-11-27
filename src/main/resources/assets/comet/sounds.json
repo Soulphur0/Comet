@@ -1,0 +1,12 @@
+{
+  "crystallization_grows": {
+    "sounds": [
+      "comet:crystallization_grows"
+    ]
+  },
+  "crystallization_breaks": {
+    "sounds": [
+      "comet:crystallization_breaks"
+    ]
+  }
+}
