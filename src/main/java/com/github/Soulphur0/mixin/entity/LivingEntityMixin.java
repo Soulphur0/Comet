@@ -1,5 +1,6 @@
 package com.github.Soulphur0.mixin.entity;
 
+import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
@@ -21,8 +22,6 @@ import java.util.Collection;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends EntityMixin {
 
-    // $ Comet ---------------------------------------------------------------------------------------------------------
-
     @Shadow public abstract float getHeadYaw();
 
     @Shadow public abstract boolean isAlive();
@@ -35,21 +34,26 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     @Shadow protected abstract void markEffectsDirty();
 
+    // $ Comet ---------------------------------------------------------------------------------------------------------
+
+    // _ Crystallization interrupt.
     GameOptions settings = MinecraftClient.getInstance().options;
-    private boolean isPlayerEntityMoving(){
+    float onCrystallizationPlayerLookDirection;
+    public boolean isPlayerInterruptingCrystallization(){
         boolean playerMoved = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed() || this.settings.attackKey.isPressed() || this.settings.useKey.isPressed()|| this.settings.pickItemKey.isPressed();
 
-        if (this.finishedCrystallization && this.getHeadYaw() != onCrystallizationRotation){
+        if (this.finishedCrystallization && this.getHeadYaw() != onCrystallizationPlayerLookDirection){
             playerMoved = true;
         }
 
         return playerMoved;
     }
 
+    // _ Sound events.
     private void playBreakFreeSound(){
         world.playSound(null,
                 this.getBlockPos(),
-                SoundEvents.BLOCK_GLASS_BREAK,
+                Comet.CRYSTALLIZATION_BREAKS,
                 SoundCategory.BLOCKS,
                 this.getCrystallizationScale(),
                 1f);
@@ -66,17 +70,18 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     // $ Injected ------------------------------------------------------------------------------------------------------
 
+    // _ Crystallization methods.
+
+    // ? Entity crystallization process.
     private static int scSwitch;
     private boolean finishedCrystallization = false;
-    float onCrystallizationRotation;
-
     @Inject(method="tickMovement", at = @At("HEAD"))
     public void modifyCrystallizedTicks(CallbackInfo ci){
         if (!this.world.isClient){
             int crystallizedTicks = this.getCrystallizedTicks();
 
-            // - Update ticks for entities in end medium.
-            // * Update ticks whether the entity is in, or left medium.
+            // + Update ticks for entities in end medium.
+            // - Update ticks whether the entity is in, or left medium.
             // Completely crystallized creatures (exclusively the player since others de-spawn) remain crystallized.
             if (this.inFreshEndMedium > 0)
                 setCrystallizedTicks(Math.min(this.getCrystallizationFinishedTicks(), crystallizedTicks + 1));
@@ -85,30 +90,31 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 this.setCrystallizedTicks(0);
             }
 
-            // * Update ticks if the player moved while in medium.
+            // - Update ticks if the player moved while in medium.
             if (this.isPlayer()){
-                if (this.isPlayerEntityMoving() || this.getDamageTracker().hasDamage()){
+                if (this.isPlayerInterruptingCrystallization() || this.getDamageTracker().hasDamage()){
                     if (crystallizedTicks >= 20)
                         this.playBreakFreeSound();
                     this.setCrystallizedTicks(0);
                 }
             }
 
-            // - Apply effects for fully crystallized entities
+            // + Apply effects for fully crystallized entities
             if (this.isCrystallized()){
-                // * Apply on-crystallization effects.
+                // - Trigger on-crystallization events.
                 if (!this.finishedCrystallization){
+                    // To player.
                     if (this.isPlayer()){
-                        // Set player invulnerable.
                         this.setNoGravity(true);
                         this.setInvulnerable(true);
-                        this.onCrystallizationRotation = this.getHeadYaw();
+                        this.onCrystallizationPlayerLookDirection = this.getHeadYaw();
                     }
+                    // To all entities.
                     this.playFinishedCrystallizationSound();
                     this.finishedCrystallization = true;
                 }
 
-                // * Always hide particle effects.
+                // - Hide particle effects.
                 this.getStatusEffects().forEach(effect ->{
                     if (effect.shouldShowParticles()){
                         effect.setShowParticles(false);
@@ -117,7 +123,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 });
                 this.markEffectsDirty();
 
-                // * Turn non-player entities into blocks.
+                // - Turn non-player entities into blocks.
                 if (!this.isPlayer()){
                     NbtCompound nbtCompound = new NbtCompound();
 
@@ -133,7 +139,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.discard();
                 }
             } else {
-                // * Reset player to normal state.
+                // - Reset player to normal state.
                 if (this.isPlayer() && this.finishedCrystallization){
                     this.setNoGravity(false);
                     this.setInvulnerable(false);
@@ -156,6 +162,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
         }
     }
 
+    // ? Make crystallized player un-pushable.
     @Inject(method="isPushable", at=@At("HEAD"), cancellable = true)
     public void isPushableInject(CallbackInfoReturnable<Boolean> cir){
         cir.setReturnValue(this.isAlive() && !this.isSpectator() && !this.isClimbing() && !this.isCrystallized());

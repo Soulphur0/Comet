@@ -2,6 +2,8 @@ package com.github.Soulphur0.dimensionalAlloys;
 
 public interface CrystallizedEntityMethods {
 
+    // _ Crystallization process' accessors.
+    // * End medium switches.
     default void setInFreshEndMedium(int inFreshEndMedium){
 
     }
@@ -10,27 +12,37 @@ public interface CrystallizedEntityMethods {
         return false;
     }
 
+    // * Crystallization ticks accessors.
     default void setCrystallizedTicks(int crystallizedTicks){}
 
     default int getCrystallizedTicks(){
         return 0;
     }
 
-    //default void setCrystallized(boolean isCrystallized) {}
+    // * Crystallization accessors.
+    default void setCrystallized(boolean isCrystallized) {}
 
     default boolean isCrystallized(){
         return false;
     }
 
+    // _ Crystallization process' attributes.
     default int getCrystallizationFinishedTicks(){
         return 0;
     }
 
-    /** <p>Used to get a value between 1.0 and 0.0; which determines how much crystallization
-     * advanced even if the parameters for it are modified.<p/>
+    /** <p>Used to get a value between <b>0.0</b> and <b>1.0</b> which determines how much crystallization
+     * advanced even if the required ticks for complete crystallization are modified.<p/>
      * <p>Mainly used to calculate overlay opacity.<p/>
+     * @see com.github.Soulphur0.mixin.gui.InGameHudMixin
      */
     default float getCrystallizationScale(){
         return 0.0F;
     }
+
+    // ? Utilities
+    /** Used outside the LivingEntity by <b>CrystallizationSoundInstance</b>.
+     *  @see com.github.Soulphur0.dimensionalAlloys.client.sound.CrystallizationSoundInstance
+     * */
+    default boolean isPlayerInterruptingCrystallization() { return false;}
 }
