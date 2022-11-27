@@ -17,8 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends DrawableHelper implements CrystallizedEntityMethods {
 
-    private static final Identifier POWDER_SNOW_OUTLINE = new Identifier("textures/misc/powder_snow_outline.png");
-    // - Inject
+    private static final Identifier CRYSTALLIZATION_OUTLINE_1 = new Identifier("comet","textures/misc/crystallization_outline_1.png");
+    private static final Identifier CRYSTALLIZATION_OUTLINE_2 = new Identifier("comet","textures/misc/crystallization_outline_2.png");
+
+
+    // * Inject
     @Mutable
     @Final
     @Shadow
@@ -30,10 +33,16 @@ public abstract class InGameHudMixin extends DrawableHelper implements Crystalli
         this.client = client;
     }
 
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"))
     public void renderOverlay(MatrixStack matrices, float tickDelta, CallbackInfo ci){
-        if (this.client.player != null && ((CrystallizedEntityMethods)this.client.player).getCrystallizedTicks() > 0){
-            this.renderOverlay(POWDER_SNOW_OUTLINE, ((CrystallizedEntityMethods)this.client.player).getCrystallizationScale());
+        if (this.client.player != null){
+            int crystallizedTicks = ((CrystallizedEntityMethods)this.client.player).getCrystallizedTicks();
+            float crystallizationScale = ((CrystallizedEntityMethods)this.client.player).getCrystallizationScale();
+            System.out.println(crystallizationScale);
+            if (crystallizedTicks > 0){
+                this.renderOverlay(CRYSTALLIZATION_OUTLINE_2, crystallizationScale);
+                this.renderOverlay(CRYSTALLIZATION_OUTLINE_1, crystallizationScale);
+            }
         }
     }
 }
