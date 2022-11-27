@@ -28,7 +28,7 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
 
-        textureToUse = (entity instanceof ZombieEntity) ? new Identifier("comet", "textures/overlay3.png") : new Identifier("comet", "textures/overlay4.png");
+        textureToUse = OVERLAY;
 
         parameters = RenderLayer.MultiPhaseParameters.builder()
                 .shader(ENTITY_DECAL_SHADER)
@@ -47,8 +47,8 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
         float scale = ((CrystallizedEntityMethods)entity).getCrystallizationScale();
 
         if (!entity.isCrystallized())
-            this.getContextModel().render(matrices, vertexConsumer, light, 0, 1.0F, 1.0F, 1.0F, scale);
+            this.getContextModel().render(matrices, vertexConsumer, light, 0, 0.5F, 1.0F, 1.0F, scale);
         else
-            this.getContextModel().render(matrices, vertexConsumer, light, 0, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.getContextModel().render(matrices, vertexConsumer, light, 0, 0.5F, 1.0F, 1.0F, 1.0F);
     }
 }
