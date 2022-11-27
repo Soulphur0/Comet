@@ -62,7 +62,7 @@ public class CometBlocks {
     public static final Block END_MEDIUM = new EndMedium(FabricBlockSettings
             .of(Material.METAL, MapColor.PURPLE)
             .strength(1.25f, 4.2f)
-            .sounds(BlockSoundGroup.LODESTONE)
+            .sounds(BlockSoundGroup.GILDED_BLACKSTONE)
             .ticksRandomly());
     public static final BlockItem END_MEDIUM_BLOCK_ITEM = new BlockItem(END_MEDIUM, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
