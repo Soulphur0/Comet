@@ -7,15 +7,17 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
+
+import java.util.Objects;
 
 import static net.minecraft.client.render.RenderPhase.*;
 import static net.minecraft.client.render.RenderPhase.ENABLE_OVERLAY_COLOR;
 
 public class CrystallizationFeatureRenderer extends FeatureRenderer {
-    private static final Identifier OVERLAY = new Identifier("comet", "textures/overlay3.png");
-    private static final Identifier OVERLAY2 = new Identifier("comet", "textures/overlay4.png");
 
     public CrystallizationFeatureRenderer(FeatureRendererContext context) {
         super(context);
@@ -23,32 +25,35 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
 
     public static RenderLayer.MultiPhaseParameters parameters;
     public static RenderLayer crystallizationLayer;
-    Identifier textureToUse;
 
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+        // * Get crystallization scale for not crystallized/statue entities.
+        float scale = ((CrystallizedEntityMethods)entity).getCrystallizationScale();
 
-        textureToUse = OVERLAY;
+        // * Get material from NBT and use it as texture identifier in the render layer parameters.
+        String material = (((CrystallizedEntityMethods)entity).getStatueMaterial() == null || Objects.equals(((CrystallizedEntityMethods) entity).getStatueMaterial(), "")) ? "end_medium" : ((CrystallizedEntityMethods)entity).getStatueMaterial();
+
+        if (Objects.equals(material, "none")) return;
 
         parameters = RenderLayer.MultiPhaseParameters.builder()
                 .shader(ENTITY_DECAL_SHADER)
-                .texture(new RenderPhase.Texture(textureToUse, false, false))
+                .texture(new RenderPhase.Texture( new Identifier("comet", "textures/entity/feature/" + material + ".png"), false, false))
                 .depthTest(EQUAL_DEPTH_TEST)
                 .cull(DISABLE_CULLING)
                 .lightmap(ENABLE_LIGHTMAP)
-                .transparency(TRANSLUCENT_TRANSPARENCY)
-                .overlay(ENABLE_OVERLAY_COLOR).build(false);
+                .transparency(TRANSLUCENT_TRANSPARENCY).build(false);
 
         crystallizationLayer = RenderLayer.of("crystallization", VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256, parameters);
 
+        // * Add render layer to the vertex consumer.
         VertexConsumer vertexConsumer;
         vertexConsumer = vertexConsumers.getBuffer(crystallizationLayer);
 
-        float scale = ((CrystallizedEntityMethods)entity).getCrystallizationScale();
-
+        // * Render feature either it is crystallized or in process.
         if (!entity.isCrystallized())
-            this.getContextModel().render(matrices, vertexConsumer, light, 0, 0.5F, 1.0F, 1.0F, scale);
+            this.getContextModel().render(matrices, vertexConsumer, light, 0, 1.0F, 1.0F, 1.0F, scale);
         else
-            this.getContextModel().render(matrices, vertexConsumer, light, 0, 0.5F, 1.0F, 1.0F, 1.0F);
+            this.getContextModel().render(matrices, vertexConsumer, light, 0, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 }
