@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements CrystallizedEntityMethods {
@@ -49,7 +50,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     // $ Comet ---------------------------------------------------------------------------------------------------------
 
-    @Shadow public abstract void sendMessage(Text message);
+    @Shadow public abstract boolean startRiding(Entity entity);
 
     // _ Crystallization process' accessors.
     // * End medium switches.
@@ -92,6 +93,12 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
         return (float)Math.min(this.getCrystallizedTicks(), max) / (float)max;
     }
 
+    // _ Statue material accessors.
+    @Override
+    public String getStatueMaterial() {
+        return statueMaterial;
+    }
+
     // $ Injected ------------------------------------------------------------------------------------------------------
 
     // _ Crystallization methods.
@@ -111,5 +118,14 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     public void unsetInFreshEndMedium(CallbackInfo ci){
         if (!this.world.isClient)
             this.inFreshEndMedium = Math.max(this.inFreshEndMedium - 1, 0);
+    }
+
+    // _ Statue nbt data.
+
+    // ? Get statue material from entity NBT.
+    private String statueMaterial;
+    @Inject(method="readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/NbtList;", ordinal = 0))
+    private void putStatueMaterial(NbtCompound nbt, CallbackInfo ci){
+        this.statueMaterial = nbt.getString("StatueMaterial");
     }
 }

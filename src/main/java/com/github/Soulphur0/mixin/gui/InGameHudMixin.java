@@ -38,7 +38,7 @@ public abstract class InGameHudMixin extends DrawableHelper implements Crystalli
         if (this.client.player != null){
             int crystallizedTicks = ((CrystallizedEntityMethods)this.client.player).getCrystallizedTicks();
             float crystallizationScale = ((CrystallizedEntityMethods)this.client.player).getCrystallizationScale();
-            System.out.println(crystallizationScale);
+
             if (crystallizedTicks > 0){
                 this.renderOverlay(CRYSTALLIZATION_OUTLINE_2, crystallizationScale);
                 this.renderOverlay(CRYSTALLIZATION_OUTLINE_1, crystallizationScale);

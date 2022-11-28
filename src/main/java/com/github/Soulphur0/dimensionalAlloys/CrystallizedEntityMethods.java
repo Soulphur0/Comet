@@ -40,9 +40,12 @@ public interface CrystallizedEntityMethods {
         return 0.0F;
     }
 
+    // _ Statue material accessors.
+
+    default void setStatueMaterial(){}
+
+    default String getStatueMaterial(){ return  null;}
+
     // ? Utilities
-    /** Used outside the LivingEntity by <b>CrystallizationSoundInstance</b>.
-     *  @see com.github.Soulphur0.dimensionalAlloys.client.sound.CrystallizationSoundInstance
-     * */
     default boolean isPlayerInterruptingCrystallization() { return false;}
 }
