@@ -2,10 +2,13 @@ package com.github.Soulphur0;
 
 import com.github.Soulphur0.dimensionalAlloys.armorMaterial.EndbriteArmorMaterial;
 import com.github.Soulphur0.dimensionalAlloys.item.MirrorShieldItem;
+import com.github.Soulphur0.dimensionalAlloys.recipe.CreatureStatueRecipe;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.*;
 import net.minecraft.item.*;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -31,6 +34,8 @@ public class Comet implements ModInitializer {
 	public static final SoundEvent CRYSTALLIZATION_GROWS = new SoundEvent(new Identifier("comet", "crystallization_grows"));
 	public static final SoundEvent CRYSTALLIZATION_BREAKS = new SoundEvent(new Identifier("comet", "crystallization_breaks"));
 
+	public static final RecipeSerializer<CreatureStatueRecipe> CREATURE_STATUE = RecipeSerializer.register("crafting_special_creaturestatue", new SpecialRecipeSerializer<CreatureStatueRecipe>(CreatureStatueRecipe::new));
+
 	@Override
 	public void onInitialize() {
 		CometBlocks.register();
@@ -51,5 +56,6 @@ public class Comet implements ModInitializer {
 		// Sounds
 		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_grows"), CRYSTALLIZATION_GROWS);
 		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_breaks"), CRYSTALLIZATION_BREAKS);
+
 	}
 }
