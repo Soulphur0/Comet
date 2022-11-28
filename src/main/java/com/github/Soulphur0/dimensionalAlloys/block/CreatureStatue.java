@@ -10,6 +10,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -26,10 +27,22 @@ public class CreatureStatue extends AbstractCrystallizedCreatureBlock implements
     // ? Render type
     @Override
     public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+        return BlockRenderType.INVISIBLE;
     }
 
     // ? Make it not spawn an entity.
     @Override
     public void releaseMob(World world, BlockPos pos) {}
+
+    // ? Make it able to render different textures.
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent(blockEntity ->{
+            NbtCompound mobData = blockEntity.getMobData();
+            mobData.putString("StatueMaterial","quartz");
+
+        });
+        return super.onUse(state, world, pos, player, hand, hit);
+    }
 }
