@@ -15,6 +15,8 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtFloat;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -28,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public class AbstractCrystallizedCreatureBlock extends BlockWithEntity implements BlockEntityProvider, Waterloggable {
 
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    private Direction placementDirection;
 
     protected AbstractCrystallizedCreatureBlock(Settings settings) {
         super(settings);
@@ -56,6 +59,41 @@ public class AbstractCrystallizedCreatureBlock extends BlockWithEntity implement
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
+        // * Get data from context.
+        World world = ctx.getWorld();
+        BlockPos pos = ctx.getBlockPos();
+        ItemStack itemStack = ctx.getStack();
+        Direction placementDirection = ctx.getPlayerFacing();
+
+        // * On server,
+        if (!world.isClient){
+            if (placementDirection != null){
+                NbtCompound itemStackData = itemStack.getNbt();
+                if (itemStackData != null){
+                    NbtCompound blockEntityTag = itemStackData.getCompound("BlockEntityTag");
+                    if (blockEntityTag != null){
+                        NbtCompound mobData = blockEntityTag.getCompound("mobData");
+                        if (mobData != null){
+                            NbtList rotation = mobData.getList("Rotation", 5);
+                            if (rotation != null){
+                                if (placementDirection == Direction.WEST || placementDirection == Direction.EAST){
+                                    rotation.set(0, NbtFloat.of(-placementDirection.asRotation()));
+                                } else if (placementDirection == Direction.SOUTH) {
+                                    rotation.set(0, NbtFloat.of(180));
+                                } else {
+                                    rotation.set(0, NbtFloat.of(0));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) -> {
+                blockEntity.readNbtFromItemStack(itemStack);
+            });
+        }
+
         return (BlockState)this.getDefaultState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 

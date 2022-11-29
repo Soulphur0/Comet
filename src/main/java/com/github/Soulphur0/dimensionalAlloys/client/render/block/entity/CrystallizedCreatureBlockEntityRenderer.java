@@ -14,7 +14,10 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3f;
 
 public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRenderer<CrystallizedCreatureBlockEntity> {
 
@@ -24,16 +27,25 @@ public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRende
 
     @Override
     public void render(CrystallizedCreatureBlockEntity entityBlock, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        NbtCompound nbtCompound = new NbtCompound();
-        NbtCompound nbtCompound1 = entityBlock.getMobData();
-        nbtCompound.put("mobData", nbtCompound1);
+        // * Get mob data from entity block.
+        NbtCompound entityBlockData = entityBlock.getMobData();
+        NbtCompound mobData = new NbtCompound();
 
-        Entity entity = EntityType.loadEntityWithPassengers(nbtCompound.getCompound("mobData"), entityBlock.getWorld(), (loadedEntity) -> loadedEntity);
+        // * If the entity block has mob data, get mob rotation, else use zero.
+        float rotation = 0f;
+        if (entityBlockData != null){
+            mobData.put("mobData", entityBlockData);
+            NbtList rotationInfo = entityBlockData.getList("Rotation",5);
+            rotation = rotationInfo.getFloat(0);
+        }
+
+        Entity entity = EntityType.loadEntityWithPassengers(mobData.getCompound("mobData"), entityBlock.getWorld(), (loadedEntity) -> loadedEntity);
 
         if (entity != null){
             entity.setCrystallizedTicks(140);
             matrices.push();
             matrices.translate(0.5D, 0.0D,0.5D);
+            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(rotation));
             MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(entity).render(entity,entity.getYaw(),0,matrices,vertexConsumers,light);
             matrices.pop();
         }
