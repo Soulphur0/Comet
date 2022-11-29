@@ -20,6 +20,7 @@ public class Comet implements ModInitializer {
 	public static final Item ENDBRITE_SHARD = new Item(new Item.Settings().group(ItemGroup.MISC));
 	public static final Item ENDBRITE_FIBER = new Item(new Item.Settings().group(ItemGroup.MISC));
 	public static final Item ENDBRITE_INGOT = new Item(new Item.Settings().group(ItemGroup.MISC));
+	public static final Item FRESH_END_MEDIUM_BOTTLE = new Item(new Item.Settings().group(ItemGroup.MISC));
 
 	public static final Item MIRROR_SHIELD = new MirrorShieldItem(new Item.Settings().maxDamage(504).group(ItemGroup.COMBAT));
 
@@ -44,6 +45,7 @@ public class Comet implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_shard"), ENDBRITE_SHARD);
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_fiber"), ENDBRITE_FIBER);
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_ingot"), ENDBRITE_INGOT);
+		Registry.register(Registry.ITEM, new Identifier("comet", "fresh_end_medium_bottle"), FRESH_END_MEDIUM_BOTTLE);
 
 		Registry.register(Registry.ITEM, new Identifier("comet", "mirror_shield"), MIRROR_SHIELD);
 
