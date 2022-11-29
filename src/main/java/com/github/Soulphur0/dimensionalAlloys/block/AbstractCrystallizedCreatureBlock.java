@@ -56,6 +56,8 @@ public class AbstractCrystallizedCreatureBlock extends BlockWithEntity implement
         builder.add(WATERLOGGED);
     }
 
+    // Todo, fix in the future, it is not a high priority bug.
+    // ! Mobs with identical UUIDs will overwrite placement rotation, this will only happen in creative mode, where a crystals can be cloned.
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -65,7 +67,7 @@ public class AbstractCrystallizedCreatureBlock extends BlockWithEntity implement
         ItemStack itemStack = ctx.getStack();
         Direction placementDirection = ctx.getPlayerFacing();
 
-        // * On server,
+        // * On server, get rotation data from NBT if exists. Then write block placement rotation to tag.
         if (!world.isClient){
             if (placementDirection != null){
                 NbtCompound itemStackData = itemStack.getNbt();
@@ -89,6 +91,7 @@ public class AbstractCrystallizedCreatureBlock extends BlockWithEntity implement
                 }
             }
 
+            // * Write ItemStack data to block entity.
             world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) -> {
                 blockEntity.readNbtFromItemStack(itemStack);
             });

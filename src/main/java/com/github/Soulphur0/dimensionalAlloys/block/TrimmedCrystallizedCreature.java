@@ -1,5 +1,6 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
+import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.dimensionalAlloys.block.entity.CrystallizedCreatureBlockEntity;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.*;
@@ -7,6 +8,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -36,15 +40,19 @@ public class TrimmedCrystallizedCreature extends AbstractCrystallizedCreatureBlo
     // ? Player interaction, turn into baseless block
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        // Todo add end medium item here to restore base.
-        /*
         Item mainHandItem = player.getMainHandStack().getItem();
-        if (mainHandItem instanceof PickaxeItem){
-            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent(blockEntity -> {
-                blockEntity.writeBlockStateData(true);
+        if (mainHandItem == Comet.FRESH_END_MEDIUM_BOTTLE){
+            NbtCompound oldBlockNBT = new NbtCompound();
+            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) ->{
+                oldBlockNBT.put("mobData",blockEntity.getMobData());
+            });
+
+            world.setBlockState(pos, CometBlocks.CRYSTALLIZED_CREATURE.getDefaultState());
+
+            world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) -> {
+                blockEntity.writeData(oldBlockNBT);
             });
         }
-        */
         return super.onUse(state, world, pos, player, hand, hit);
     }
 }
