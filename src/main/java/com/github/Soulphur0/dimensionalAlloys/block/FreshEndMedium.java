@@ -108,8 +108,9 @@ public class FreshEndMedium extends TransparentBlock implements CrystallizedEnti
             } else if (!player.getInventory().insertStack(new ItemStack(Comet.FRESH_END_MEDIUM_BOTTLE))) {
                 player.dropItem(new ItemStack(Comet.FRESH_END_MEDIUM_BOTTLE), false);
             }
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+
         return super.onUse(state, world, pos, player, hand, hit);
     }
 }

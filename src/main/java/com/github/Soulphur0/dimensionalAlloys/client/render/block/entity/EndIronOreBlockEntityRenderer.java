@@ -20,8 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EndIronOreBlockEntityRenderer implements BlockEntityRenderer<EndIronOreBlockEntity> {
 
-    Identifier revealedTexture = new Identifier("comet","textures/block/end_iron_ore_revealed.png");
-
     public EndIronOreBlockEntityRenderer(BlockEntityRendererFactory.Context ctx){}
 
     @Override
@@ -31,12 +29,14 @@ public class EndIronOreBlockEntityRenderer implements BlockEntityRenderer<EndIro
 
     @Override
     public void render(EndIronOreBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        // * Get client player.
         ClientPlayerEntity playerEntity = MinecraftClient.getInstance().player;
         AtomicBoolean clientHasNightVision = new AtomicBoolean(false);
 
         if (playerEntity != null){
             playerEntity.getStatusEffects().forEach(statusEffectInstance -> {
-                clientHasNightVision.set(statusEffectInstance.getEffectType() == StatusEffects.NIGHT_VISION);
+                if (!clientHasNightVision.get())
+                    clientHasNightVision.set(statusEffectInstance.getEffectType() == StatusEffects.NIGHT_VISION);
             });
         }
 
