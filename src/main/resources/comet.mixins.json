@@ -9,7 +9,8 @@
     "ChorusPlantBlockMixin",
     "HungerManagerMixin",
     "StatusEffectInstanceMixin",
-    "entity.EntityMixin"
+    "entity.EntityMixin",
+    "entity.player.PlayerEntityMixin"
   ],
   "client": [
     "ExampleMixin",

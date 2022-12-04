@@ -26,6 +26,11 @@ public interface CrystallizedEntityMethods {
         return false;
     }
 
+    // * Status effect accessors.
+    default void setCrystallizedByStatusEffect(boolean crystallizedByStatusEffect) {}
+
+    default boolean isCrystallizedByStatusEffect() { return false;}
+
     // _ Crystallization process' attributes.
     default int getCrystallizationFinishedTicks(){
         return 0;
@@ -44,8 +49,8 @@ public interface CrystallizedEntityMethods {
 
     default void setStatueMaterial(){}
 
-    default String getStatueMaterial(){ return  null;}
+    default String getStatueMaterial(){ return null;}
 
     // ? Utilities
-    default boolean isPlayerInterruptingCrystallization() { return false;}
+    default boolean isCrystallizationInterrupted() { return false;}
 }

@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,14 +40,18 @@ public abstract class LivingEntityMixin extends EntityMixin {
     // _ Crystallization interrupt.
     GameOptions settings = MinecraftClient.getInstance().options;
     float onCrystallizationPlayerLookDirection;
-    public boolean isPlayerInterruptingCrystallization(){
-        boolean playerMoved = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed() || this.settings.attackKey.isPressed() || this.settings.useKey.isPressed()|| this.settings.pickItemKey.isPressed();
+    public boolean isCrystallizationInterrupted(){
+        // + Player interrupted crystallization by moving.
+        boolean interrupted = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed() || this.settings.attackKey.isPressed() || this.settings.useKey.isPressed()|| this.settings.pickItemKey.isPressed();
 
         if (this.finishedCrystallization && this.getHeadYaw() != onCrystallizationPlayerLookDirection){
-            playerMoved = true;
+            interrupted = true;
         }
 
-        return playerMoved;
+        // + Crystallization got interrupted by damage.
+        interrupted = this.getDamageTracker().hasDamage() || interrupted;
+
+        return !this.isCrystallizedByStatusEffect() && interrupted;
     }
 
     // _ Sound events.
@@ -90,9 +95,9 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 this.setCrystallizedTicks(0);
             }
 
-            // - Update ticks if the player moved while in medium.
+            // - Update ticks if the player moved while in medium or got hit before crystallized.
             if (this.isPlayer()){
-                if (this.isPlayerInterruptingCrystallization() || this.getDamageTracker().hasDamage()){
+                if (this.isCrystallizationInterrupted()){
                     if (crystallizedTicks >= 20)
                         this.playBreakFreeSound();
                     this.setCrystallizedTicks(0);
@@ -110,6 +115,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                         this.onCrystallizationPlayerLookDirection = this.getHeadYaw();
                     }
                     // To all entities.
+                    this.setVelocity(Vec3d.ZERO);
                     this.playFinishedCrystallizationSound();
                     this.finishedCrystallization = true;
                 }
@@ -143,6 +149,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 if (this.isPlayer() && this.finishedCrystallization){
                     this.setNoGravity(false);
                     this.setInvulnerable(false);
+
                     this.finishedCrystallization = false;
 
                     this.getStatusEffects().forEach(effect ->{

@@ -3,13 +3,13 @@ package com.github.Soulphur0.mixin.entity;
 import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -50,7 +50,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     // $ Comet ---------------------------------------------------------------------------------------------------------
 
-    @Shadow public abstract boolean startRiding(Entity entity);
+    @Shadow public abstract void setVelocity(Vec3d velocity);
 
     // _ Crystallization process' accessors.
     // * End medium switches.
@@ -81,7 +81,21 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
         return this.getCrystallizedTicks() >= this.getCrystallizationFinishedTicks();
     }
 
+    // * Status effect accessors.
+    public void setCrystallizedByStatusEffect(boolean crystallizedByStatusEffect) {
+        this.crystallizedByStatusEffect = crystallizedByStatusEffect;
+    }
+
+    public boolean isCrystallizedByStatusEffect() {
+        return crystallizedByStatusEffect;
+    }
+
     // _ Crystallization process' attributes.
+    public int inFreshEndMedium;
+    private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
+    private String statueMaterial;
+    private boolean crystallizedByStatusEffect;
+
     @Override
     public int getCrystallizationFinishedTicks(){
         return 140;
@@ -104,8 +118,6 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     // _ Crystallization methods.
 
     // ? Add data tracker for crystallization.
-    private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
-    public int inFreshEndMedium;
     @Inject(method="<init>", at = @At("TAIL"))
     public void addCrystallizedTicksTracker(EntityType type, World world, CallbackInfo ci){
         this.dataTracker.startTracking(CRYSTALLIZED_TICKS, 0);
@@ -120,10 +132,27 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
             this.inFreshEndMedium = Math.max(this.inFreshEndMedium - 1, 0);
     }
 
+    // ? Make entities vulnerable to status effects when crystallized by a potion
+    @Inject(method="isInvulnerableTo", at = @At("HEAD"), cancellable = true)
+    private void vulnerableToStatusEffects(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir){
+        Entity entityInstance = ((Entity)(Object)this);
+        if (entityInstance.isCrystallizedByStatusEffect() && (damageSource.isMagic() || damageSource == DamageSource.WITHER)){
+            if (entityInstance.isPlayer() && ((PlayerEntity)entityInstance).isCreative()){
+                return;
+            }
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method="changeLookDirection", at = @At("HEAD"), cancellable = true)
+    private void cancelLookDirection(double cursorDeltaX, double cursorDeltaY, CallbackInfo ci){
+        if (this.isCrystallized() && this.isCrystallizedByStatusEffect())
+            ci.cancel();
+    }
+
     // _ Statue nbt data.
 
     // ? Get statue material from entity NBT.
-    private String statueMaterial;
     @Inject(method="readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/NbtList;", ordinal = 0))
     private void putStatueMaterial(NbtCompound nbt, CallbackInfo ci){
         this.statueMaterial = nbt.getString("StatueMaterial");

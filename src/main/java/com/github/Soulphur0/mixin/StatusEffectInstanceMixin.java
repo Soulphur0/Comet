@@ -31,7 +31,7 @@ public abstract class StatusEffectInstanceMixin implements StatusEffectInstanceM
     private boolean hiddenByCrystallization;
     @Inject(method="update", at = @At("HEAD"), cancellable = true)
     private void cancelUpdate(LivingEntity entity, Runnable overwriteCallback, CallbackInfoReturnable<Boolean> cir){
-        if (((CrystallizedEntityMethods)entity).isCrystallized())
+        if (entity.isCrystallized() && !entity.isCrystallizedByStatusEffect())
             cir.setReturnValue(true);
     }
 }

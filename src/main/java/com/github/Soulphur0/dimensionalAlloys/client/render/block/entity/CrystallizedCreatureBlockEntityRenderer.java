@@ -32,10 +32,9 @@ public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRende
         NbtCompound mobData = new NbtCompound();
 
         // * If the entity block has mob data, get mob rotation, else use zero.
-        // Todo manage to write model rotation data into mobNBT.
         // ! Mob rotation is the rotation of the entity, not the model, so, idle model rotation won't apply.
         float rotation = 0f;
-        if (entityBlockData != null){
+        if (entityBlockData != null) {
             mobData.put("mobData", entityBlockData);
             NbtList rotationInfo = entityBlockData.getList("Rotation",5);
             rotation = rotationInfo.getFloat(0);

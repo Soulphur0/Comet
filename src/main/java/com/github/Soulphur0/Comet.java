@@ -1,11 +1,13 @@
 package com.github.Soulphur0;
 
 import com.github.Soulphur0.dimensionalAlloys.armorMaterial.EndbriteArmorMaterial;
+import com.github.Soulphur0.dimensionalAlloys.entity.effect.CrystallizedStatusEffect;
 import com.github.Soulphur0.dimensionalAlloys.item.MirrorShieldItem;
 import com.github.Soulphur0.dimensionalAlloys.recipe.CreatureStatueRecipe;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.*;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.*;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -35,7 +37,11 @@ public class Comet implements ModInitializer {
 	public static final SoundEvent CRYSTALLIZATION_GROWS = new SoundEvent(new Identifier("comet", "crystallization_grows"));
 	public static final SoundEvent CRYSTALLIZATION_BREAKS = new SoundEvent(new Identifier("comet", "crystallization_breaks"));
 
+	// Crafting recipes
 	public static final RecipeSerializer<CreatureStatueRecipe> CREATURE_STATUE = RecipeSerializer.register("crafting_special_creaturestatue", new SpecialRecipeSerializer<CreatureStatueRecipe>(CreatureStatueRecipe::new));
+
+	// Status effects
+	public static final StatusEffect CRYSTALLIZED = new CrystallizedStatusEffect();
 
 	@Override
 	public void onInitialize() {
@@ -58,6 +64,9 @@ public class Comet implements ModInitializer {
 		// Sounds
 		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_grows"), CRYSTALLIZATION_GROWS);
 		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_breaks"), CRYSTALLIZATION_BREAKS);
+
+		// Status effects
+		Registry.register(Registry.STATUS_EFFECT, new Identifier("comet", "crystallized"), CRYSTALLIZED);
 
 	}
 }

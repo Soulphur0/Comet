@@ -1,8 +1,6 @@
 package com.github.Soulphur0.dimensionalAlloys.block.entity;
 
 import com.github.Soulphur0.dimensionalAlloys.block.AbstractCrystallizedCreatureBlock;
-import com.github.Soulphur0.dimensionalAlloys.block.CrystallizedCreature;
-import com.github.Soulphur0.dimensionalAlloys.block.TrimmedCrystallizedCreature;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -44,7 +42,6 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
         if (mobData != null)
             nbt.put("mobData", mobData);
     }
-
 
     @Override
     public void readNbt(NbtCompound nbt) {
