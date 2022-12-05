@@ -66,6 +66,7 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
     private String statueMaterial;
     private boolean crystallizedByStatusEffect;
+    protected int crystallizationCooldown;
     protected float onCrystallizationBodyYaw;
 
     @Override

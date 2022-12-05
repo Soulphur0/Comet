@@ -1,16 +1,15 @@
 package com.github.Soulphur0.mixin.entity;
 
 import com.github.Soulphur0.Comet;
+import com.github.Soulphur0.dimensionalAlloys.entity.effect.CrystallizedStatusEffect;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -148,7 +147,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.discard();
                 }
             } else {
-                // - Reset entity to normal state.
+                // - Undo on-crystallization effects.
                 if (this.finishedCrystallization){
                     this.setNoGravity(false);
                     this.setInvulnerable(false);
@@ -168,6 +167,9 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
                     mobEntity.setSilent(false);
                 }
+
+                // Tick crystallization effect counter down
+                this.crystallizationCooldown = (this.crystallizationCooldown > 0) ? this.crystallizationCooldown-1  : this.crystallizationCooldown;
             }
 
             // Sync client
@@ -210,9 +212,21 @@ public abstract class LivingEntityMixin extends EntityMixin {
             cir.setReturnValue(false);
     }
 
-    // ? Make crystallized entities unable to get more status effects.
+    // ? Custom behaviour when receiving status effects.
+    // If the entity is getting the crystallization effect by other than itself, it won't allow to apply the effect until a cooldown equivalent to double the length of the effect has passed.
+    // If the entity is crystallized, it can't get more effects.
     @Inject(method="addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
-    private void cancelStatusEffectAddition(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir){
+    private void addStatusEffect_cometExtraBehaviour(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir){
+        if (effect.getEffectType() instanceof CrystallizedStatusEffect){
+            if (source != ((Entity)(Object)this)) {
+                if (crystallizationCooldown <= 0) {
+                    this.crystallizationCooldown = effect.getDuration() * 2;
+                } else {
+                    cir.setReturnValue(false);
+                }
+            }
+        }
+
         if (((LivingEntity)(Object)this).isCrystallized()){
             cir.setReturnValue(false);
         }
