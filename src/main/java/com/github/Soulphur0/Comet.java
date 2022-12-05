@@ -8,7 +8,11 @@ import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.sound.SoundEvent;
@@ -42,6 +46,8 @@ public class Comet implements ModInitializer {
 
 	// Status effects
 	public static final StatusEffect CRYSTALLIZED = new CrystallizedStatusEffect();
+	public static final Potion CRYSTALLIZATION = new Potion(new StatusEffectInstance(CRYSTALLIZED, 160));
+	public static final Potion LONG_CRYSTALLIZATION = new Potion(new StatusEffectInstance(CRYSTALLIZED, 320));
 
 	@Override
 	public void onInitialize() {
@@ -67,6 +73,8 @@ public class Comet implements ModInitializer {
 
 		// Status effects
 		Registry.register(Registry.STATUS_EFFECT, new Identifier("comet", "crystallized"), CRYSTALLIZED);
+		Registry.register(Registry.POTION, new Identifier("comet","crystallization"),CRYSTALLIZATION);
+		Registry.register(Registry.POTION, new Identifier("comet","long_crystallization"),LONG_CRYSTALLIZATION);
 
 	}
 }
