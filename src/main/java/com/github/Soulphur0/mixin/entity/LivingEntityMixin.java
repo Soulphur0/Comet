@@ -7,9 +7,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.RavagerEntity;
+import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -215,10 +220,13 @@ public abstract class LivingEntityMixin extends EntityMixin {
     // ? Custom behaviour when receiving status effects.
     // If the entity is getting the crystallization effect by other than itself, it won't allow to apply the effect until a cooldown equivalent to double the length of the effect has passed.
     // If the entity is crystallized, it can't get more effects.
+    // If the entity is a mini-boss, the effect lasts a third of the duration.
     @Inject(method="addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
     private void addStatusEffect_cometExtraBehaviour(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir){
+        LivingEntity thisLivingEntity = ((LivingEntity)(Object)this);
+
         if (effect.getEffectType() instanceof CrystallizedStatusEffect){
-            if (source != ((Entity)(Object)this)) {
+            if (source != thisLivingEntity) {
                 if (crystallizationCooldown <= 0) {
                     this.crystallizationCooldown = effect.getDuration() * 2;
                 } else {
@@ -227,8 +235,12 @@ public abstract class LivingEntityMixin extends EntityMixin {
             }
         }
 
-        if (((LivingEntity)(Object)this).isCrystallized()){
+        if (thisLivingEntity.isCrystallized()){
             cir.setReturnValue(false);
+        }
+
+        if (thisLivingEntity instanceof ElderGuardianEntity || thisLivingEntity instanceof RavagerEntity || thisLivingEntity instanceof WardenEntity){
+            effect.setDuration(effect.getDuration()/3);
         }
     }
 }
