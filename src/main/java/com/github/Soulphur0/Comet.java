@@ -13,6 +13,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.sound.SoundEvent;
@@ -49,6 +50,7 @@ public class Comet implements ModInitializer {
 	public static final Potion CRYSTALLIZATION = new Potion(new StatusEffectInstance(CRYSTALLIZED, 160));
 	public static final Potion LONG_CRYSTALLIZATION = new Potion(new StatusEffectInstance(CRYSTALLIZED, 320));
 
+
 	@Override
 	public void onInitialize() {
 		CometBlocks.register();
@@ -75,6 +77,8 @@ public class Comet implements ModInitializer {
 		Registry.register(Registry.STATUS_EFFECT, new Identifier("comet", "crystallized"), CRYSTALLIZED);
 		Registry.register(Registry.POTION, new Identifier("comet","crystallization"),CRYSTALLIZATION);
 		Registry.register(Registry.POTION, new Identifier("comet","long_crystallization"),LONG_CRYSTALLIZATION);
+		BrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, FRESH_END_MEDIUM_BOTTLE, CRYSTALLIZATION);
+		BrewingRecipeRegistry.registerPotionRecipe(CRYSTALLIZATION, Items.REDSTONE, LONG_CRYSTALLIZATION);
 
 	}
 }
