@@ -3,11 +3,14 @@ package com.github.Soulphur0.mixin.entity;
 import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -38,16 +41,13 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     // $ Comet ---------------------------------------------------------------------------------------------------------
 
+    @Shadow public abstract float getBodyYaw();
+
     // _ Crystallization interrupt.
     GameOptions settings = MinecraftClient.getInstance().options;
-    float onCrystallizationPlayerLookDirection;
     public boolean isCrystallizationInterrupted(){
         // + Player interrupted crystallization by moving.
-        boolean interrupted = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.sneakKey.isPressed() || this.settings.attackKey.isPressed() || this.settings.useKey.isPressed()|| this.settings.pickItemKey.isPressed();
-
-        if (this.finishedCrystallization && this.getHeadYaw() != onCrystallizationPlayerLookDirection){
-            interrupted = true;
-        }
+        boolean interrupted = this.settings.forwardKey.isPressed() || this.settings.backKey.isPressed() || this.settings.leftKey.isPressed() || this.settings.rightKey.isPressed() || this.settings.jumpKey.isPressed() || this.settings.attackKey.isPressed() || this.settings.useKey.isPressed()|| this.settings.pickItemKey.isPressed();
 
         // + Crystallization got interrupted by damage.
         interrupted = this.getDamageTracker().hasDamage() || interrupted;
@@ -110,10 +110,6 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 // - Trigger on-crystallization events.
                 if (!this.finishedCrystallization){
                     this.finishedCrystallization = true;
-                    // To player.
-                    if (this.isPlayer()){
-                        this.onCrystallizationPlayerLookDirection = this.getHeadYaw();
-                    }
 
                     // To mobs
                     if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
@@ -121,6 +117,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     }
 
                     // To all entities.
+                    this.onCrystallizationBodyYaw = this.getBodyYaw();
                     this.setNoGravity(true);
                     this.setInvulnerable(true);
                     this.playFinishedCrystallizationSound();
@@ -211,5 +208,13 @@ public abstract class LivingEntityMixin extends EntityMixin {
     private void restrictMovement(CallbackInfoReturnable<Boolean> cir){
         if (this.isCrystallized())
             cir.setReturnValue(false);
+    }
+
+    // ? Make crystallized entities unable to get more status effects.
+    @Inject(method="addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", at = @At("HEAD"), cancellable = true)
+    private void cancelStatusEffectAddition(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir){
+        if (((LivingEntity)(Object)this).isCrystallized()){
+            cir.setReturnValue(false);
+        }
     }
 }
