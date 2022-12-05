@@ -10,6 +10,7 @@
     "HungerManagerMixin",
     "StatusEffectInstanceMixin",
     "entity.EntityMixin",
+    "entity.LivingEntityMixin",
     "entity.player.PlayerEntityMixin"
   ],
   "client": [
@@ -17,7 +18,6 @@
     "ModelLoaderAccessor",
     "PersistentProjectileEntityMixin",
     "SpriteAtlasTextureMixin",
-    "entity.LivingEntityMixin",
     "entityModel.PlayerEntityModelMixin",
     "entityRenderer.ArmorStandEntityRendererMixin",
     "entityRenderer.DrownedEntityRendererMixin",

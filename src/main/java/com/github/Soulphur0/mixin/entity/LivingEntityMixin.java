@@ -2,15 +2,20 @@ package com.github.Soulphur0.mixin.entity;
 
 import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.registries.CometBlocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends EntityMixin {
@@ -108,16 +114,21 @@ public abstract class LivingEntityMixin extends EntityMixin {
             if (this.isCrystallized()){
                 // - Trigger on-crystallization events.
                 if (!this.finishedCrystallization){
+                    this.finishedCrystallization = true;
                     // To player.
                     if (this.isPlayer()){
-                        this.setNoGravity(true);
-                        this.setInvulnerable(true);
                         this.onCrystallizationPlayerLookDirection = this.getHeadYaw();
                     }
+
+                    // To mobs
+                    if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
+                        mobEntity.setSilent(true);
+                    }
+
                     // To all entities.
-                    this.setVelocity(Vec3d.ZERO);
+                    // ! this.setNoGravity(true);
+                    this.setInvulnerable(true);
                     this.playFinishedCrystallizationSound();
-                    this.finishedCrystallization = true;
                 }
 
                 // - Hide particle effects.
@@ -130,7 +141,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 this.markEffectsDirty();
 
                 // - Turn non-player entities into blocks.
-                if (!this.isPlayer()){
+                if (!this.isPlayer() && !this.isCrystallizedByStatusEffect()){
                     NbtCompound nbtCompound = new NbtCompound();
 
                     NbtCompound mobDataCompound = new NbtCompound();
@@ -145,8 +156,8 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.discard();
                 }
             } else {
-                // - Reset player to normal state.
-                if (this.isPlayer() && this.finishedCrystallization){
+                // - Reset entity to normal state.
+                if (this.finishedCrystallization){
                     this.setNoGravity(false);
                     this.setInvulnerable(false);
 
@@ -159,6 +170,11 @@ public abstract class LivingEntityMixin extends EntityMixin {
                         }
                     });
                     this.markEffectsDirty();
+                }
+
+                // For mobs
+                if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
+                    mobEntity.setSilent(false);
                 }
             }
 
@@ -173,5 +189,31 @@ public abstract class LivingEntityMixin extends EntityMixin {
     @Inject(method="isPushable", at=@At("HEAD"), cancellable = true)
     public void isPushableInject(CallbackInfoReturnable<Boolean> cir){
         cir.setReturnValue(this.isAlive() && !this.isSpectator() && !this.isClimbing() && !this.isCrystallized());
+    }
+
+    // TODO check if this compleately works, if it depends on the parent method and how to make a crystallized player unable to control a mount.
+    @Inject(method="travel", at = @At("HEAD"), cancellable = true)
+    private void cancelTravel(Vec3d movementInput, CallbackInfo ci){
+        if (this.isCrystallized()){
+            ci.cancel();
+        }
+
+        if (this.getVehicle() != null){
+            if (this.getVehicle().isCrystallized()){
+                ci.cancel();
+            }
+        }
+
+        if(this.getPrimaryPassenger() != null){
+            if(this.getPrimaryPassenger().isCrystallized()){
+                ci.cancel();
+            }
+        }
+    }
+
+    @Inject(method = "canMoveVoluntarily", at = @At("HEAD"), cancellable = true)
+    private void restrictMovement(CallbackInfoReturnable<Boolean> cir){
+        if (this.isCrystallized())
+            cir.setReturnValue(false);
     }
 }
