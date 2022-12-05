@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HungerManager.class)
 public class HungerManagerMixin {
 
+    // ? Cancel natural health regeneration during crystallization.
     PlayerEntity player;
     @Inject(method="update", at= @At("HEAD"), cancellable = true)
     private void cancelUpdate(PlayerEntity player, CallbackInfo ci){
@@ -19,6 +20,8 @@ public class HungerManagerMixin {
             ci.cancel();
     }
 
+    // ? Cancel saturation additions during crystallization
+    // * Just in case, food can't be consumed anyway.
     @Inject(method="add", at = @At("HEAD"), cancellable = true)
     private void cancelAdd(int food, float saturationModifier, CallbackInfo ci){
         if (((CrystallizedEntityMethods)player).isCrystallized())

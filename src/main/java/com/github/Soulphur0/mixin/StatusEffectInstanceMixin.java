@@ -16,6 +16,9 @@ public abstract class StatusEffectInstanceMixin implements StatusEffectInstanceM
     @Shadow
     private boolean showParticles;
 
+    // $ Comet ---------------------------------------------------------------------------------------------------------
+    private boolean hiddenByCrystallization;
+
     public void setShowParticles(boolean showParticles){
         this.showParticles = showParticles;
     }
@@ -28,7 +31,6 @@ public abstract class StatusEffectInstanceMixin implements StatusEffectInstanceM
         return hiddenByCrystallization;
     }
 
-    private boolean hiddenByCrystallization;
     @Inject(method="update", at = @At("HEAD"), cancellable = true)
     private void cancelUpdate(LivingEntity entity, Runnable overwriteCallback, CallbackInfoReturnable<Boolean> cir){
         if (entity.isCrystallized() && !entity.isCrystallizedByStatusEffect())

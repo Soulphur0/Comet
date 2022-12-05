@@ -4,17 +4,18 @@
   "package": "com.github.Soulphur0.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BlockItemMixin",
     "ChorusFlowerBlockInvoker",
     "ChorusFlowerBlockMixin",
     "ChorusPlantBlockMixin",
     "HungerManagerMixin",
+    "ItemStackMixin",
     "StatusEffectInstanceMixin",
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
     "entity.player.PlayerEntityMixin"
   ],
   "client": [
-    "ExampleMixin",
     "ModelLoaderAccessor",
     "PersistentProjectileEntityMixin",
     "SpriteAtlasTextureMixin",
