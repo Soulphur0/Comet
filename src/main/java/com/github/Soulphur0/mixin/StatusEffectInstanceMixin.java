@@ -16,8 +16,12 @@ public abstract class StatusEffectInstanceMixin implements StatusEffectInstanceM
     @Shadow
     private boolean showParticles;
 
+    @Shadow
+    int duration;
     // $ Comet ---------------------------------------------------------------------------------------------------------
     private boolean hiddenByCrystallization;
+
+    public void setDuration(int duration){ this.duration = duration;}
 
     public void setShowParticles(boolean showParticles){
         this.showParticles = showParticles;
