@@ -153,10 +153,10 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
         }
     }
 
-    // ? Make entities crystallized by status effect unable to look around
+    // ? Make crystallized entities unable to look around.
     @Inject(method="changeLookDirection", at = @At("HEAD"), cancellable = true)
     private void cancelLookDirection(double cursorDeltaX, double cursorDeltaY, CallbackInfo ci){
-        if (this.isCrystallized() && this.isCrystallizedByStatusEffect())
+        if (this.isCrystallized())
             ci.cancel();
     }
 
