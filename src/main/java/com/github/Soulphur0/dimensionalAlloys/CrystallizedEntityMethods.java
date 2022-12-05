@@ -31,6 +31,12 @@ public interface CrystallizedEntityMethods {
 
     default boolean isCrystallizedByStatusEffect() { return false;}
 
+    // * On-crystallization attributes accessors.
+
+    default void setOnCrystallizationBodyYaw(float bodyYaw) {}
+
+    default float getOnCrystallizationBodyYaw(){ return 0.0f;}
+
     // _ Crystallization process' attributes.
     default int getCrystallizationFinishedTicks(){
         return 0;

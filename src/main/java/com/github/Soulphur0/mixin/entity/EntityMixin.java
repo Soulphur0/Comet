@@ -53,13 +53,31 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
 
     @Shadow public abstract Vec3d getPos();
 
-    // $ Comet ---------------------------------------------------------------------------------------------------------
-
     @Shadow public abstract @Nullable Entity getVehicle();
 
     @Shadow public abstract Text getName();
 
     @Shadow public abstract @Nullable Entity getPrimaryPassenger();
+
+    // $ Comet ---------------------------------------------------------------------------------------------------------
+
+    // _ Crystallization process' attributes.
+    public int inFreshEndMedium;
+    private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
+    private String statueMaterial;
+    private boolean crystallizedByStatusEffect;
+    protected float onCrystallizationBodyYaw;
+
+    @Override
+    public int getCrystallizationFinishedTicks(){
+        return 140;
+    }
+
+    @Override
+    public float getCrystallizationScale(){
+        int max = this.getCrystallizationFinishedTicks();
+        return (float)Math.min(this.getCrystallizedTicks(), max) / (float)max;
+    }
 
     // _ Crystallization process' accessors.
     // * End medium switches.
@@ -99,22 +117,10 @@ public abstract class EntityMixin implements CrystallizedEntityMethods {
         return crystallizedByStatusEffect;
     }
 
-    // _ Crystallization process' attributes.
-    public int inFreshEndMedium;
-    private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
-    private String statueMaterial;
-    private boolean crystallizedByStatusEffect;
+    // * On-crystallization attributes accessors.
+    public float getOnCrystallizationBodyYaw(){return this.onCrystallizationBodyYaw;}
 
-    @Override
-    public int getCrystallizationFinishedTicks(){
-        return 140;
-    }
-
-    @Override
-    public float getCrystallizationScale(){
-        int max = this.getCrystallizationFinishedTicks();
-        return (float)Math.min(this.getCrystallizedTicks(), max) / (float)max;
-    }
+    public void setOnCrystallizationBodyYaw(float bodyYaw) { this.onCrystallizationBodyYaw = bodyYaw;}
 
     // _ Statue material accessors.
     @Override

@@ -4,6 +4,7 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -35,9 +36,15 @@ public class LivingEntityRendererMixin<T extends Entity, M extends EntityModel<T
     @ModifyArgs(method="render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value ="INVOKE", target ="Lnet/minecraft/client/render/entity/LivingEntityRenderer;setupTransforms(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/util/math/MatrixStack;FFF)V"))
     private void freezeTransforms(Args args){
         LivingEntity livingEntity = args.get(0);
-        if (livingEntity.isCrystallized()){
+        if (!livingEntity.isCrystallized())
+            livingEntity.setOnCrystallizationBodyYaw(args.get(3));
+
+        if (livingEntity.isCrystallized() && livingEntity.getPrimaryPassenger() != null){
             args.set(2, 0f);
-            args.set(3, 0f);
+            args.set(3, livingEntity.getOnCrystallizationBodyYaw());
+            args.set(4, 0f);
+        } else if (livingEntity.isCrystallized()){
+            args.set(2, 0f);
             args.set(4, 0f);
         }
     }
