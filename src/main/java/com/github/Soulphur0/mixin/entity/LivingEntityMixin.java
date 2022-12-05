@@ -2,20 +2,16 @@ package com.github.Soulphur0.mixin.entity;
 
 import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.registries.CometBlocks;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends EntityMixin {
@@ -126,7 +121,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     }
 
                     // To all entities.
-                    // ! this.setNoGravity(true);
+                    this.setNoGravity(true);
                     this.setInvulnerable(true);
                     this.playFinishedCrystallizationSound();
                 }
@@ -191,7 +186,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
         cir.setReturnValue(this.isAlive() && !this.isSpectator() && !this.isClimbing() && !this.isCrystallized());
     }
 
-    // TODO check if this compleately works, if it depends on the parent method and how to make a crystallized player unable to control a mount.
+    // ? Make crystallized entities unable to move, either is the player, a mob, or a vehicle.
     @Inject(method="travel", at = @At("HEAD"), cancellable = true)
     private void cancelTravel(Vec3d movementInput, CallbackInfo ci){
         if (this.isCrystallized()){
@@ -211,6 +206,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
         }
     }
 
+    // ? Make crystallized mobs unable to move without disabling their AI.
     @Inject(method = "canMoveVoluntarily", at = @At("HEAD"), cancellable = true)
     private void restrictMovement(CallbackInfoReturnable<Boolean> cir){
         if (this.isCrystallized())

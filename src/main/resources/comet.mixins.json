@@ -22,6 +22,7 @@
     "entityRenderer.ArmorStandEntityRendererMixin",
     "entityRenderer.DrownedEntityRendererMixin",
     "entityRenderer.HuskEntityRendererMixin",
+    "entityRenderer.LivingEntityRendererMixin",
     "entityRenderer.MobEntityRendererMixin",
     "entityRenderer.PiglinEntityRendererMixin",
     "entityRenderer.PlayerEntityRendererMixin",

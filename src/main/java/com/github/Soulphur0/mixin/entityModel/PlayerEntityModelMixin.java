@@ -17,6 +17,9 @@ public class PlayerEntityModelMixin<T extends LivingEntity>  extends BipedEntity
         super(root);
     }
 
+    // $ Injected ------------------------------------------------------------------------------------------------------
+
+    // ? Cancels animations if the player is crystallized, but it does it before the LivingEntityRendererMixin cancel so limb angles are respected and the player is frozen in action.
     @Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At("HEAD"), cancellable = true)
     public void freezeAnimations(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci){
         if (((CrystallizedEntityMethods)livingEntity).isCrystallized()){
