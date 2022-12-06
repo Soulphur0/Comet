@@ -1,6 +1,5 @@
 package com.github.Soulphur0.mixin;
 
-import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
 import com.github.Soulphur0.dimensionalAlloys.StatusEffectInstanceMethods;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;

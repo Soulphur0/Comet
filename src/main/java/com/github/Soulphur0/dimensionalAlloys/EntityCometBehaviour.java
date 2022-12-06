@@ -1,8 +1,9 @@
 package com.github.Soulphur0.dimensionalAlloys;
 
-public interface CrystallizedEntityMethods {
+public interface EntityCometBehaviour {
 
-    // _ Crystallization process' accessors.
+    // _ Crystallization process
+    // ? Crystallization process' accessors.
     // * End medium switches.
     default void setInFreshEndMedium(int inFreshEndMedium){
 
@@ -37,26 +38,29 @@ public interface CrystallizedEntityMethods {
 
     default float getOnCrystallizationBodyYaw(){ return 0.0f;}
 
-    // _ Crystallization process' attributes.
+    // ? Crystallization process' attributes.
     default int getCrystallizationFinishedTicks(){
         return 0;
     }
 
-    /** <p>Used to get a value between <b>0.0</b> and <b>1.0</b> which determines how much crystallization
-     * advanced even if the required ticks for complete crystallization are modified.<p/>
-     * <p>Mainly used to calculate overlay opacity.<p/>
-     * @see com.github.Soulphur0.mixin.gui.InGameHudMixin
-     */
     default float getCrystallizationScale(){
         return 0.0F;
     }
 
-    // _ Statue material accessors.
-
+    // ? Statue material accessors.
     default void setStatueMaterial(){}
 
     default String getStatueMaterial(){ return null;}
 
     // ? Utilities
     default boolean isCrystallizationInterrupted() { return false;}
+
+    // _ Fire extra behaviour
+    default void setSoulFireTicks(int ticks){}
+
+    default int getSoulFireTicks(){ return 0;}
+
+    default void setEndFireTicks(int ticks){}
+
+    default int getEndFireTicks(){ return 0;}
 }

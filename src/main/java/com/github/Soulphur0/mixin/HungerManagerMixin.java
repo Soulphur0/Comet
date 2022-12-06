@@ -1,6 +1,6 @@
 package com.github.Soulphur0.mixin;
 
-import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
+import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +16,7 @@ public class HungerManagerMixin {
     @Inject(method="update", at= @At("HEAD"), cancellable = true)
     private void cancelUpdate(PlayerEntity player, CallbackInfo ci){
         this.player = player;
-        if (((CrystallizedEntityMethods)player).isCrystallized())
+        if (((EntityCometBehaviour)player).isCrystallized())
             ci.cancel();
     }
 
@@ -24,7 +24,7 @@ public class HungerManagerMixin {
     // * Just in case, food can't be consumed anyway.
     @Inject(method="add", at = @At("HEAD"), cancellable = true)
     private void cancelAdd(int food, float saturationModifier, CallbackInfo ci){
-        if (((CrystallizedEntityMethods)player).isCrystallized())
+        if (((EntityCometBehaviour)player).isCrystallized())
             ci.cancel();
     }
 }

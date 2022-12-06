@@ -1,6 +1,6 @@
 package com.github.Soulphur0.mixin.gui;
 
-import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
+import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
-public abstract class InGameHudMixin extends DrawableHelper implements CrystallizedEntityMethods {
+public abstract class InGameHudMixin extends DrawableHelper implements EntityCometBehaviour {
 
     private static final Identifier CRYSTALLIZATION_OUTLINE_1 = new Identifier("comet","textures/misc/crystallization_outline_1.png");
     private static final Identifier CRYSTALLIZATION_OUTLINE_2 = new Identifier("comet","textures/misc/crystallization_outline_2.png");
@@ -36,8 +36,8 @@ public abstract class InGameHudMixin extends DrawableHelper implements Crystalli
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"))
     public void renderOverlay(MatrixStack matrices, float tickDelta, CallbackInfo ci){
         if (this.client.player != null){
-            int crystallizedTicks = ((CrystallizedEntityMethods)this.client.player).getCrystallizedTicks();
-            float crystallizationScale = ((CrystallizedEntityMethods)this.client.player).getCrystallizationScale();
+            int crystallizedTicks = ((EntityCometBehaviour)this.client.player).getCrystallizedTicks();
+            float crystallizationScale = ((EntityCometBehaviour)this.client.player).getCrystallizationScale();
 
             if (crystallizedTicks > 0){
                 this.renderOverlay(CRYSTALLIZATION_OUTLINE_2, crystallizationScale);

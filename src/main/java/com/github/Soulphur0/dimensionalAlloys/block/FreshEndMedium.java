@@ -1,7 +1,7 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
 import com.github.Soulphur0.Comet;
-import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
+import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.WitherEntity;
@@ -10,7 +10,7 @@ import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.mob.RavagerEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
-public class FreshEndMedium extends TransparentBlock implements CrystallizedEntityMethods {
+public class FreshEndMedium extends TransparentBlock implements EntityCometBehaviour {
 
     public FreshEndMedium(Settings settings){
         super(settings);
@@ -82,12 +82,17 @@ public class FreshEndMedium extends TransparentBlock implements CrystallizedEnti
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
+    @Override
+    public boolean canReplace(BlockState state, ItemPlacementContext context) {
+        return true;
+    }
+
     // _ Entity behaviour
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity || entity instanceof ElderGuardianEntity || entity instanceof RavagerEntity || entity instanceof WardenEntity)
             return;
-        ((CrystallizedEntityMethods)entity).setInFreshEndMedium(2);
+        ((EntityCometBehaviour)entity).setInFreshEndMedium(2);
     }
 
     @Override

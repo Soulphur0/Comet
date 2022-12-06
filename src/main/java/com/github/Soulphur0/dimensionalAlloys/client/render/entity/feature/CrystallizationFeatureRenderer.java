@@ -1,21 +1,16 @@
 package com.github.Soulphur0.dimensionalAlloys.client.render.entity.feature;
 
-import com.github.Soulphur0.CometClient;
-import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
+import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
 import static net.minecraft.client.render.RenderPhase.*;
-import static net.minecraft.client.render.RenderPhase.ENABLE_OVERLAY_COLOR;
 
 public class CrystallizationFeatureRenderer extends FeatureRenderer {
 
@@ -29,10 +24,10 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         // * Get crystallization scale for not crystallized/statue entities.
-        float scale = ((CrystallizedEntityMethods)entity).getCrystallizationScale();
+        float scale = ((EntityCometBehaviour)entity).getCrystallizationScale();
 
         // * Get material from NBT and use it as texture identifier in the render layer parameters.
-        String material = (((CrystallizedEntityMethods)entity).getStatueMaterial() == null || Objects.equals(((CrystallizedEntityMethods) entity).getStatueMaterial(), "")) ? "end_medium" : ((CrystallizedEntityMethods)entity).getStatueMaterial();
+        String material = (((EntityCometBehaviour)entity).getStatueMaterial() == null || Objects.equals(((EntityCometBehaviour) entity).getStatueMaterial(), "")) ? "end_medium" : ((EntityCometBehaviour)entity).getStatueMaterial();
 
         if (Objects.equals(material, "none")) return;
 

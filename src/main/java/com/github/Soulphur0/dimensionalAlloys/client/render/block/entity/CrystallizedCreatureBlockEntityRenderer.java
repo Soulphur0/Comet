@@ -1,22 +1,15 @@
 package com.github.Soulphur0.dimensionalAlloys.client.render.block.entity;
 
-import com.github.Soulphur0.dimensionalAlloys.CrystallizedEntityMethods;
 import com.github.Soulphur0.dimensionalAlloys.block.entity.CrystallizedCreatureBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3f;
 
 public class CrystallizedCreatureBlockEntityRenderer implements BlockEntityRenderer<CrystallizedCreatureBlockEntity> {

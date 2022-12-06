@@ -68,7 +68,7 @@ public class CometBlocks {
 
     // $ Fresh end medium
     public static final Block FRESH_END_MEDIUM = new FreshEndMedium(FabricBlockSettings
-            .of(Material.GLASS, MapColor.PALE_PURPLE)
+            .of(Material.SNOW_LAYER, MapColor.PALE_PURPLE)
             .strength(0.3f)
             .velocityMultiplier(0.9f)
             .sounds(BlockSoundGroup.GLASS)
@@ -106,12 +106,27 @@ public class CometBlocks {
             FabricBlockEntityTypeBuilder.create(CrystallizedCreatureBlockEntity::new, CRYSTALLIZED_CREATURE, TRIMMED_CRYSTALLIZED_CREATURE, CREATURE_STATUE).build()
     );
 
+    // _ End fire
+    public static final Block END_FIRE = new EndFireBlock(FabricBlockSettings
+            .of(Material.FIRE, MapColor.PURPLE)
+            .noCollision()
+            .breakInstantly()
+            .luminance(state -> 15)
+            .sounds(BlockSoundGroup.WOOL));
+
     // _ Block predicates
     private static boolean never(BlockState blockState, BlockView blockView, BlockPos blockPos) {
         return false;
     }
 
     // _ Examples
+// -    Blocks.register("soul_fire", new SoulFireBlock(AbstractBlock.Settings
+//            .of(Material.FIRE, MapColor.LIGHT_BLUE)
+//            .noCollision()
+//            .breakInstantly()
+//            .luminance(state -> 10)
+//            .sounds(BlockSoundGroup.WOOL)));
+
     // - Blocks.register("soul_sand", new SoulSandBlock(AbstractBlock.Settings
     // .of(Material.AGGREGATE, MapColor.BROWN)
     // .strength(0.5f)
@@ -161,5 +176,7 @@ public class CometBlocks {
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "creature_statue"), CREATURE_STATUE);
         Registry.register(Registry.ITEM, new Identifier("comet", "creature_statue"), CREATURE_STATUE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "end_fire"), END_FIRE);
     }
 }
