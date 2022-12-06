@@ -33,6 +33,7 @@ public class EndbriteTube extends Block {
         stateManager.add(TUBES);
     }
 
+    // _ Block placement behaviour
     @Override
     public BlockState getPlacementState(ItemPlacementContext ipc) {
         BlockState blockState = ipc.getWorld().getBlockState(ipc.getBlockPos());
@@ -63,34 +64,50 @@ public class EndbriteTube extends Block {
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
+    // _ Block shape
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
+        return switch (state.get(TUBES)) {
+            case 1 -> Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+            case 2 -> Block.createCuboidShape(4.0D, 10.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+            case 3 -> Block.createCuboidShape(4.0D, 8.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+            case 4 -> Block.createCuboidShape(4.0D, 4.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+            case 5 -> Block.createCuboidShape(4.0D, 4.0D, 2.0D, 12.0D, 16.0D, 14.0D);
+            default -> Block.createCuboidShape(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+        };
+    }
+
+    // _ Particle display
+    @Environment(EnvType.CLIENT)
+    private static void createParticle(World world, BlockPos pos, BlockState state, net.minecraft.util.math.random.Random random) {
+        ParticleEffect particleEffect = ParticleTypes.DRIPPING_OBSIDIAN_TEAR;
         switch (state.get(TUBES)){
             case 1:
-                return Block.createCuboidShape(6.0D, 12.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+                world.addParticle(particleEffect, pos.getX()+0.525D, pos.getY()+0.8D, pos.getZ()+0.525D, 0.0D, 0.0D, 0.0D);
+                break;
             case 2:
-                return Block.createCuboidShape(4.0D, 10.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+                world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.555D, 0.0D, 0.0D, 0.0D);
+                world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.7D, pos.getZ()+0.425D, 0.0D, 0.0D, 0.0D);
+                break;
             case 3:
-                return Block.createCuboidShape(4.0D, 8.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
+                break;
             case 4:
-                return Block.createCuboidShape(4.0D, .0D, 4.0D, 12.0D, 16.0D, 12.0D);
+                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
+                break;
             case 5:
-                return Block.createCuboidShape(4.0D, 4.0D, 2.0D, 12.0D, 16.0D, 14.0D);
+                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
+                break;
             default:
-                return Block.createCuboidShape(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
         }
+
     }
 
-    @Environment(EnvType.CLIENT)
-    private static void createParticle(World world, BlockPos pos, BlockState state, Random random) {
-        ParticleEffect particleEffect = ParticleTypes.DRIPPING_OBSIDIAN_TEAR;
-        world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-            float f = random.nextFloat();
-            if (f <= 0.12F) {
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        float f = random.nextFloat();
+            if (f <= 0.125F) {
                 createParticle(world, pos, state, random);
             }
     }

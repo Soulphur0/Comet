@@ -19,12 +19,4 @@ public class HungerManagerMixin {
         if (((EntityCometBehaviour)player).isCrystallized())
             ci.cancel();
     }
-
-    // ? Cancel saturation additions during crystallization
-    // * Just in case, food can't be consumed anyway.
-    @Inject(method="add", at = @At("HEAD"), cancellable = true)
-    private void cancelAdd(int food, float saturationModifier, CallbackInfo ci){
-        if (((EntityCometBehaviour)player).isCrystallized())
-            ci.cancel();
-    }
 }

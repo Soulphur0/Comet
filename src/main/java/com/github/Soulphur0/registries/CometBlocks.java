@@ -42,7 +42,8 @@ public class CometBlocks {
     public static final Block ENDBRITE_TUBE = new EndbriteTube(FabricBlockSettings
             .of(Material.STONE)
             .hardness(5f)
-            .sounds(BlockSoundGroup.ANCIENT_DEBRIS));
+            .sounds(BlockSoundGroup.ANCIENT_DEBRIS)
+            .ticksRandomly());
     public static final BlockItem ENDBRITE_TUBE_BLOCK_ITEM = new BlockItem(ENDBRITE_TUBE, new Item.Settings().group(ItemGroup.MISC));
 
     // $ Chorus humus

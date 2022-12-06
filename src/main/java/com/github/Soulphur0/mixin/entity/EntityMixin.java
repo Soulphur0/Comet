@@ -218,12 +218,6 @@ public abstract class EntityMixin implements EntityCometBehaviour {
     @Inject(method="baseTick", at = @At("HEAD"))
     private void updateAdditionalFireBehaviour(CallbackInfo ci){
         if (!this.getWorld().isClient()){
-            if (this.isPlayer()){
-                System.out.println("FireTicks ==> " + this.getFireTicks());
-                System.out.println("SoulFireTicks ==> " + this.getSoulFireTicks());
-                System.out.println("EndFireTicks ==> " + this.getEndFireTicks());
-            }
-
             // Override fire type if it was more recent.
             if (this.getSoulFireTicks() > -20){
                 this.setEndFireTicks(-20);
