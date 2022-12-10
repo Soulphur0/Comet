@@ -86,22 +86,78 @@ public class EndbriteTube extends Block {
                 world.addParticle(particleEffect, pos.getX()+0.525D, pos.getY()+0.8D, pos.getZ()+0.525D, 0.0D, 0.0D, 0.0D);
                 break;
             case 2:
-                world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.555D, 0.0D, 0.0D, 0.0D);
-                world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.7D, pos.getZ()+0.425D, 0.0D, 0.0D, 0.0D);
+                int tube2 = (int)Math.floor(random.nextFloat() * 2);
+                if (tube2 == 0)
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.555D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.7D, pos.getZ()+0.425D, 0.0D, 0.0D, 0.0D);
                 break;
             case 3:
-                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
+                int tube3 = (int)Math.floor(random.nextFloat() * 3);
+                if (tube3 == 0)
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube3 == 1)
+                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.7D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
                 break;
             case 4:
-                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
+                int tube4 = (int)Math.floor(random.nextFloat() * 4);
+                if (tube4 == 0)
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube4 == 1)
+                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube4 == 2)
+                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
                 break;
             case 5:
-                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
+                int tube5 = (int)Math.floor(random.nextFloat() * 5);
+                if (tube5 == 0)
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.75D, 0.0D, 0.0D, 0.0D);
+                else if (tube5 == 1)
+                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube5 == 2)
+                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
+                else if (tube5 == 3)
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.45D, pos.getZ()+0.25D, 0.0D, 0.0D, 0.0D);
+                break;
+            case 6:
+                int tube6 = (int)Math.floor(random.nextFloat() * 6);
+                if (tube6 == 0)
+                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.75D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 1)
+                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 2)
+                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 3)
+                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 4)
+                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.45D, pos.getZ()+0.25D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX()+0.75D, pos.getY()+0.6D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
                 break;
             default:
-                world.addParticle(particleEffect, pos.getX()+random.nextDouble()-0.1D, pos.getY()+1.0D, pos.getZ()+random.nextDouble()+0.1D, 0.0D, 0.0D, 0.0D);
+                int tube7 = (int)Math.floor(random.nextFloat() * 7);
+                if (tube7 == 0)
+                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.75D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 1)
+                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 2)
+                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 3)
+                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 4)
+                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.45D, pos.getZ()+0.25D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 5)
+                    world.addParticle(particleEffect, pos.getX()+0.75D, pos.getY()+0.5D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX()+0.75D, pos.getY()+0.7D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
+                break;
         }
-
     }
 
     @Override
