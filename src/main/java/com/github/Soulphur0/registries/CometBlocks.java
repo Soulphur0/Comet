@@ -107,13 +107,78 @@ public class CometBlocks {
             FabricBlockEntityTypeBuilder.create(CrystallizedCreatureBlockEntity::new, CRYSTALLIZED_CREATURE, TRIMMED_CRYSTALLIZED_CREATURE, CREATURE_STATUE).build()
     );
 
-    // _ End fire
+    // $ End fire
     public static final Block END_FIRE = new EndFireBlock(FabricBlockSettings
             .of(Material.FIRE, MapColor.PURPLE)
             .noCollision()
             .breakInstantly()
             .luminance(state -> 15)
             .sounds(BlockSoundGroup.WOOL));
+
+    // $ Pumice stone
+    public static final Block PUMICE_STONE = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(0.4f)
+            .sounds(BlockSoundGroup.NETHERRACK));
+    public static final Item PUMICE_STONE_BLOCK_ITEM = new BlockItem(PUMICE_STONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    public static final Block WATER_PUMICE_STONE = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(0.4f)
+            .sounds(BlockSoundGroup.NETHERRACK));
+    public static final Item WATER_PUMICE_STONE_BLOCK_ITEM = new BlockItem(WATER_PUMICE_STONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    public static final Block LAVA_PUMICE_STONE = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(0.4f)
+            .sounds(BlockSoundGroup.NETHERRACK));
+    public static final Item LAVA_PUMICE_STONE_BLOCK_ITEM = new BlockItem(LAVA_PUMICE_STONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    // $ Drenchstone
+    public static final Block DRENCHSTONE = new DrenchstoneBlock(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(1.5f, 6.0f)
+            .sounds(BlockSoundGroup.STONE));
+    public static final Item DRENCHSTONE_BLOCK_ITEM = new BlockItem(DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    public static final Block WATER_DRENCHSTONE = new WaterDrenchstoneBlock(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(1.5f, 6.0f)
+            .sounds(BlockSoundGroup.STONE));
+
+    public static final Block LAVA_DRENCHSTONE = new LavaDrenchstoneBlock(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(1.5f, 6.0f)
+            .sounds(BlockSoundGroup.STONE));
+
+
+    // $ Nether Drenchstone
+    public static final Block NETHER_DRENCHSTONE = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(0.4f)
+            .sounds(BlockSoundGroup.NETHERRACK));
+    public static final Item NETHER_DRENCHSTONE_BLOCK_ITEM = new BlockItem(NETHER_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    // $ End Drenchstone
+    public static final Block END_DRENCHSTONE = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(1.5f, 6.0f)
+            .sounds(BlockSoundGroup.STONE));
+    public static final Item END_DRENCHSTONE_BLOCK_ITEM = new BlockItem(END_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    // $ Dry Rooted endstone
+    public static final Block DRY_ROOTED_ENDSTONE = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(1.5f, 6.0f)
+            .sounds(BlockSoundGroup.STONE));
+    public static final Item DRY_ROOTED_ENDSTONE_BLOCK_ITEM = new BlockItem(DRY_ROOTED_ENDSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+
+    // $ Fresh Rooted endstone
+    public static final Block FRESH_ROOTED_ENDSTONE = new Block(FabricBlockSettings
+            .of(Material.STONE)
+            .strength(1.5f, 6.0f)
+            .sounds(BlockSoundGroup.STONE));
+    public static final Item FRESH_ROOTED_ENDSTONE_BLOCK_ITEM = new BlockItem(FRESH_ROOTED_ENDSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // _ Block predicates
     private static boolean never(BlockState blockState, BlockView blockView, BlockPos blockPos) {
@@ -179,5 +244,33 @@ public class CometBlocks {
         Registry.register(Registry.ITEM, new Identifier("comet", "creature_statue"), CREATURE_STATUE_BLOCK_ITEM);
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "end_fire"), END_FIRE);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "pumice_stone"), PUMICE_STONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "pumice_stone"), PUMICE_STONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "water_pumice_stone"), WATER_PUMICE_STONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "water_pumice_stone"), WATER_PUMICE_STONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "lava_pumice_stone"), LAVA_PUMICE_STONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "lava_pumice_stone"), LAVA_PUMICE_STONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "drenchstone"), DRENCHSTONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "drenchstone"), DRENCHSTONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "water_drenchstone"), WATER_DRENCHSTONE);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "lava_drenchstone"), LAVA_DRENCHSTONE);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "nether_drenchstone"), NETHER_DRENCHSTONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "nether_drenchstone"), NETHER_DRENCHSTONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "end_drenchstone"), END_DRENCHSTONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "end_drenchstone"), END_DRENCHSTONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "dry_rooted_endstone"), DRY_ROOTED_ENDSTONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "dry_rooted_endstone"), DRY_ROOTED_ENDSTONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "fresh_rooted_endstone"), FRESH_ROOTED_ENDSTONE);
+        Registry.register(Registry.ITEM, new Identifier("comet", "fresh_rooted_endstone"), FRESH_ROOTED_ENDSTONE_BLOCK_ITEM);
     }
 }
