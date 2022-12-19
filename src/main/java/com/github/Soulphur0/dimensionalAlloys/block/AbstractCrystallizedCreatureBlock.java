@@ -27,10 +27,9 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
-public class AbstractCrystallizedCreatureBlock extends BlockWithEntity implements BlockEntityProvider, Waterloggable {
+public abstract class AbstractCrystallizedCreatureBlock extends BlockWithEntity implements BlockEntityProvider, Waterloggable {
 
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    private Direction placementDirection;
 
     protected AbstractCrystallizedCreatureBlock(Settings settings) {
         super(settings);

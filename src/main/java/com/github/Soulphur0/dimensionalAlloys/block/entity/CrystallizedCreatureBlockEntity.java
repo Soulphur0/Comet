@@ -66,7 +66,7 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
 
     // $ Comet methods
 
-    // _ Write data to block entity.
+    // _ Write data to block entity. [SETTERS]
 
     // ? Write data to block entity.
     // Used on block creation in LivingEntityMixin.
@@ -85,7 +85,7 @@ public class CrystallizedCreatureBlockEntity extends BlockEntity {
         }
     }
 
-    // _ Retrieve data from block entity.
+    // _ Retrieve data from block entity. [GETTERS]
 
     // ? Get mob data
     public NbtCompound getMobData(){

@@ -18,6 +18,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.dimension.DimensionTypes;
 
 import java.util.Random;
 
@@ -28,6 +30,7 @@ public class EndbriteTube extends Block {
         super(settings);
     }
 
+    // _ Append properties
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
         stateManager.add(TUBES);
@@ -77,94 +80,103 @@ public class EndbriteTube extends Block {
         };
     }
 
-    // _ Particle display
-    @Environment(EnvType.CLIENT)
-    private static void createParticle(World world, BlockPos pos, BlockState state, net.minecraft.util.math.random.Random random) {
-        ParticleEffect particleEffect = ParticleTypes.DRIPPING_OBSIDIAN_TEAR;
-        switch (state.get(TUBES)){
-            case 1:
-                world.addParticle(particleEffect, pos.getX()+0.525D, pos.getY()+0.8D, pos.getZ()+0.525D, 0.0D, 0.0D, 0.0D);
-                break;
-            case 2:
-                int tube2 = (int)Math.floor(random.nextFloat() * 2);
-                if (tube2 == 0)
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.555D, 0.0D, 0.0D, 0.0D);
-                else
-                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.7D, pos.getZ()+0.425D, 0.0D, 0.0D, 0.0D);
-                break;
-            case 3:
-                int tube3 = (int)Math.floor(random.nextFloat() * 3);
-                if (tube3 == 0)
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
-                else if (tube3 == 1)
-                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.7D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
-                else
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.7D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
-                break;
-            case 4:
-                int tube4 = (int)Math.floor(random.nextFloat() * 4);
-                if (tube4 == 0)
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
-                else if (tube4 == 1)
-                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
-                else if (tube4 == 2)
-                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
-                else
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
-                break;
-            case 5:
-                int tube5 = (int)Math.floor(random.nextFloat() * 5);
-                if (tube5 == 0)
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.75D, 0.0D, 0.0D, 0.0D);
-                else if (tube5 == 1)
-                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
-                else if (tube5 == 2)
-                    world.addParticle(particleEffect, pos.getX()+0.375D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
-                else if (tube5 == 3)
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.4D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
-                else
-                    world.addParticle(particleEffect, pos.getX()+0.625D, pos.getY()+0.45D, pos.getZ()+0.25D, 0.0D, 0.0D, 0.0D);
-                break;
-            case 6:
-                int tube6 = (int)Math.floor(random.nextFloat() * 6);
-                if (tube6 == 0)
-                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.75D, 0.0D, 0.0D, 0.0D);
-                else if (tube6 == 1)
-                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
-                else if (tube6 == 2)
-                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
-                else if (tube6 == 3)
-                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
-                else if (tube6 == 4)
-                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.45D, pos.getZ()+0.25D, 0.0D, 0.0D, 0.0D);
-                else
-                    world.addParticle(particleEffect, pos.getX()+0.75D, pos.getY()+0.6D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
-                break;
-            default:
-                int tube7 = (int)Math.floor(random.nextFloat() * 7);
-                if (tube7 == 0)
-                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.75D, 0.0D, 0.0D, 0.0D);
-                else if (tube7 == 1)
-                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.6D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
-                else if (tube7 == 2)
-                    world.addParticle(particleEffect, pos.getX()+0.25D, pos.getY()+0.4D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
-                else if (tube7 == 3)
-                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.4D, pos.getZ()+0.5D, 0.0D, 0.0D, 0.0D);
-                else if (tube7 == 4)
-                    world.addParticle(particleEffect, pos.getX()+0.5D, pos.getY()+0.45D, pos.getZ()+0.25D, 0.0D, 0.0D, 0.0D);
-                else if (tube7 == 5)
-                    world.addParticle(particleEffect, pos.getX()+0.75D, pos.getY()+0.5D, pos.getZ()+0.625D, 0.0D, 0.0D, 0.0D);
-                else
-                    world.addParticle(particleEffect, pos.getX()+0.75D, pos.getY()+0.7D, pos.getZ()+0.375D, 0.0D, 0.0D, 0.0D);
-                break;
+    // _ Block behaviour
+
+
+    private static boolean isInDripLocation(World world, BlockPos pos){
+        return world.getDimensionKey() == DimensionTypes.THE_END && pos.getY() <= 25;
+    }
+
+    // + Particle display
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
+        if (!isInDripLocation(world, pos)) return;
+
+        float f = random.nextFloat();
+        if (f <= 0.125F) {
+            createParticle(world, pos, state, random);
         }
     }
 
-    @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
-        float f = random.nextFloat();
-            if (f <= 0.125F) {
-                createParticle(world, pos, state, random);
+    @Environment(EnvType.CLIENT)
+    private static void createParticle(World world, BlockPos pos, BlockState state, net.minecraft.util.math.random.Random random) {
+        ParticleEffect particleEffect = ParticleTypes.DRIPPING_OBSIDIAN_TEAR;
+        switch (state.get(TUBES)) {
+            case 1 -> world.addParticle(particleEffect, pos.getX() + 0.525D, pos.getY() + 0.8D, pos.getZ() + 0.525D, 0.0D, 0.0D, 0.0D);
+            case 2 -> {
+                int tube2 = (int) Math.floor(random.nextFloat() * 2);
+                if (tube2 == 0)
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.7D, pos.getZ() + 0.555D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX() + 0.375D, pos.getY() + 0.7D, pos.getZ() + 0.425D, 0.0D, 0.0D, 0.0D);
             }
+            case 3 -> {
+                int tube3 = (int) Math.floor(random.nextFloat() * 3);
+                if (tube3 == 0)
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.7D, pos.getZ() + 0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube3 == 1)
+                    world.addParticle(particleEffect, pos.getX() + 0.375D, pos.getY() + 0.7D, pos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.7D, pos.getZ() + 0.375D, 0.0D, 0.0D, 0.0D);
+            }
+            case 4 -> {
+                int tube4 = (int) Math.floor(random.nextFloat() * 4);
+                if (tube4 == 0)
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.4D, pos.getZ() + 0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube4 == 1)
+                    world.addParticle(particleEffect, pos.getX() + 0.375D, pos.getY() + 0.6D, pos.getZ() + 0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube4 == 2)
+                    world.addParticle(particleEffect, pos.getX() + 0.375D, pos.getY() + 0.4D, pos.getZ() + 0.375D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.4D, pos.getZ() + 0.375D, 0.0D, 0.0D, 0.0D);
+            }
+            case 5 -> {
+                int tube5 = (int) Math.floor(random.nextFloat() * 5);
+                if (tube5 == 0)
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.4D, pos.getZ() + 0.75D, 0.0D, 0.0D, 0.0D);
+                else if (tube5 == 1)
+                    world.addParticle(particleEffect, pos.getX() + 0.375D, pos.getY() + 0.6D, pos.getZ() + 0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube5 == 2)
+                    world.addParticle(particleEffect, pos.getX() + 0.375D, pos.getY() + 0.4D, pos.getZ() + 0.375D, 0.0D, 0.0D, 0.0D);
+                else if (tube5 == 3)
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.4D, pos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX() + 0.625D, pos.getY() + 0.45D, pos.getZ() + 0.25D, 0.0D, 0.0D, 0.0D);
+            }
+            case 6 -> {
+                int tube6 = (int) Math.floor(random.nextFloat() * 6);
+                if (tube6 == 0)
+                    world.addParticle(particleEffect, pos.getX() + 0.5D, pos.getY() + 0.4D, pos.getZ() + 0.75D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 1)
+                    world.addParticle(particleEffect, pos.getX() + 0.25D, pos.getY() + 0.6D, pos.getZ() + 0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 2)
+                    world.addParticle(particleEffect, pos.getX() + 0.25D, pos.getY() + 0.4D, pos.getZ() + 0.375D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 3)
+                    world.addParticle(particleEffect, pos.getX() + 0.5D, pos.getY() + 0.4D, pos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
+                else if (tube6 == 4)
+                    world.addParticle(particleEffect, pos.getX() + 0.5D, pos.getY() + 0.45D, pos.getZ() + 0.25D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX() + 0.75D, pos.getY() + 0.6D, pos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
+            }
+            default -> {
+                int tube7 = (int) Math.floor(random.nextFloat() * 7);
+                if (tube7 == 0)
+                    world.addParticle(particleEffect, pos.getX() + 0.5D, pos.getY() + 0.4D, pos.getZ() + 0.75D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 1)
+                    world.addParticle(particleEffect, pos.getX() + 0.25D, pos.getY() + 0.6D, pos.getZ() + 0.625D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 2)
+                    world.addParticle(particleEffect, pos.getX() + 0.25D, pos.getY() + 0.4D, pos.getZ() + 0.375D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 3)
+                    world.addParticle(particleEffect, pos.getX() + 0.5D, pos.getY() + 0.4D, pos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 4)
+                    world.addParticle(particleEffect, pos.getX() + 0.5D, pos.getY() + 0.45D, pos.getZ() + 0.25D, 0.0D, 0.0D, 0.0D);
+                else if (tube7 == 5)
+                    world.addParticle(particleEffect, pos.getX() + 0.75D, pos.getY() + 0.5D, pos.getZ() + 0.625D, 0.0D, 0.0D, 0.0D);
+                else
+                    world.addParticle(particleEffect, pos.getX() + 0.75D, pos.getY() + 0.7D, pos.getZ() + 0.375D, 0.0D, 0.0D, 0.0D);
+            }
+        }
     }
+
+
 }

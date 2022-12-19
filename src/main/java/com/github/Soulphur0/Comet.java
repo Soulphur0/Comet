@@ -1,6 +1,6 @@
 package com.github.Soulphur0;
 
-import com.github.Soulphur0.dimensionalAlloys.armorMaterial.EndbriteArmorMaterial;
+import com.github.Soulphur0.dimensionalAlloys.client.render.armorMaterial.EndbriteArmorMaterial;
 import com.github.Soulphur0.dimensionalAlloys.entity.effect.CrystallizedStatusEffect;
 import com.github.Soulphur0.dimensionalAlloys.item.MirrorShieldItem;
 import com.github.Soulphur0.dimensionalAlloys.recipe.CreatureStatueRecipe;

@@ -1,4 +1,4 @@
-package com.github.Soulphur0.dimensionalAlloys.armorMaterial;
+package com.github.Soulphur0.dimensionalAlloys.client.render.armorMaterial;
 
 import com.github.Soulphur0.Comet;
 import net.minecraft.entity.EquipmentSlot;
