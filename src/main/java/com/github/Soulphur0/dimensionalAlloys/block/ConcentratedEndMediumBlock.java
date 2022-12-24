@@ -69,10 +69,12 @@ public class ConcentratedEndMediumBlock extends Block {
     // $ Ticking
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        float hardenChance = random.nextFloat();
-        if (hardenChance <= 0.025f)
-            world.setBlockState(pos, CometBlocks.END_MEDIUM.getDefaultState());
-
+        boolean canDryOut = !(world.getBlockState(pos.down()).getBlock() == CometBlocks.CONCENTRATED_END_MEDIUM || world.getBlockState(pos.down()).getBlock() == Blocks.OCHRE_FROGLIGHT || world.getBlockState(pos.down()).getBlock() == Blocks.PEARLESCENT_FROGLIGHT || world.getBlockState(pos.down()).getBlock() == Blocks.VERDANT_FROGLIGHT);
+        if (canDryOut){
+            float hardenChance = random.nextFloat();
+            if (hardenChance <= 0.025f)
+                world.setBlockState(pos, CometBlocks.END_MEDIUM.getDefaultState());
+        }
         super.randomTick(state, world, pos, random);
     }
 
