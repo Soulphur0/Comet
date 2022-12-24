@@ -3,12 +3,13 @@ package com.github.Soulphur0.mixin.entity;
 import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.dimensionalAlloys.entity.effect.CrystallizedStatusEffect;
 import com.github.Soulphur0.registries.CometBlocks;
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTracker;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.ElderGuardianEntity;
@@ -18,7 +19,10 @@ import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,10 +47,13 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
     @Shadow protected abstract void markEffectsDirty();
 
-    // $ Comet ---------------------------------------------------------------------------------------------------------
-
     @Shadow public abstract float getBodyYaw();
 
+    @Shadow protected abstract int getNextAirUnderwater(int air);
+
+    @Shadow public abstract boolean damage(DamageSource source, float amount);
+
+    // $ Comet ---------------------------------------------------------------------------------------------------------
     // _ Crystallization interrupt.
     GameOptions settings = MinecraftClient.getInstance().options;
     public boolean isCrystallizationInterrupted(){
@@ -86,7 +93,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
     private static int scSwitch;
     private boolean finishedCrystallization = false;
     @Inject(method="tickMovement", at = @At("HEAD"))
-    public void modifyCrystallizedTicks(CallbackInfo ci){
+    public void updateCrystallizedTicks(CallbackInfo ci){
         if (!this.world.isClient){
             int crystallizedTicks = this.getCrystallizedTicks();
 
@@ -94,7 +101,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
             // - Update ticks whether the entity is in, or left medium.
             // Completely crystallized creatures (exclusively the player since others de-spawn) remain crystallized.
             if (this.inFreshEndMedium > 0)
-                setCrystallizedTicks(Math.min(this.getCrystallizationFinishedTicks(), crystallizedTicks + 1));
+                setCrystallizedTicks(Math.min(this.getMaxCrystallizedTicks(), crystallizedTicks + 1));
             else if (!this.isCrystallized()) {
                 this.playBreakFreeSound();
                 this.setCrystallizedTicks(0);
@@ -180,7 +187,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
             // Sync client
             scSwitch = this.inFreshEndMedium;
         } else {
-            this.setInFreshEndMedium(scSwitch);
+            this.setInEndMedium(scSwitch);
         }
     }
 
@@ -242,5 +249,34 @@ public abstract class LivingEntityMixin extends EntityMixin {
         if (thisLivingEntity instanceof ElderGuardianEntity || thisLivingEntity instanceof RavagerEntity || thisLivingEntity instanceof WardenEntity){
             effect.setDuration(effect.getDuration()/3);
         }
+    }
+
+    // _ Make entities submerged in end medium lose air and drown.
+
+    // ? Tick air
+    @Inject(method="baseTick", at = @At("HEAD"))
+    private void tickAir_cometExtraBehaviour(CallbackInfo ci){
+        // + Check if the entity's head is submerged in end medium, if so, lose air.
+        if (world.getBlockState(new BlockPos(this.getEyePos())).getBlock() == CometBlocks.END_MEDIUM && !((LivingEntity)(Object)this).isCrystallized()){
+            this.setAir(this.getNextAirUnderwater(this.getAir()));
+
+            // - If the entity has no air left, take damage.
+            // There's an Easter egg death message with a small chance.
+            if (this.getAir() == -20) {
+                this.setAir(0);
+                Random random = Random.create();
+                float damageTypeChance = random.nextFloat();
+                if (damageTypeChance > 0.15)
+                    this.damage(Comet.END_MEDIUM_DROWN, 2.0f);
+                else
+                    this.damage(Comet.END_MEDIUM_DROWN_RARE, 2.0f);
+            }
+        }
+    }
+
+    // ? Make the air counter not reset if the entity is submerged in end medium.
+    @WrapWithCondition(method="baseTick", at = @At(value ="INVOKE", target="Lnet/minecraft/entity/LivingEntity;setAir(I)V", ordinal = 2))
+    private boolean isOutsideOfEndMedium_cometExtraBehaviour(LivingEntity instance, int air){
+        return !(world.getBlockState(new BlockPos(this.getEyePos())).getBlock() == CometBlocks.END_MEDIUM) && !instance.isCrystallized();
     }
 }

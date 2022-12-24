@@ -4,6 +4,8 @@
 	"block.comet.fresh_chorus_humus": "Fresh chorus humus",
 	"block.comet.end_medium": "End medium",
 	"block.comet.fresh_end_medium": "Fresh end medium",
+	"death.attack.end_medidum_drown": "%1$s drowned in crystals",
+	"death.attack.end_medidum_drown_rare": "%1$s's lungs crystallized",
 	"item.comet.endbrite_shard": "Endbrite shard",
 	"item.comet.endbrite_ingot": "Endbrite ingot",
 	"block.comet.endbrite_tube": "Endbrite tube",

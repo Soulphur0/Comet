@@ -73,6 +73,12 @@ public abstract class EntityMixin implements EntityCometBehaviour {
 
     @Shadow public abstract int getFireTicks();
 
+    @Shadow public abstract Vec3d getEyePos();
+
+    @Shadow public abstract void setAir(int air);
+
+    @Shadow public abstract int getAir();
+
     // _ Attributes.
     // ? Crystallization process' attributes
     public int inFreshEndMedium;
@@ -90,20 +96,20 @@ public abstract class EntityMixin implements EntityCometBehaviour {
 
     // _ Crystallization process' methods.
     @Override
-    public int getCrystallizationFinishedTicks(){
+    public int getMaxCrystallizedTicks(){
         return 140;
     }
 
     @Override
     public float getCrystallizationScale(){
-        int max = this.getCrystallizationFinishedTicks();
+        int max = this.getMaxCrystallizedTicks();
         return (float)Math.min(this.getCrystallizedTicks(), max) / (float)max;
     }
 
     // ? Accessors
     // * End medium switches.
     @Override
-    public void setInFreshEndMedium(int inFreshEndMedium){
+    public void setInEndMedium(int inFreshEndMedium){
         this.inFreshEndMedium = inFreshEndMedium;
     }
 
@@ -126,7 +132,7 @@ public abstract class EntityMixin implements EntityCometBehaviour {
     // * Crystallization accessors.
     @Override
     public boolean isCrystallized(){
-        return this.getCrystallizedTicks() >= this.getCrystallizationFinishedTicks();
+        return this.getCrystallizedTicks() >= this.getMaxCrystallizedTicks();
     }
 
     // * Status effect accessors.
@@ -179,8 +185,8 @@ public abstract class EntityMixin implements EntityCometBehaviour {
     }
 
     // ? Set inFreshEndMedium to false
-    // This is called every tick, in case the entity is no longer in FreshEndMedium.
-    // The inFreshEndMedium attribute is set to true by the onEntityCollision() method from the FreshEndMedium class.
+    // This is called every tick, in case the entity is no longer in EndMediumLayer.
+    // The inFreshEndMedium attribute is set to true by the onEntityCollision() method from the EndMediumLayer class.
     @Inject(method="baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z"))
     public void unsetInFreshEndMedium(CallbackInfo ci){
         if (!this.world.isClient)
