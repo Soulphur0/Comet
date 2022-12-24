@@ -109,7 +109,7 @@ public abstract class AbstractCrystallizedCreatureBlock extends BlockWithEntity 
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockPos blockPos = pos.down();
         BlockState blockState = world.getBlockState(blockPos);
-        return blockState.isSideSolid(world, blockPos, Direction.UP, SideShapeType.CENTER);
+        return blockState.isSideSolid(world, blockPos, Direction.UP, SideShapeType.CENTER) || blockState.getBlock() == CometBlocks.END_MEDIUM;
     }
 
     @Override

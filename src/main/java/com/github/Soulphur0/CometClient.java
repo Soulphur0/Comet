@@ -27,7 +27,9 @@ public class CometClient implements ClientModInitializer {
         // $ Block render layer maps
         // _ Endbrite tube
         BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.ENDBRITE_TUBE, RenderLayer.getCutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.FRESH_END_MEDIUM, RenderLayer.getTranslucent());
+
+        // _ End medium
+        BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.END_MEDIUM_LAYER, RenderLayer.getTranslucent());
 
         // _ Crystallized creature
         BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.CRYSTALLIZED_CREATURE, RenderLayer.getCutout());

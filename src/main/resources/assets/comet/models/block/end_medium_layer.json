@@ -1,7 +1,7 @@
 {   "parent": "block/block",
     "textures": {
-        "particle": "comet:block/fresh_end_medium",
-        "side": "comet:block/fresh_end_medium"
+        "particle": "comet:block/end_medium_layer",
+        "side": "comet:block/end_medium_layer"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

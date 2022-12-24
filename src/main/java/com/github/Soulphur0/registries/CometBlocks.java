@@ -60,21 +60,22 @@ public class CometBlocks {
     public static final BlockItem FRESH_CHORUS_HUMUS_ITEM = new BlockItem(FRESH_CHORUS_HUMUS, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ End medium
-    public static final Block END_MEDIUM = new EndMedium(FabricBlockSettings
+    public static final Block END_MEDIUM = new EndMediumBlock(FabricBlockSettings
             .of(Material.METAL, MapColor.PURPLE)
             .strength(1.25f, 4.2f)
             .sounds(BlockSoundGroup.GILDED_BLACKSTONE)
+            .dynamicBounds()
             .ticksRandomly());
     public static final BlockItem END_MEDIUM_BLOCK_ITEM = new BlockItem(END_MEDIUM, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // $ Fresh end medium
-    public static final Block FRESH_END_MEDIUM = new FreshEndMedium(FabricBlockSettings
+    // End medium layer
+    public static final Block END_MEDIUM_LAYER = new EndMediumLayer(FabricBlockSettings
             .of(Material.SNOW_LAYER, MapColor.PALE_PURPLE)
             .strength(0.3f)
-            .velocityMultiplier(0.9f)
+            // velocityMultiplier(0.9f)
             .sounds(BlockSoundGroup.GLASS)
             .nonOpaque().blockVision(CometBlocks::never));
-    public static final BlockItem FRESH_END_MEDIUM_BLOCK_ITEM = new BlockItem(FRESH_END_MEDIUM, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
+    public static final BlockItem END_MEDIUM_LAYER_BLOCK_ITEM = new BlockItem(END_MEDIUM_LAYER, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ Crystallized creature
     public static final Block CRYSTALLIZED_CREATURE = new CrystallizedCreature(FabricBlockSettings
@@ -231,8 +232,8 @@ public class CometBlocks {
         Registry.register(Registry.BLOCK, new Identifier("comet", "end_medium"), END_MEDIUM);
         Registry.register(Registry.ITEM, new Identifier("comet", "end_medium"), END_MEDIUM_BLOCK_ITEM);
 
-        Registry.register(Registry.BLOCK, new Identifier("comet", "fresh_end_medium"), FRESH_END_MEDIUM);
-        Registry.register(Registry.ITEM, new Identifier("comet", "fresh_end_medium"), FRESH_END_MEDIUM_BLOCK_ITEM);
+        Registry.register(Registry.BLOCK, new Identifier("comet", "end_medium_layer"), END_MEDIUM_LAYER);
+        Registry.register(Registry.ITEM, new Identifier("comet", "end_medium_layer"), END_MEDIUM_LAYER_BLOCK_ITEM);
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "crystallized_creature"), CRYSTALLIZED_CREATURE);
         Registry.register(Registry.ITEM, new Identifier("comet", "crystallized_creature"), CRYSTALLIZED_CREATURE_BLOCK_ITEM);
