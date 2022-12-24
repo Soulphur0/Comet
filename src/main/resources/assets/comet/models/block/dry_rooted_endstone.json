@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "comet:block/dry_rooted_endstone"
+    "end": "comet:block/dry_rooted_endstone_top",
+    "side": "comet:block/dry_rooted_endstone_side"
   }
 }

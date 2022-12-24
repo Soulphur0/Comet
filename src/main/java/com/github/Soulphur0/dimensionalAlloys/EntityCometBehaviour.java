@@ -2,12 +2,10 @@ package com.github.Soulphur0.dimensionalAlloys;
 
 public interface EntityCometBehaviour {
 
-    // _ Crystallization process
-    // ? Crystallization process' accessors.
-    // * End medium switches.
-    default void setInFreshEndMedium(int inFreshEndMedium){
-
-    }
+    // $ Crystallization process
+    // _ Crystallization process' properties accessors.
+    // * Touching End medium switches.
+    default void setInEndMedium(int inFreshEndMedium){}
 
     default boolean isInFreshEndMedium(){
         return false;
@@ -20,7 +18,7 @@ public interface EntityCometBehaviour {
         return 0;
     }
 
-    // * Crystallization accessors.
+    // * Crystallization state accessors.
     default void setCrystallized(boolean isCrystallized) {}
 
     default boolean isCrystallized(){
@@ -32,14 +30,13 @@ public interface EntityCometBehaviour {
 
     default boolean isCrystallizedByStatusEffect() { return false;}
 
-    // * On-crystallization attributes accessors.
-
+    // * On-crystallization saved attributes accessors.
     default void setOnCrystallizationBodyYaw(float bodyYaw) {}
 
     default float getOnCrystallizationBodyYaw(){ return 0.0f;}
 
-    // ? Crystallization process' attributes.
-    default int getCrystallizationFinishedTicks(){
+    // _ Crystallization process' attributes.
+    default int getMaxCrystallizedTicks(){
         return 0;
     }
 
@@ -47,15 +44,15 @@ public interface EntityCometBehaviour {
         return 0.0F;
     }
 
-    // ? Statue material accessors.
+    // _ Crystallization utilities
+    default boolean isCrystallizationInterrupted() { return false;}
+
+    // $ Statue rendering.
     default void setStatueMaterial(){}
 
     default String getStatueMaterial(){ return null;}
 
-    // ? Utilities
-    default boolean isCrystallizationInterrupted() { return false;}
-
-    // _ Fire extra behaviour
+    // $ Fire extra behaviour
     default void setSoulFireTicks(int ticks){}
 
     default int getSoulFireTicks(){ return 0;}

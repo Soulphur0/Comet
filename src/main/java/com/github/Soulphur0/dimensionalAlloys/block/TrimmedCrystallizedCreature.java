@@ -9,7 +9,6 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -41,7 +40,7 @@ public class TrimmedCrystallizedCreature extends AbstractCrystallizedCreatureBlo
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         Item mainHandItem = player.getMainHandStack().getItem();
-        if (mainHandItem == Comet.FRESH_END_MEDIUM_BOTTLE){
+        if (mainHandItem == Comet.CONCENTRATED_END_MEDIUM_BOTTLE){
             NbtCompound oldBlockNBT = new NbtCompound();
             world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) ->{
                 oldBlockNBT.put("mobData",blockEntity.getMobData());
