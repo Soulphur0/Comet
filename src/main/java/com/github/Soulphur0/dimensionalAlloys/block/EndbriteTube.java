@@ -1,18 +1,18 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
+import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -21,8 +21,6 @@ import net.minecraft.world.WorldView;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionTypes;
 
-import java.util.Random;
-
 public class EndbriteTube extends Block {
     public static final IntProperty TUBES = IntProperty.of("tubes", 1, 7);
 
@@ -30,13 +28,13 @@ public class EndbriteTube extends Block {
         super(settings);
     }
 
-    // _ Append properties
+    // $ Append properties
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
         stateManager.add(TUBES);
     }
 
-    // _ Block placement behaviour
+    // $ Block placement behaviour
     @Override
     public BlockState getPlacementState(ItemPlacementContext ipc) {
         BlockState blockState = ipc.getWorld().getBlockState(ipc.getBlockPos());
@@ -67,7 +65,7 @@ public class EndbriteTube extends Block {
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    // _ Block shape
+    // $ Block shape
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
         return switch (state.get(TUBES)) {
@@ -80,11 +78,13 @@ public class EndbriteTube extends Block {
         };
     }
 
-    // _ Block behaviour
-
-
-    private static boolean isInDripLocation(World world, BlockPos pos){
+    // $ Block behaviour
+    private boolean isInDripLocation(World world, BlockPos pos){
         return world.getDimensionKey() == DimensionTypes.THE_END && pos.getY() <= 25;
+    }
+
+    private boolean isUnderDripFillCircumstances(World world, BlockPos pos){
+        return world.getBlockState(pos.up()).getBlock() == CometBlocks.END_END_MEDIUM_DRENCHSTONE || world.getBlockState(pos.up()).getBlock() == CometBlocks.FRESH_ROOTED_ENDSTONE;
     }
 
     // + Particle display
@@ -92,10 +92,46 @@ public class EndbriteTube extends Block {
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
         if (!isInDripLocation(world, pos)) return;
 
+        // ? Drip particle, it will drip more particles if it can fill a cauldron below.
         float f = random.nextFloat();
-        if (f <= 0.125F) {
+        if (isUnderDripFillCircumstances(world, pos) && f<=0.125F){
+            createParticle(world, pos, state, random);
+        } else if (f <= 0.025F) {
             createParticle(world, pos, state, random);
         }
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        float fillChance = random.nextFloat();
+
+        // ? Check if the block has a chance to fill a cauldron.
+        if (isUnderDripFillCircumstances(world, pos) && fillChance <= 0.025){
+            BlockPos cauldronPos = checkForCauldron(world,pos);
+            BlockState cauldronState = world.getBlockState(cauldronPos);
+
+            // + Compare obtained pos with this pos, checkForCauldron returns this block's pos if it doesn't find a cauldron.
+            if (cauldronPos != pos){
+                // - Check if the cauldron is an end medium one, in which case it will be filled if it's not full yet.
+                if (cauldronState.getBlock() == CometBlocks.END_MEDIUM_CAULDRON){
+                    if (cauldronState.get(LeveledCauldronBlock.LEVEL) < 3)
+                        world.setBlockState(cauldronPos,CometBlocks.END_MEDIUM_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL, cauldronState.get(LeveledCauldronBlock.LEVEL) + 1));
+                // - If it is a regular cauldron, place an end medium cauldron with level 1.
+                } else if (cauldronState.getBlock() == Blocks.CAULDRON)
+                    world.setBlockState(cauldronPos,CometBlocks.END_MEDIUM_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL, 1));
+            }
+        }
+        super.randomTick(state, world, pos, random);
+    }
+
+    private BlockPos checkForCauldron(ServerWorld world, BlockPos pos){
+        for(int i = 1; i<10; i++){
+            Block block = world.getBlockState(pos.down(i)).getBlock();
+            if (block == Blocks.CAULDRON || block == CometBlocks.END_MEDIUM_CAULDRON){
+                return pos.down(i);
+            }
+        }
+        return pos;
     }
 
     @Environment(EnvType.CLIENT)
@@ -177,6 +213,4 @@ public class EndbriteTube extends Block {
             }
         }
     }
-
-
 }

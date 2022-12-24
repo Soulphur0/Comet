@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "comet:item/concentrated_end_medium_bottle"
+  }
+}

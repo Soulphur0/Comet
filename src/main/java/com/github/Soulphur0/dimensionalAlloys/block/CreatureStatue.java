@@ -1,15 +1,11 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
 import com.github.Soulphur0.Comet;
-import com.github.Soulphur0.dimensionalAlloys.block.entity.CrystallizedCreatureBlockEntity;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -20,7 +16,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 public class CreatureStatue extends AbstractCrystallizedCreatureBlock implements BlockEntityProvider, Waterloggable {
 
@@ -48,7 +43,7 @@ public class CreatureStatue extends AbstractCrystallizedCreatureBlock implements
                 mobData.putString("StatueMaterial","none");
             }
 
-            if (mainHandItem == Comet.FRESH_END_MEDIUM_BOTTLE){
+            if (mainHandItem == Comet.CONCENTRATED_END_MEDIUM_BOTTLE){
                 NbtCompound mobData = blockEntity.getMobData();
                 mobData.putString("StatueMaterial","end_medium");
             }

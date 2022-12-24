@@ -13,6 +13,7 @@
     "ItemStackMixin",
     "SoulFireBlockMixin",
     "StatusEffectInstanceMixin",
+    "block.CauldronBehaviorMixin",
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
     "entity.player.PlayerEntityMixin"

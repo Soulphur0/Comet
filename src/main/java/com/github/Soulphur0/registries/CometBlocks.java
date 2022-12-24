@@ -181,6 +181,24 @@ public class CometBlocks {
             .sounds(BlockSoundGroup.STONE));
     public static final Item FRESH_ROOTED_ENDSTONE_BLOCK_ITEM = new BlockItem(FRESH_ROOTED_ENDSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
+    // $ End medium cauldron
+    public static final Block END_MEDIUM_CAULDRON = new EndMediumCauldronBlock(FabricBlockSettings
+            .of(Material.METAL, MapColor.STONE_GRAY)
+            .requiresTool()
+            .strength(2.0f)
+            .nonOpaque(), precipitation -> precipitation == Biome.Precipitation.NONE, CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR);
+
+    // $ Concentrated end medium
+    public static final Block CONCENTRATED_END_MEDIUM = new ConcentratedEndMediumBlock(FabricBlockSettings
+            .of(Material.GLASS)
+            .strength(0.3f)
+            .sounds(BlockSoundGroup.GLASS)
+            .velocityMultiplier(0.5f)
+            .nonOpaque()
+            .blockVision(CometBlocks::never)
+            .ticksRandomly());
+    public static final Item CONCENTRATED_END_MEDIUM_BUCKET = new ConcentratedEndMediumBucket(CONCENTRATED_END_MEDIUM, new Item.Settings().group(ItemGroup.MISC));
+
     // _ Block predicates
     private static boolean never(BlockState blockState, BlockView blockView, BlockPos blockPos) {
         return false;
@@ -273,5 +291,10 @@ public class CometBlocks {
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "fresh_rooted_endstone"), FRESH_ROOTED_ENDSTONE);
         Registry.register(Registry.ITEM, new Identifier("comet", "fresh_rooted_endstone"), FRESH_ROOTED_ENDSTONE_BLOCK_ITEM);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "end_medium_cauldron"), END_MEDIUM_CAULDRON);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "concentrated_end_medium"), CONCENTRATED_END_MEDIUM);
+        Registry.register(Registry.ITEM, new Identifier("comet", "concentrated_end_medium_bucket"), CONCENTRATED_END_MEDIUM_BUCKET);
     }
 }
