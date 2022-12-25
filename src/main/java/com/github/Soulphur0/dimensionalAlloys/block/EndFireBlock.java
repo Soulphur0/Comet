@@ -27,7 +27,12 @@ public class EndFireBlock extends AbstractFireBlock {
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (!entity.isFireImmune()) {
-            entity.setEndFireTicks(entity.getFireTicks());
+            // + Set end fire ticks to 1 on-contact, in order to not render 1 regular fire hud frame.
+            if (entity.getEndFireTicks() == -20)
+                entity.setEndFireTicks(1);
+            else
+                entity.setEndFireTicks(entity.getFireTicks());
+
             entity.setSoulFireTicks(-20);
         }
 

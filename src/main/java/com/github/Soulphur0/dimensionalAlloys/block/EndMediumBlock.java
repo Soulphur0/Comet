@@ -52,7 +52,7 @@ public class EndMediumBlock extends Block {
     }
 
     // $ Collision behaviour, sink if not moving.
-    private boolean entityHasEndMediumAbove(World world, Entity entity){
+    private boolean entityIsInEndMedium(BlockView world, Entity entity){
         return entity.getBlockStateAtPos().isOf(this) || world.getBlockState(entity.getBlockPos()).getBlock() == CometBlocks.END_MEDIUM || world.getBlockState(entity.getBlockPos().up()).getBlock() == CometBlocks.END_MEDIUM;
     }
 
@@ -71,7 +71,7 @@ public class EndMediumBlock extends Block {
             // - The entity is a falling block.
             if (entity instanceof ClientPlayerEntity clientPlayer && clientPlayer.input.jumping || entity.getVelocity().horizontalLength() > 0.03 || entity.fallDistance > 0.25f || entity instanceof FallingBlockEntity) {
                 // - Check that the entity is not inside end medium.
-                if (!entityHasEndMediumAbove((World) world, entity))
+                if (!entityIsInEndMedium(world, entity))
                     return super.getCollisionShape(state, world, pos, context);
             }
         }
@@ -82,7 +82,7 @@ public class EndMediumBlock extends Block {
     // _ Apply medium effects if the entity is in end medium.
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (!(entity instanceof LivingEntity) || entity.getBlockStateAtPos().isOf(this) || entityHasEndMediumAbove(world, entity)) {
+        if (!(entity instanceof LivingEntity) || entity.getBlockStateAtPos().isOf(this) || entityIsInEndMedium(world, entity)) {
             // ? Slow down entity, and sink it if it is not jumping, otherwise it will slowly rise.
             // This multiplies entity movement in each axis by the specified value, slowing the entity, these values are set like this to simulate high viscosity.
             if (!(entity instanceof ClientPlayerEntity clientPlayer && clientPlayer.input.jumping))

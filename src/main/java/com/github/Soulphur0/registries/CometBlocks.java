@@ -227,7 +227,7 @@ public class CometBlocks {
             .nonOpaque()
             .blockVision(CometBlocks::never)
             .ticksRandomly());
-    public static final Item CONCENTRATED_END_MEDIUM_BUCKET = new ConcentratedEndMediumBucket(CONCENTRATED_END_MEDIUM, new Item.Settings().group(ItemGroup.MISC));
+    public static final Item CONCENTRATED_END_MEDIUM_BUCKET = new ConcentratedEndMediumBucket(CONCENTRATED_END_MEDIUM, new Item.Settings().group(ItemGroup.MISC).maxCount(1));
 
     // _ Block predicates
     private static boolean never(BlockState blockState, BlockView blockView, BlockPos blockPos) {

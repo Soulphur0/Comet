@@ -60,4 +60,8 @@ public interface EntityCometBehaviour {
     default void setEndFireTicks(int ticks){}
 
     default int getEndFireTicks(){ return 0;}
+
+    default boolean isOnSoulFire() { return false;}
+
+    default boolean isOnEndFire() { return false;}
 }

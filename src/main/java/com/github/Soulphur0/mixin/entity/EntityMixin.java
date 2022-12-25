@@ -176,14 +176,15 @@ public abstract class EntityMixin implements EntityCometBehaviour {
 
     // $ Injected ------------------------------------------------------------------------------------------------------
 
-    // _ Crystallization methods.
-
-    // ? Add data tracker for crystallization.
+    // _ Generic injects.
+    // ? Add data tracker for comet behaviours.
     @Inject(method="<init>", at = @At("TAIL"))
-    public void addCrystallizedTicksTracker(EntityType type, World world, CallbackInfo ci){
+    public void comet_addDataTrackers(EntityType type, World world, CallbackInfo ci){
         this.dataTracker.startTracking(CRYSTALLIZED_TICKS, 0);
+        this.dataTracker.startTracking(COMET_FLAGS, (byte)0);
     }
 
+    // _ Crystallization methods.
     // ? Set inFreshEndMedium to false
     // This is called every tick, in case the entity is no longer in EndMediumLayer.
     // The inFreshEndMedium attribute is set to true by the onEntityCollision() method from the EndMediumLayer class.
@@ -221,6 +222,49 @@ public abstract class EntityMixin implements EntityCometBehaviour {
     }
 
     // _ Fire additional behaviour
+    private static final TrackedData<Byte> COMET_FLAGS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.BYTE);
+    private static final int ON_SOUL_FIRE_FLAG_INDEX = 0;
+    private static final int ON_END_FIRE_FLAG_INDEX = 1;
+
+    private void setCometFlag(int index, boolean value) {
+        byte b = this.dataTracker.get(COMET_FLAGS);
+        if (value) {
+            this.dataTracker.set(COMET_FLAGS, (byte)(b | 1 << index));
+        } else {
+            this.dataTracker.set(COMET_FLAGS, (byte)(b & ~(1 << index)));
+        }
+    }
+
+    private boolean getCometFlag(int index) {
+        return (this.dataTracker.get(COMET_FLAGS) & 1 << index) != 0;
+    }
+
+    public void setOnSoulFire(boolean onFire) {
+        this.setCometFlag(ON_SOUL_FIRE_FLAG_INDEX, onFire);
+    }
+
+    public void setOnEndFire(boolean onFire) {
+        this.setCometFlag(ON_END_FIRE_FLAG_INDEX, onFire);
+    }
+
+    public boolean isOnSoulFire() {
+        boolean bl = this.world != null && this.world.isClient;
+        return !((Entity)(Object)this).isFireImmune() && (((Entity)(Object)this).getSoulFireTicks() > 0 || bl && this.getCometFlag(ON_SOUL_FIRE_FLAG_INDEX));
+    }
+
+    public boolean isOnEndFire() {
+        boolean bl = this.world != null && this.world.isClient;
+        return !((Entity)(Object)this).isFireImmune() && (((Entity)(Object)this).getSoulFireTicks() > 0 || bl && this.getCometFlag(ON_END_FIRE_FLAG_INDEX));
+    }
+
+    public boolean doesRenderOnSoulFire() {
+        return this.isOnSoulFire() && !this.isSpectator();
+    }
+
+    public boolean doesRenderOnEndFire() {
+        return this.isOnEndFire() && !this.isSpectator();
+    }
+
     @Inject(method="baseTick", at = @At("HEAD"))
     private void updateAdditionalFireBehaviour(CallbackInfo ci){
         if (!this.getWorld().isClient()){
@@ -239,18 +283,27 @@ public abstract class EntityMixin implements EntityCometBehaviour {
             this.soulFireTicks = (this.getFireTicks() <= -20) ? -20 : this.soulFireTicks;
             this.endFireTicks = (this.getFireTicks() <= -20) ? -20 : this.endFireTicks;
 
-            // Update ticks to client
+            // Set on fire for the data tracker to track it.
             if (this.isPlayer()){
-                PacketByteBuf soulFireTicks = PacketByteBufs.create();
-                PacketByteBuf endFireTicks = PacketByteBufs.create();
-
-                soulFireTicks.writeInt(this.soulFireTicks);
-                endFireTicks.writeInt(this.endFireTicks);
-
-                ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new Identifier("comet","soul_fire_ticks"), soulFireTicks);
-                ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new Identifier("comet","end_fire_ticks"), endFireTicks);
+                this.setOnSoulFire(this.soulFireTicks > -20);
+                this.setOnEndFire(this.endFireTicks > -20);
+            } else {
+                this.setOnSoulFire(this.soulFireTicks > 0);
+                this.setOnEndFire(this.endFireTicks > 0);
             }
-        }
+
+            //. Update ticks to client might need this for server.
+//            if (this.isPlayer()){
+//                PacketByteBuf soulFireTicks = PacketByteBufs.create();
+//                PacketByteBuf endFireTicks = PacketByteBufs.create();
+//
+//                soulFireTicks.writeInt(this.soulFireTicks);
+//                endFireTicks.writeInt(this.endFireTicks);
+//
+//                ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new Identifier("comet","soul_fire_ticks"), soulFireTicks);
+//                ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new Identifier("comet","end_fire_ticks"), endFireTicks);
+//            }
+       }
     }
 
     //
