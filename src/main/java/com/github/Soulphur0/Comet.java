@@ -1,16 +1,16 @@
 package com.github.Soulphur0;
 
-import com.github.Soulphur0.dimensionalAlloys.client.render.armorMaterial.EndbriteArmorMaterial;
+import com.github.Soulphur0.dimensionalAlloys.item.armorMaterial.EndbriteArmorMaterial;
 import com.github.Soulphur0.dimensionalAlloys.entity.effect.CrystallizedStatusEffect;
+import com.github.Soulphur0.dimensionalAlloys.item.EndbriteElytraChestplateItem;
 import com.github.Soulphur0.dimensionalAlloys.item.MirrorShieldItem;
 import com.github.Soulphur0.dimensionalAlloys.recipe.CreatureStatueRecipe;
+import com.github.Soulphur0.dimensionalAlloys.recipe.EndbriteElytraChestplateItemRecipe;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.client.render.CameraSubmersionType;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.entity.*;
@@ -44,6 +44,7 @@ public class Comet implements ModInitializer {
 	public static final ArmorMaterial ENDBRITE_ARMOR_MATERIAL = new EndbriteArmorMaterial();
 	public static final Item ENDBRITE_HELMET = new ArmorItem(ENDBRITE_ARMOR_MATERIAL, EquipmentSlot.HEAD, new Item.Settings().group(ItemGroup.COMBAT));
 	public static final Item ENDBRITE_CHESTPLATE = new ArmorItem(ENDBRITE_ARMOR_MATERIAL, EquipmentSlot.CHEST, new Item.Settings().group(ItemGroup.COMBAT));
+	public static final Item ENDBRITE_ELYTRA_CHESTPLATE = new EndbriteElytraChestplateItem(ENDBRITE_ARMOR_MATERIAL, EquipmentSlot.CHEST, new Item.Settings().group(ItemGroup.COMBAT));
 	public static final Item ENDBRITE_LEGGINGS = new ArmorItem(ENDBRITE_ARMOR_MATERIAL, EquipmentSlot.LEGS, new Item.Settings().group(ItemGroup.COMBAT));
 	public static final Item ENDBRITE_BOOTS = new ArmorItem(ENDBRITE_ARMOR_MATERIAL, EquipmentSlot.FEET, new Item.Settings().group(ItemGroup.COMBAT));
 
@@ -53,6 +54,7 @@ public class Comet implements ModInitializer {
 
 	// Crafting recipes
 	public static final RecipeSerializer<CreatureStatueRecipe> CREATURE_STATUE = RecipeSerializer.register("crafting_special_creaturestatue", new SpecialRecipeSerializer<CreatureStatueRecipe>(CreatureStatueRecipe::new));
+	public static final RecipeSerializer<EndbriteElytraChestplateItemRecipe> ENDBRITE_ELYTRA_CHESTPLATE_RECIPE = RecipeSerializer.register("crafting_special_endbriteelytrachestplate", new SpecialRecipeSerializer<EndbriteElytraChestplateItemRecipe>(EndbriteElytraChestplateItemRecipe::new));
 
 	// Status effects
 	public static final StatusEffect CRYSTALLIZED = new CrystallizedStatusEffect();
@@ -88,6 +90,7 @@ public class Comet implements ModInitializer {
 		// Armor
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_helmet"), ENDBRITE_HELMET);
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_chestplate"), ENDBRITE_CHESTPLATE);
+		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_elytra_chestplate"), ENDBRITE_ELYTRA_CHESTPLATE);
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_leggings"), ENDBRITE_LEGGINGS);
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_boots"), ENDBRITE_BOOTS);
 

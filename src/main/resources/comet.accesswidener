@@ -16,3 +16,4 @@ accessible field net/minecraft/client/render/RenderPhase ENABLE_OVERLAY_COLOR Ln
 accessible field net/minecraft/client/render/Camera$Projection center Lnet/minecraft/util/math/Vec3d;
 
 accessible class net/minecraft/client/render/BackgroundRenderer$FogData
+

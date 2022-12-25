@@ -52,8 +52,7 @@ public class CreatureStatueRecipe extends SpecialCraftingRecipe {
 
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
-        ItemStack crystallizedCreatureHolder = ItemStack.EMPTY;
-        int amethystShardCounter = 0;
+        ItemStack crystallizedCreatureItem = ItemStack.EMPTY;
 
         // * Check that there is, in fact, a crystallized creature and four amethyst shards.
         for(int i = 0; i < craftingInventory.size(); i++){
@@ -61,16 +60,14 @@ public class CreatureStatueRecipe extends SpecialCraftingRecipe {
             if (sample.isEmpty()) continue;
             Item item = sample.getItem();
             if (Block.getBlockFromItem(item) instanceof CrystallizedCreature || Block.getBlockFromItem(item) instanceof TrimmedCrystallizedCreature){
-                crystallizedCreatureHolder = sample;
-                continue;
+                crystallizedCreatureItem = sample;
             }
-            if (item == Items.AMETHYST_SHARD) amethystShardCounter++;
         }
 
         // * Create item and copy nbt to it, adding statue tag to mobData for later render.
         ItemStack creatureStatue = new ItemStack(CometBlocks.CREATURE_STATUE);
-        if (crystallizedCreatureHolder.hasNbt()){
-            NbtCompound crystallizedCreatureNBT = crystallizedCreatureHolder.getNbt().copy();
+        if (crystallizedCreatureItem.hasNbt()){
+            NbtCompound crystallizedCreatureNBT = crystallizedCreatureItem.getNbt().copy();
             NbtCompound blockEntityTag = crystallizedCreatureNBT.getCompound("BlockEntityTag");
             NbtCompound mobData = blockEntityTag.getCompound("mobData");
 

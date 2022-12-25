@@ -1,4 +1,4 @@
-package com.github.Soulphur0.dimensionalAlloys.client.render.armorMaterial;
+package com.github.Soulphur0.dimensionalAlloys.item.armorMaterial;
 
 import com.github.Soulphur0.Comet;
 import net.minecraft.entity.EquipmentSlot;
@@ -8,7 +8,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 
 public class EndbriteArmorMaterial implements ArmorMaterial {
-    private static final int[] BASE_DURABILITY = new int[] {407,592,555,481};
+    private static final int[] BASE_DURABILITY = new int[]{13, 15, 16, 11};
     private static final int[] PROTECTION_VALUES = new int[] {3, 6, 8, 3};
 
     @Override
@@ -23,7 +23,7 @@ public class EndbriteArmorMaterial implements ArmorMaterial {
 
     @Override
     public int getEnchantability() {
-        return 5;
+        return 10;
     }
 
     @Override

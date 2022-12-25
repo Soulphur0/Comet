@@ -77,6 +77,7 @@ public class CometArmorFeatureRenderer<T extends LivingEntity, M extends BipedEn
     private boolean checkIfCometItem(ItemStack itemStack){
         return  itemStack.isOf(Comet.ENDBRITE_HELMET) ||
                 itemStack.isOf(Comet.ENDBRITE_CHESTPLATE) ||
+                itemStack.isOf(Comet.ENDBRITE_ELYTRA_CHESTPLATE) ||
                 itemStack.isOf(Comet.ENDBRITE_LEGGINGS) ||
                 itemStack.isOf(Comet.ENDBRITE_BOOTS);
     }

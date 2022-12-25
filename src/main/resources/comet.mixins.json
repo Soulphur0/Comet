@@ -16,7 +16,9 @@
     "block.CauldronBehaviorMixin",
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
-    "entity.player.PlayerEntityMixin"
+    "entity.player.PlayerEntityMixin",
+    "item.ArmorItemMixin",
+    "item.ElytraItemMixin"
   ],
   "client": [
     "InGameOverlayRendererMixin",
@@ -27,6 +29,8 @@
     "client.render.CameraMixin",
     "client.render.WorldRendererMixin",
     "client.render.entity.EntityRenderDispatcherMixin",
+    "client.render.entity.feature.ElytraFeatureRendererMixin",
+    "client.render.network.ClientPlayerEntityMixin",
     "entityModel.PlayerEntityModelMixin",
     "entityRenderer.ArmorStandEntityRendererMixin",
     "entityRenderer.DrownedEntityRendererMixin",

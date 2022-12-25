@@ -4,10 +4,13 @@ import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.dimensionalAlloys.entity.effect.CrystallizedStatusEffect;
 import com.github.Soulphur0.registries.CometBlocks;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTracker;
@@ -16,6 +19,10 @@ import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.RavagerEntity;
 import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -52,6 +59,10 @@ public abstract class LivingEntityMixin extends EntityMixin {
     @Shadow protected abstract int getNextAirUnderwater(int air);
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
+
+    @Shadow protected abstract void initDataTracker();
+
+    @Shadow public abstract void endCombat();
 
     // $ Comet ---------------------------------------------------------------------------------------------------------
     // _ Crystallization interrupt.
@@ -252,7 +263,6 @@ public abstract class LivingEntityMixin extends EntityMixin {
     }
 
     // _ Make entities submerged in end medium lose air and drown.
-
     // ? Tick air
     @Inject(method="baseTick", at = @At("HEAD"))
     private void tickAir_cometExtraBehaviour(CallbackInfo ci){
@@ -278,5 +288,46 @@ public abstract class LivingEntityMixin extends EntityMixin {
     @WrapWithCondition(method="baseTick", at = @At(value ="INVOKE", target="Lnet/minecraft/entity/LivingEntity;setAir(I)V", ordinal = 2))
     private boolean isOutsideOfEndMedium_cometExtraBehaviour(LivingEntity instance, int air){
         return !(world.getBlockState(new BlockPos(this.getEyePos())).getBlock() == CometBlocks.END_MEDIUM) && !instance.isCrystallized();
+    }
+
+    // _ Fall flying behaviour for elytra-like items.
+    // ? When checking for an equipped elytra, return an elytra item if a flight-compatible item is equipped.
+    @WrapOperation(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+    private boolean comet_checkForElytraItem(ItemStack instance, Item item, Operation<Boolean> original){
+        if (instance.isOf(Comet.ENDBRITE_ELYTRA_CHESTPLATE)){
+            return true;
+        } else {
+            return original.call(instance, item);
+        }
+    }
+
+    // ? When using an endbrite elytra chestplate, check that the user is wearing a full armor set of endbrite, otherwise the elytra will split from the chestplate.
+    @Inject(method="baseTick", at = @At("HEAD"))
+    private void comet_checkIfLivingEntityIsWearingEndbriteSet(CallbackInfo ci){
+        LivingEntity livingEntity = ((LivingEntity)(Object)this);
+        boolean hasEndbriteArmor = livingEntity.getEquippedStack(EquipmentSlot.HEAD).isOf(Comet.ENDBRITE_HELMET) && livingEntity.getEquippedStack(EquipmentSlot.LEGS).isOf(Comet.ENDBRITE_LEGGINGS) && livingEntity.getEquippedStack(EquipmentSlot.FEET).isOf(Comet.ENDBRITE_BOOTS);
+        ItemStack chestItem = livingEntity.getEquippedStack(EquipmentSlot.CHEST);
+
+        // + Split endbrite elytra chestplate if the user is not wearing the rest of the armor.
+        if (!hasEndbriteArmor && chestItem.isOf(Comet.ENDBRITE_ELYTRA_CHESTPLATE)){
+            // - Retrieve elytra data from when the items were combined.
+            NbtCompound elytraChestplateData = chestItem.getOrCreateNbt();
+            NbtCompound elytraData = elytraChestplateData.getCompound("elytraData");
+
+            // - Set the elytrachestplate data to the chestplate.
+            ItemStack endbriteChestplate = new ItemStack(Comet.ENDBRITE_CHESTPLATE);
+            endbriteChestplate.setNbt(elytraChestplateData);
+
+            livingEntity.equipStack(EquipmentSlot.CHEST, endbriteChestplate);
+
+            // - If the entity is a player, give back the elytra.
+            if (livingEntity instanceof PlayerEntity player){
+                ItemStack elytraItem = new ItemStack(Items.ELYTRA);
+                elytraItem.setNbt(elytraData);
+                if (!player.getInventory().insertStack(elytraItem)) {
+                    player.dropItem(elytraItem, false);
+                }
+            }
+        }
     }
 }
