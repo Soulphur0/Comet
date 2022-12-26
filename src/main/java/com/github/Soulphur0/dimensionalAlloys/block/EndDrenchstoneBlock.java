@@ -32,33 +32,26 @@ public class EndDrenchstoneBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack handItemStack = player.getStackInHand(hand);
-
+        
         // + Replace item.
-        boolean usingBucket = handItemStack.isOf(Items.WATER_BUCKET) || handItemStack.isOf(Items.LAVA_BUCKET);
-        boolean usingBottle = handItemStack.isOf(Comet.CONCENTRATED_END_MEDIUM_BOTTLE);
-        if(usingBucket || usingBottle){
+        if(handItemStack.isOf(Items.WATER_BUCKET) || handItemStack.isOf(Items.LAVA_BUCKET) || handItemStack.isOf(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET)){
             // - Replace block.
             if (handItemStack.isOf(Items.WATER_BUCKET))
                 world.setBlockState(pos, CometBlocks.END_WATER_DRENCHSTONE.getDefaultState());
             else if (handItemStack.isOf(Items.LAVA_BUCKET))
                 world.setBlockState(pos, CometBlocks.END_LAVA_DRENCHSTONE.getDefaultState());
-            else if (handItemStack.isOf(Comet.CONCENTRATED_END_MEDIUM_BOTTLE))
+            else if (handItemStack.isOf(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET))
                 world.setBlockState(pos, CometBlocks.END_END_MEDIUM_DRENCHSTONE.getDefaultState());
 
             // - Remove item if the player is not on creative mode.
             if (!player.isCreative())
                 player.getMainHandStack().decrement(1);
 
-            // - If the hand is free, add an empty bucket/bottle.
+            // - If the hand is free, add an empty bucket.
             if (handItemStack.isEmpty()){
-                if (usingBottle)
-                    player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
-                else
-                    player.setStackInHand(hand, new ItemStack(Items.BUCKET));
+                player.setStackInHand(hand, new ItemStack(Items.BUCKET));
             // - If it is not free, try to shove it into the inventory, drop it otherwise.
-            } else if (usingBottle && !player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE))) {
-                player.dropItem(new ItemStack(Items.GLASS_BOTTLE), false);
-            } else if (usingBucket && !player.getInventory().insertStack(new ItemStack(Items.BUCKET))) {
+            } else if (!player.getInventory().insertStack(new ItemStack(Items.BUCKET))) {
                 player.dropItem(new ItemStack(Items.BUCKET), false);
             }
         }
@@ -88,18 +81,27 @@ public class EndDrenchstoneBlock extends Block {
                 // - Only take in source blocks.
                 if (world.getBlockState(pos.offset(directions[i])).get(FluidBlock.LEVEL) == 0){
                     // Remove source.
-                    if (state.getBlock() == CometBlocks.END_DRENCHSTONE)
+                    if (state.getBlock() == CometBlocks.END_DRENCHSTONE){
                         world.setBlockState(pos.offset(directions[i]), Blocks.AIR.getDefaultState(),2);
-                    world.setBlockState(pos, CometBlocks.END_WATER_DRENCHSTONE.getDefaultState(),2);
+                        world.setBlockState(pos, CometBlocks.END_WATER_DRENCHSTONE.getDefaultState(),2);
+                    }
                 }
             // + Check for lava.
             } else if (world.getBlockState(pos.offset(directions[i])).getBlock() == Blocks.LAVA){
                 // - Only take in source blocks.
                 if (world.getBlockState(pos.offset(directions[i])).get(FluidBlock.LEVEL) == 0){
                     // Remove source.
-                    if (state.getBlock() == CometBlocks.END_DRENCHSTONE)
+                    if (state.getBlock() == CometBlocks.END_DRENCHSTONE){
                         world.setBlockState(pos.offset(directions[i]), Blocks.AIR.getDefaultState(),2);
-                    world.setBlockState(pos, CometBlocks.END_LAVA_DRENCHSTONE.getDefaultState(),2);
+                        world.setBlockState(pos, CometBlocks.END_LAVA_DRENCHSTONE.getDefaultState(),2);
+                    }
+                }
+            // + Check for concentrated end medium.
+            } else if (world.getBlockState(pos.offset(directions[i])).getBlock() == CometBlocks.CONCENTRATED_END_MEDIUM){
+                // Remove source.
+                if (state.getBlock() == CometBlocks.END_DRENCHSTONE){
+                    world.setBlockState(pos.offset(directions[i]), Blocks.AIR.getDefaultState(),2);
+                    world.setBlockState(pos, CometBlocks.END_END_MEDIUM_DRENCHSTONE.getDefaultState(),2);
                 }
             }
         }

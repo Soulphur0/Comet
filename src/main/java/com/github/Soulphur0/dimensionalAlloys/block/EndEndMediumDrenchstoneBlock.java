@@ -21,13 +21,13 @@ public class EndEndMediumDrenchstoneBlock extends EndDrenchstoneBlock{
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack handItemStack = player.getStackInHand(hand);
-        if(handItemStack.isOf(Items.GLASS_BOTTLE)){
+        if(handItemStack.isOf(Items.BUCKET)){
             if (!player.isCreative())
                 player.getMainHandStack().decrement(1);
             if (handItemStack.isEmpty()){
-                player.setStackInHand(hand, new ItemStack(Comet.CONCENTRATED_END_MEDIUM_BOTTLE));
-            } else if (!player.getInventory().insertStack(new ItemStack(Comet.CONCENTRATED_END_MEDIUM_BOTTLE))) {
-                player.dropItem(new ItemStack(Comet.CONCENTRATED_END_MEDIUM_BOTTLE), false);
+                player.setStackInHand(hand, new ItemStack(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET));
+            } else if (!player.getInventory().insertStack(new ItemStack(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET))) {
+                player.dropItem(new ItemStack(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET), false);
             }
             world.setBlockState(pos, CometBlocks.END_DRENCHSTONE.getDefaultState());
         }

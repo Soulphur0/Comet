@@ -22,6 +22,10 @@ public class ConcentratedEndMediumBucket extends BlockItem {
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
+        if (context.getWorld().getBlockState(context.getBlockPos()).getBlock() == CometBlocks.END_END_MEDIUM_DRENCHSTONE){
+            return ActionResult.SUCCESS;
+        }
+
         ActionResult actionResult = super.useOnBlock(context);
         PlayerEntity playerEntity = context.getPlayer();
         if (actionResult.isAccepted() && playerEntity != null && !playerEntity.isCreative()) {
@@ -29,10 +33,5 @@ public class ConcentratedEndMediumBucket extends BlockItem {
             playerEntity.setStackInHand(hand, Items.BUCKET.getDefaultStack());
         }
         return actionResult;
-    }
-
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        return super.use(world, user, hand);
     }
 }
