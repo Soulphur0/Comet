@@ -1,5 +1,6 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
+import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,22 +32,37 @@ public class EndDrenchstoneBlock extends Block {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ItemStack handItemStack = player.getStackInHand(hand);
-        // + Replace item.
-        if(handItemStack.isOf(Items.WATER_BUCKET) || handItemStack.isOf(Items.LAVA_BUCKET)){
-            if (!player.isCreative())
-                player.getMainHandStack().decrement(1);
-            if (handItemStack.isEmpty()){
-                player.setStackInHand(hand, new ItemStack(Items.BUCKET));
-            } else if (!player.getInventory().insertStack(new ItemStack(Items.BUCKET))) {
-                player.dropItem(new ItemStack(Items.WATER_BUCKET), false);
-            }
 
-            // + Replace block.
+        // + Replace item.
+        boolean usingBucket = handItemStack.isOf(Items.WATER_BUCKET) || handItemStack.isOf(Items.LAVA_BUCKET);
+        boolean usingBottle = handItemStack.isOf(Comet.CONCENTRATED_END_MEDIUM_BOTTLE);
+        if(usingBucket || usingBottle){
+            // - Replace block.
             if (handItemStack.isOf(Items.WATER_BUCKET))
                 world.setBlockState(pos, CometBlocks.END_WATER_DRENCHSTONE.getDefaultState());
             else if (handItemStack.isOf(Items.LAVA_BUCKET))
                 world.setBlockState(pos, CometBlocks.END_LAVA_DRENCHSTONE.getDefaultState());
+            else if (handItemStack.isOf(Comet.CONCENTRATED_END_MEDIUM_BOTTLE))
+                world.setBlockState(pos, CometBlocks.END_END_MEDIUM_DRENCHSTONE.getDefaultState());
+
+            // - Remove item if the player is not on creative mode.
+            if (!player.isCreative())
+                player.getMainHandStack().decrement(1);
+
+            // - If the hand is free, add an empty bucket/bottle.
+            if (handItemStack.isEmpty()){
+                if (usingBottle)
+                    player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                else
+                    player.setStackInHand(hand, new ItemStack(Items.BUCKET));
+            // - If it is not free, try to shove it into the inventory, drop it otherwise.
+            } else if (usingBottle && !player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE))) {
+                player.dropItem(new ItemStack(Items.GLASS_BOTTLE), false);
+            } else if (usingBucket && !player.getInventory().insertStack(new ItemStack(Items.BUCKET))) {
+                player.dropItem(new ItemStack(Items.BUCKET), false);
+            }
         }
+
         return super.onUse(state, world, pos, player, hand, hit);
     }
 

@@ -23,6 +23,7 @@ public class EndLavaDrenchstoneBlock extends EndDrenchstoneBlock{
         if(handItemStack.isOf(Items.BUCKET)){
             if (!player.isCreative())
                 player.getMainHandStack().decrement(1);
+
             if (handItemStack.isEmpty()){
                 player.setStackInHand(hand, new ItemStack(Items.LAVA_BUCKET));
             } else if (!player.getInventory().insertStack(new ItemStack(Items.LAVA_BUCKET))) {
@@ -30,6 +31,6 @@ public class EndLavaDrenchstoneBlock extends EndDrenchstoneBlock{
             }
             world.setBlockState(pos, CometBlocks.END_DRENCHSTONE.getDefaultState());
         }
-        return super.onUse(state, world, pos, player, hand, hit);
+        return ActionResult.PASS;
     }
 }

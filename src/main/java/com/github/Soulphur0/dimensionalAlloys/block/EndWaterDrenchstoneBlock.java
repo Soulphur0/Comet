@@ -35,6 +35,6 @@ public class EndWaterDrenchstoneBlock extends EndDrenchstoneBlock{
             world.setBlockState(pos, CometBlocks.END_DRENCHSTONE.getDefaultState());
         }
 
-        return super.onUse(state, world, pos, player, hand, hit);
+        return ActionResult.PASS;
     }
 }
