@@ -36,7 +36,7 @@ public class Comet implements ModInitializer {
 	public static final Item ENDBRITE_SHARD = new Item(new Item.Settings().group(ItemGroup.MISC));
 	public static final Item ENDBRITE_FIBER = new Item(new Item.Settings().group(ItemGroup.MISC));
 	public static final Item ENDBRITE_INGOT = new Item(new Item.Settings().group(ItemGroup.MISC));
-	public static final Item CONCENTRATED_END_MEDIUM_BOTTLE = new Item(new Item.Settings().group(ItemGroup.MISC));
+	public static final Item CONCENTRATED_END_MEDIUM_BOTTLE = new Item(new Item.Settings().group(ItemGroup.MISC).maxCount(16));
 
 	public static final Item MIRROR_SHIELD = new MirrorShieldItem(new Item.Settings().maxDamage(504).group(ItemGroup.COMBAT));
 
