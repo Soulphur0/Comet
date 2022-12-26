@@ -7,6 +7,7 @@ import com.github.Soulphur0.dimensionalAlloys.item.MirrorShieldItem;
 import com.github.Soulphur0.dimensionalAlloys.recipe.CreatureStatueRecipe;
 import com.github.Soulphur0.dimensionalAlloys.recipe.EndbriteElytraChestplateItemRecipe;
 import com.github.Soulphur0.registries.CometBlocks;
+import com.github.Soulphur0.registries.CometEndFeatures;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeveledCauldronBlock;
@@ -77,7 +78,11 @@ public class Comet implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		// _ Register all blocks.
 		CometBlocks.register();
+
+		// _ Register all terrain features.
+		CometEndFeatures.register();
 
 		// Items
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_shard"), ENDBRITE_SHARD);
@@ -105,6 +110,7 @@ public class Comet implements ModInitializer {
 		BrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, CONCENTRATED_END_MEDIUM_BOTTLE, CRYSTALLIZATION);
 		BrewingRecipeRegistry.registerPotionRecipe(CRYSTALLIZATION, Items.REDSTONE, LONG_CRYSTALLIZATION);
 
+		// Cauldron behaviour
 		END_MEDIUM_CAULDRON_BEHAVIOR.put(Items.BUCKET, (state2, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(state2, world, pos, player, hand, stack, new ItemStack(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET), state -> state.get(LeveledCauldronBlock.LEVEL) == 3, SoundEvents.ITEM_BUCKET_FILL));
 		CauldronBehavior.registerBucketBehavior(END_MEDIUM_CAULDRON_BEHAVIOR);
 	}

@@ -74,7 +74,7 @@ public class EndbriteArmorModel<T extends LivingEntity> extends BipedEntityModel
         ModelPartData right_leg = modelPartData.addChild("right_leg", ModelPartBuilder.create().uv(40, 22).cuboid(-2.0F, -0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new Dilation(0.6F))
         .uv(40, 45).cuboid(-3.5F, -0.0F, 0.0F, 1.0F, 7.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-1.9F, 12.0F, 0.0F));
 
-        // _ Endbrite armor parts and different vanilla part setup
+        // _ Endbrite armor parts and different vanilla part setup.
 
         ModelPartData inner_body = modelPartData.addChild("inner_body", ModelPartBuilder.create().uv(32, 6).cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new Dilation(0.6F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
 
