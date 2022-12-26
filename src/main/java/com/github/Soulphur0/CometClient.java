@@ -38,6 +38,10 @@ public class CometClient implements ClientModInitializer {
         // _ End fire
         BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.END_FIRE, RenderLayer.getCutout());
 
+        // _ Thorned roots
+        BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.THORNED_ROOTS, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.THORNED_ROOTS_PLANT, RenderLayer.getCutout());
+
         // $ Entity model layers
         // _ Endbrite armor layer
         EntityModelLayerRegistry.registerModelLayer(ENDBRITE_ARMOR_MODEL_LAYER, EndbriteArmorModel::getTexturedModelData);

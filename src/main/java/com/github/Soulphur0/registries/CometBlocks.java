@@ -229,6 +229,25 @@ public class CometBlocks {
             .ticksRandomly());
     public static final Item CONCENTRATED_END_MEDIUM_BUCKET = new ConcentratedEndMediumBucket(CONCENTRATED_END_MEDIUM, new Item.Settings().group(ItemGroup.MISC).maxCount(1));
 
+    // $ Thorned roots
+    public static final Block THORNED_ROOTS = new ThornedRootsBodyBlock(FabricBlockSettings
+            .of(Material.PLANT)
+            .ticksRandomly()
+            .noCollision()
+            .luminance(EndRoots.getLuminanceSupplier(14))
+            .breakInstantly()
+            .sounds(BlockSoundGroup.CAVE_VINES));
+
+    public static final Block THORNED_ROOTS_PLANT = new ThornedRootsHeadBlock(FabricBlockSettings
+            .of(Material.PLANT)
+            .noCollision()
+            .luminance(EndRoots.getLuminanceSupplier(14))
+            .breakInstantly()
+            .sounds(BlockSoundGroup.CAVE_VINES));
+
+    public static final Item THORNED_ROOTS_BLOCK_ITEM = new BlockItem(THORNED_ROOTS, new Item.Settings().group(ItemGroup.DECORATIONS));
+
+
     // _ Block predicates
     private static boolean never(BlockState blockState, BlockView blockView, BlockPos blockPos) {
         return false;
@@ -336,5 +355,9 @@ public class CometBlocks {
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "concentrated_end_medium"), CONCENTRATED_END_MEDIUM);
         Registry.register(Registry.ITEM, new Identifier("comet", "concentrated_end_medium_bucket"), CONCENTRATED_END_MEDIUM_BUCKET);
+
+        Registry.register(Registry.BLOCK, new Identifier("comet", "thorned_roots"), THORNED_ROOTS);
+        Registry.register(Registry.BLOCK, new Identifier("comet", "thorned_roots_plant"), THORNED_ROOTS_PLANT);
+        Registry.register(Registry.ITEM, new Identifier("comet", "thorned_roots"), THORNED_ROOTS_BLOCK_ITEM);
     }
 }

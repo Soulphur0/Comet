@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "loaded=false": {
+      "model": "comet:block/thorned_roots"
+    },
+    "loaded=true": {
+      "model": "comet:block/thorned_roots_loaded"
+    }
+  }
+}
