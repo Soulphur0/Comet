@@ -40,14 +40,6 @@ public class ThornedRootsBodyBlock extends AbstractPlantBlock implements Fertili
         return new ItemStack(CometBlocks.THORNED_ROOTS_BLOCK_ITEM);
     }
 
-    // _ Random tick to grow back thorns.
-    @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (!state.get(LOADED) && random.nextFloat() <= 0.01)
-            world.setBlockState(pos, state.with(LOADED,true));
-        super.randomTick(state, world, pos, random);
-    }
-
     // _ Self-Defense mechanism when loaded.
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
@@ -84,7 +76,7 @@ public class ThornedRootsBodyBlock extends AbstractPlantBlock implements Fertili
     // $ Plant properties.
     @Override
     protected AbstractPlantStemBlock getStem() {
-        return (AbstractPlantStemBlock) CometBlocks.THORNED_ROOTS_PLANT;
+        return (AbstractPlantStemBlock) CometBlocks.THORNED_ROOTS;
     }
 
     // $ Methods required for plant actions.

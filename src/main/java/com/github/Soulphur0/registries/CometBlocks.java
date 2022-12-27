@@ -230,7 +230,7 @@ public class CometBlocks {
     public static final Item CONCENTRATED_END_MEDIUM_BUCKET = new ConcentratedEndMediumBucket(CONCENTRATED_END_MEDIUM, new Item.Settings().group(ItemGroup.MISC).maxCount(1));
 
     // $ Thorned roots
-    public static final Block THORNED_ROOTS = new ThornedRootsBodyBlock(FabricBlockSettings
+    public static final Block THORNED_ROOTS = new ThornedRootsHeadBlock(FabricBlockSettings
             .of(Material.PLANT)
             .ticksRandomly()
             .noCollision()
@@ -238,7 +238,7 @@ public class CometBlocks {
             .breakInstantly()
             .sounds(BlockSoundGroup.CAVE_VINES));
 
-    public static final Block THORNED_ROOTS_PLANT = new ThornedRootsHeadBlock(FabricBlockSettings
+    public static final Block THORNED_ROOTS_PLANT = new ThornedRootsBodyBlock(FabricBlockSettings
             .of(Material.PLANT)
             .noCollision()
             .luminance(EndRoots.getLuminanceSupplier(14))

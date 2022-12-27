@@ -39,10 +39,30 @@ public class ThornedRootsHeadBlock extends AbstractPlantStemBlock implements Fer
     }
 
     // _ Random tick to grow back thorns.
+    // Grows back thorns in a random position of the plant.
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (!state.get(LOADED) && random.nextFloat() <= 0.01)
-            world.setBlockState(pos, state.with(LOADED,true));
+        random.nextFloat();
+        if (random.nextFloat() <= 0.02){
+            // + Check the block above this block, counting plant blocks until it reaches the top.
+            BlockState plantPart = state;
+            int plantLength = 0;
+            while (plantPart.isOf(CometBlocks.THORNED_ROOTS) || plantPart.isOf(CometBlocks.THORNED_ROOTS_PLANT)){
+                plantPart = world.getBlockState(pos.up(plantLength));
+                plantLength++;
+            }
+
+            // + Pick a random block of the plant based on the obtained plant length.
+            BlockPos pickedPlantPartPos = pos.up((int)Math.floor(Math.random() * plantLength));
+            BlockState pikcedPlantPart = world.getBlockState(pickedPlantPartPos);
+
+            // + Make sure the picked block is of this and load it if it is not loaded.
+            if (pikcedPlantPart.isOf(CometBlocks.THORNED_ROOTS) || pikcedPlantPart.isOf(CometBlocks.THORNED_ROOTS_PLANT)){
+                if (!pikcedPlantPart.get(LOADED))
+                    world.setBlockState(pickedPlantPartPos, pikcedPlantPart.with(LOADED, true), Block.REDRAW_ON_MAIN_THREAD | Block.NOTIFY_ALL);
+            }
+
+        }
         super.randomTick(state, world, pos, random);
     }
 
@@ -92,7 +112,7 @@ public class ThornedRootsHeadBlock extends AbstractPlantStemBlock implements Fer
 
     @Override
     protected Block getPlant() {
-        return CometBlocks.THORNED_ROOTS;
+        return CometBlocks.THORNED_ROOTS_PLANT;
     }
 
     // $ Methods required for plant actions.
