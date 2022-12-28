@@ -35,7 +35,6 @@ public class EndMediumColumnsFeature extends Feature<EndMediumColumnsFeatureConf
     // +        Height is calculated in a way, so the further away it is from the generation point, the lower  it will be.
     @Override
     public boolean generate(FeatureContext<EndMediumColumnsFeatureConfig> context) {
-        System.out.println("Tried to generate!!!");
         // # World gen data.
         int seaLevel = 120;
         BlockPos origin = context.getOrigin();

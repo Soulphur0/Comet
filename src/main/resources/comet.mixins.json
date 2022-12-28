@@ -18,7 +18,8 @@
     "entity.LivingEntityMixin",
     "entity.player.PlayerEntityMixin",
     "item.ArmorItemMixin",
-    "item.ElytraItemMixin"
+    "item.ElytraItemMixin",
+    "world.gen.feature.ChorusPlantFeatureMixin"
   ],
   "client": [
     "InGameOverlayRendererMixin",
