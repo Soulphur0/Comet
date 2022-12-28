@@ -3,12 +3,13 @@ package com.github.Soulphur0;
 import com.github.Soulphur0.dimensionalAlloys.item.armorMaterial.EndbriteArmorMaterial;
 import com.github.Soulphur0.dimensionalAlloys.entity.effect.CrystallizedStatusEffect;
 import com.github.Soulphur0.dimensionalAlloys.item.EndbriteElytraChestplateItem;
-import com.github.Soulphur0.dimensionalAlloys.item.MirrorShieldItem;
+import com.github.Soulphur0.dimensionalAlloys.item.PortalShieldItem;
 import com.github.Soulphur0.dimensionalAlloys.recipe.CreatureStatueRecipe;
 import com.github.Soulphur0.dimensionalAlloys.recipe.EndbriteElytraChestplateItemRecipe;
 import com.github.Soulphur0.registries.CometBlocks;
 import com.github.Soulphur0.registries.CometEndFeatures;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeveledCauldronBlock;
 import net.minecraft.block.cauldron.CauldronBehavior;
@@ -39,7 +40,7 @@ public class Comet implements ModInitializer {
 	public static final Item ENDBRITE_INGOT = new Item(new Item.Settings().group(ItemGroup.MISC));
 	public static final Item CONCENTRATED_END_MEDIUM_BOTTLE = new Item(new Item.Settings().group(ItemGroup.MISC).maxCount(16));
 
-	public static final Item MIRROR_SHIELD = new MirrorShieldItem(new Item.Settings().maxDamage(504).group(ItemGroup.COMBAT));
+	public static final Item PORTAL_SHIELD = new PortalShieldItem(new Item.Settings().maxDamage(504).group(ItemGroup.COMBAT));
 
 	// Armor
 	public static final ArmorMaterial ENDBRITE_ARMOR_MATERIAL = new EndbriteArmorMaterial();
@@ -68,6 +69,8 @@ public class Comet implements ModInitializer {
 	public static final SpriteIdentifier END_FIRE_0 = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("comet","block/end_fire_0"));
 	public static final SpriteIdentifier END_FIRE_1 = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("comet","block/end_fire_1"));
 
+	public static final SpriteIdentifier PORTAL_SHIELD_SPRITE = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier("comet", "entity/portal_shield"));
+
 	// Damage sources
 	public static final DamageSource END_MEDIUM_DROWN = new DamageSource("end_medidum_drown").setBypassesArmor();
 	public static final DamageSource END_MEDIUM_DROWN_RARE = new DamageSource("end_medidum_drown_rare").setBypassesArmor();
@@ -90,7 +93,7 @@ public class Comet implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_ingot"), ENDBRITE_INGOT);
 		Registry.register(Registry.ITEM, new Identifier("comet", "concentrated_end_medium_bottle"), CONCENTRATED_END_MEDIUM_BOTTLE);
 
-		Registry.register(Registry.ITEM, new Identifier("comet", "mirror_shield"), MIRROR_SHIELD);
+		Registry.register(Registry.ITEM, new Identifier("comet", "portal_shield"), PORTAL_SHIELD);
 
 		// Armor
 		Registry.register(Registry.ITEM, new Identifier("comet", "endbrite_helmet"), ENDBRITE_HELMET);
@@ -113,5 +116,8 @@ public class Comet implements ModInitializer {
 		// Cauldron behaviour
 		END_MEDIUM_CAULDRON_BEHAVIOR.put(Items.BUCKET, (state2, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(state2, world, pos, player, hand, stack, new ItemStack(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET), state -> state.get(LeveledCauldronBlock.LEVEL) == 3, SoundEvents.ITEM_BUCKET_FILL));
 		CauldronBehavior.registerBucketBehavior(END_MEDIUM_CAULDRON_BEHAVIOR);
+
+		// Portal shield model predicate provider
+		FabricModelPredicateProviderRegistry.register(PORTAL_SHIELD, new Identifier("blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
 	}
 }

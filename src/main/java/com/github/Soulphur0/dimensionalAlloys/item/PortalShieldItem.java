@@ -18,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class MirrorShieldItem extends ShieldItem {
-    public MirrorShieldItem(Settings settings) {
+public class PortalShieldItem extends ShieldItem {
+    public PortalShieldItem(Settings settings) {
         super(settings);
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
     }

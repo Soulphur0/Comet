@@ -3,6 +3,7 @@ package com.github.Soulphur0;
 import com.github.Soulphur0.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import com.github.Soulphur0.dimensionalAlloys.client.render.block.entity.CrystallizedCreatureBlockEntityRenderer;
 import com.github.Soulphur0.dimensionalAlloys.client.render.block.entity.EndIronOreBlockEntityRenderer;
+import com.github.Soulphur0.dimensionalAlloys.client.render.entity.model.PortalShieldEntityModel;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -16,10 +17,13 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
+import static com.github.Soulphur0.Comet.PORTAL_SHIELD;
+
 @Environment(EnvType.CLIENT)
 public class CometClient implements ClientModInitializer {
 
     public static final EntityModelLayer ENDBRITE_ARMOR_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "endbrite_armor"), "endbrite_armor_outer");
+    public static final EntityModelLayer PORTAL_SHIELD_MODEL_LAYER = new EntityModelLayer(new Identifier("comet", "portal_shield"), "portal_shield");
 
     @Override
     public void onInitializeClient() {
@@ -45,6 +49,7 @@ public class CometClient implements ClientModInitializer {
         // $ Entity model layers
         // _ Endbrite armor layer
         EntityModelLayerRegistry.registerModelLayer(ENDBRITE_ARMOR_MODEL_LAYER, EndbriteArmorModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(PORTAL_SHIELD_MODEL_LAYER, PortalShieldEntityModel::getTexturedModelData);
 
         // $ Block entity renderers
         // _ Crystallized creature
