@@ -17,6 +17,7 @@
     "entity.EntityMixin",
     "entity.LivingEntityMixin",
     "entity.player.PlayerEntityMixin",
+    "entity.projectile.ProjectileEntityMixin",
     "item.ArmorItemMixin",
     "item.ElytraItemMixin",
     "world.gen.feature.ChorusPlantFeatureMixin"
