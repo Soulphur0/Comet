@@ -10,9 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.mob.ElderGuardianEntity;
-import net.minecraft.entity.mob.RavagerEntity;
-import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.entity.mob.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -98,7 +96,8 @@ public class EndMediumBlock extends Block {
                 entity.slowMovement(state, new Vec3d(0.5f, -0.5, 0.5f));
 
             // ? Set state for crystallization ticking.
-            if (!(entity instanceof EnderDragonEntity || entity instanceof WitherEntity || entity instanceof ElderGuardianEntity || entity instanceof RavagerEntity || entity instanceof WardenEntity))
+            if (!(entity instanceof EnderDragonEntity || entity instanceof WitherEntity || entity instanceof ElderGuardianEntity || entity instanceof RavagerEntity || entity instanceof WardenEntity ||
+                entity instanceof EndermanEntity || entity instanceof EndermiteEntity || entity instanceof ShulkerEntity))
                 ((EntityCometBehaviour)entity).setInEndMedium(2);
 
             // ? Render particles when submerged.

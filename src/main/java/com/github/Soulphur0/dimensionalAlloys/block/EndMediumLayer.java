@@ -6,9 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.mob.ElderGuardianEntity;
-import net.minecraft.entity.mob.RavagerEntity;
-import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.entity.mob.*;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -84,7 +82,8 @@ public class EndMediumLayer extends TransparentBlock implements EntityCometBehav
     // $ Entity behaviour
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity || entity instanceof ElderGuardianEntity || entity instanceof RavagerEntity || entity instanceof WardenEntity)
+        if (entity instanceof EnderDragonEntity || entity instanceof WitherEntity || entity instanceof ElderGuardianEntity || entity instanceof RavagerEntity || entity instanceof WardenEntity ||
+            entity instanceof EndermanEntity || entity instanceof EndermiteEntity || entity instanceof ShulkerEntity)
             return;
         ((EntityCometBehaviour)entity).setInEndMedium(2);
     }

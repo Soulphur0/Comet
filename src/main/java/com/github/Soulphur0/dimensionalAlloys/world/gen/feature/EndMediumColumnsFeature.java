@@ -3,7 +3,6 @@ package com.github.Soulphur0.dimensionalAlloys.world.gen.feature;
 import com.github.Soulphur0.registries.CometBlocks;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import jdk.swing.interop.SwingInterOpUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,10 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class EndMediumColumnsFeature extends Feature<EndMediumColumnsFeatureConfig> {
     private static final ImmutableList<Block> CANNOT_REPLACE_BLOCKS = ImmutableList.of(Blocks.OBSIDIAN, Blocks.PURPUR_BLOCK, Blocks.PURPUR_PILLAR, Blocks.PURPUR_STAIRS, Blocks.PURPUR_SLAB, Blocks.END_STONE_BRICKS, Blocks.BEDROCK, Blocks.CHEST, Blocks.ENDER_CHEST);
-    private static final int field_31495 = 5;
-    private static final int field_31496 = 50;
-    private static final int field_31497 = 8;
-    private static final int field_31498 = 15;
 
     public EndMediumColumnsFeature(Codec<EndMediumColumnsFeatureConfig> codec) {
         super(codec);
