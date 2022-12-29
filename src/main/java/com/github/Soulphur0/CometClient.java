@@ -12,12 +12,14 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 
-import static com.github.Soulphur0.Comet.PORTAL_SHIELD;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public class CometClient implements ClientModInitializer {
@@ -59,6 +61,7 @@ public class CometClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(CometBlocks.END_IRON_ORE_BLOCK_ENTITY, EndIronOreBlockEntityRenderer::new);
 
         //. Networking
+        // $ Additional fire behaviour.
         ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet","soul_fire_ticks"), (client, handler, buf, responseSender) -> {
             if (MinecraftClient.getInstance().player != null){
                 MinecraftClient.getInstance().player.setSoulFireTicks(buf.getInt(0));
@@ -68,6 +71,14 @@ public class CometClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet","end_fire_ticks"), (client, handler, buf, responseSender) -> {
             if (MinecraftClient.getInstance().player != null){
                 MinecraftClient.getInstance().player.setEndFireTicks(buf.getInt(0));
+            }
+        });
+
+        // $ Crystallization.
+        ServerPlayNetworking.registerGlobalReceiver(new Identifier("comet", "decrystallize_client"), (server, player, handler, buf, responseSender) ->{
+            if (Objects.equals(player.getUuidAsString(), buf.readString())){
+                player.setCrystallizedTicks(0);
+                player.getWorld().playSound(null, player.getBlockPos(), Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, player.getCrystallizationScale(), 1f);
             }
         });
     }

@@ -6,7 +6,6 @@ import com.github.Soulphur0.registries.CometBlocks;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
@@ -115,15 +114,6 @@ public abstract class LivingEntityMixin extends EntityMixin {
             else if (!this.isCrystallized()) {
                 this.playBreakFreeSound();
                 this.setCrystallizedTicks(0);
-            }
-
-            // - Update ticks if the player moved while in medium or got hit before crystallized.
-            if (this.isPlayer()){
-                if (this.isCrystallizationInterrupted()){
-                    if (crystallizedTicks >= 20)
-                        this.playBreakFreeSound();
-                    this.setCrystallizedTicks(0);
-                }
             }
 
             // + Apply effects for fully crystallized entities
