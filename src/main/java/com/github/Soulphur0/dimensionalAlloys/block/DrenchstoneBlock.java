@@ -39,7 +39,8 @@ public class DrenchstoneBlock extends Block {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return (BlockState)this.getDefaultState().with(LEVEL, 0).with(SOURCE_DIRECTION, Direction.UP);
+        DrenchstoneSourceData sourceData = checkForSource(ctx.getWorld(), ctx.getWorld().getBlockState(ctx.getBlockPos()), ctx.getBlockPos());
+        return this.getDefaultState().with(LEVEL, sourceData.getLevel()).with(SOURCE_DIRECTION, sourceData.getDirection());
     }
 
     // $ Behaviour methods
@@ -53,7 +54,7 @@ public class DrenchstoneBlock extends Block {
         Block sourceBlock = world.getBlockState(pos.offset(state.get(SOURCE_DIRECTION))).getBlock();
 
         // ? If source doesn't exist, convert to level 0 of the same block and schedule block update.
-        // todo: fluid-filled blocks empty instantly because the level state is changed to zero instantly, then all updateed at once.
+        // todo: fluid-filled blocks empty instantly because the level state is changed to zero instantly, then all updated at once.
         //  Find a way to make them update in a chained manner.
         //  % A possible fix is to make them ticking block, emptying them at a very fast pace.
         if (sourceData.getLevel() < state.get(LEVEL)){

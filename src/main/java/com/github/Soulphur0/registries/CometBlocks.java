@@ -198,14 +198,14 @@ public class CometBlocks {
     public static final Item END_END_MEDIUM_DRENCHSTONE_BLOCK_ITEM = new BlockItem(END_END_MEDIUM_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ Dry Rooted endstone
-    public static final Block DRY_ROOTED_ENDSTONE = new Block(FabricBlockSettings
+    public static final Block DRY_ROOTED_ENDSTONE = new DryRootedEndstoneBlock(FabricBlockSettings
             .of(Material.STONE)
             .strength(1.5f, 6.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final Item DRY_ROOTED_ENDSTONE_BLOCK_ITEM = new BlockItem(DRY_ROOTED_ENDSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ Fresh Rooted endstone
-    public static final Block FRESH_ROOTED_ENDSTONE = new Block(FabricBlockSettings
+    public static final Block FRESH_ROOTED_ENDSTONE = new FreshRootedEndstoneBlock(FabricBlockSettings
             .of(Material.STONE)
             .strength(1.5f, 6.0f)
             .sounds(BlockSoundGroup.STONE));
