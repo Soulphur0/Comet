@@ -79,7 +79,7 @@ public class CometClient implements ClientModInitializer {
 
         // $ Crystallization.
         ServerPlayNetworking.registerGlobalReceiver(new Identifier("comet", "decrystallize_client"), (server, player, handler, buf, responseSender) ->{
-            if (Objects.equals(player.getUuidAsString(), buf.readString())){
+            if (Objects.equals(player.getUuidAsString(), buf.readString()) && !player.isCrystallizedByStatusEffect()){
                 player.setCrystallizedTicks(0);
                 player.getWorld().playSound(null, player.getBlockPos(), Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, player.getCrystallizationScale(), 1f);
             }
