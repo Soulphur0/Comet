@@ -33,7 +33,7 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
 
         parameters = RenderLayer.MultiPhaseParameters.builder()
                 .shader(ENTITY_DECAL_SHADER)
-                .texture(new RenderPhase.Texture( new Identifier("comet", "textures/entity/feature/" + material + ".png"), false, false))
+                .texture(new RenderPhase.Texture(new Identifier("comet", "textures/entity/feature/" + material + ".png"), false, false))
                 .depthTest(EQUAL_DEPTH_TEST)
                 .cull(DISABLE_CULLING)
                 .lightmap(ENABLE_LIGHTMAP)

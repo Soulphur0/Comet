@@ -1,6 +1,7 @@
 package com.github.Soulphur0;
 
 import com.github.Soulphur0.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
+import com.github.Soulphur0.dimensionalAlloys.block.CreatureStatue;
 import com.github.Soulphur0.dimensionalAlloys.client.render.block.entity.CrystallizedCreatureBlockEntityRenderer;
 import com.github.Soulphur0.dimensionalAlloys.client.render.block.entity.EndIronOreBlockEntityRenderer;
 import com.github.Soulphur0.dimensionalAlloys.client.render.entity.model.PortalShieldEntityModel;
@@ -16,8 +17,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.item.Item;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Objects;
 
@@ -80,6 +83,16 @@ public class CometClient implements ClientModInitializer {
                 player.setCrystallizedTicks(0);
                 player.getWorld().playSound(null, player.getBlockPos(), Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, player.getCrystallizationScale(), 1f);
             }
+        });
+
+        // $ Creature statue.
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "update_statue_texture"), (client, handler, buf, responseSender) -> {
+            BlockPos posToUpdate = buf.readBlockPos();
+            Item material = Item.byRawId(buf.readVarInt());
+
+            client.execute(() -> {
+                CreatureStatue.updateNBT(client, posToUpdate, material);
+            });
         });
     }
 }
