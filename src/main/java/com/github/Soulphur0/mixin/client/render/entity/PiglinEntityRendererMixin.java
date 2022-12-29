@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin.entityRenderer;
+package com.github.Soulphur0.mixin.client.render.entity;
 
 import com.github.Soulphur0.CometClient;
 import com.github.Soulphur0.dimensionalAlloys.client.render.entity.feature.CometArmorFeatureRenderer;
@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -38,7 +39,7 @@ public class PiglinEntityRendererMixin extends BipedEntityRenderer<MobEntity, Pi
         return piglinEntityModel;
     }
 
-    @Override
+    @Shadow
     public Identifier getTexture(MobEntity mobEntity) {
         Identifier identifier = TEXTURES.get(mobEntity.getType());
         if (identifier == null) {

@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin.entityRenderer;
+package com.github.Soulphur0.mixin.client.render.entity;
 
 import com.github.Soulphur0.dimensionalAlloys.client.render.entity.feature.CrystallizationFeatureRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -8,22 +8,20 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MobEntityRenderer.class)
-public class MobEntityRendererMixin<T extends MobEntity, M extends EntityModel<T>> extends LivingEntityRenderer<T, M> {
+public abstract class MobEntityRendererMixin<T extends MobEntity, M extends EntityModel<T>> extends LivingEntityRenderer<T, M> {
 
 
     public MobEntityRendererMixin(EntityRendererFactory.Context ctx, M model, float shadowRadius) {
         super(ctx, model, shadowRadius);
     }
 
-    @Override
-    public Identifier getTexture(T entity) {
-        return null;
-    }
+    public abstract Identifier getTexture(T entity);
 
     // * Injections ----------------------------------------------------------------------------------------------------
 

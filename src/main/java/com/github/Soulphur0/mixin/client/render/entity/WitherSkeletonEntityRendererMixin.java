@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin.entityRenderer;
+package com.github.Soulphur0.mixin.client.render.entity;
 
 import com.github.Soulphur0.CometClient;
 import com.github.Soulphur0.dimensionalAlloys.client.render.entity.feature.CometArmorFeatureRenderer;
@@ -9,6 +9,7 @@ import net.minecraft.client.render.entity.WitherSkeletonEntityRenderer;
 import net.minecraft.entity.mob.AbstractSkeletonEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -25,7 +26,7 @@ public class WitherSkeletonEntityRendererMixin extends SkeletonEntityRenderer {
         super(context);
     }
 
-    @Override
+    @Shadow
     public Identifier getTexture(AbstractSkeletonEntity abstractSkeletonEntity) {
         return TEXTURE;
     }

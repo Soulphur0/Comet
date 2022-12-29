@@ -1,31 +1,34 @@
-package com.github.Soulphur0.mixin.entityRenderer;
+package com.github.Soulphur0.mixin.client.render.entity;
 
 import com.github.Soulphur0.CometClient;
 import com.github.Soulphur0.dimensionalAlloys.client.render.entity.feature.CometArmorFeatureRenderer;
 import com.github.Soulphur0.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
+import net.minecraft.client.render.entity.DrownedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.HuskEntityRenderer;
-import net.minecraft.client.render.entity.ZombieEntityRenderer;
+import net.minecraft.client.render.entity.ZombieBaseEntityRenderer;
+import net.minecraft.client.render.entity.model.DrownedEntityModel;
+import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HuskEntityRenderer.class)
-public class HuskEntityRendererMixin extends ZombieEntityRenderer {
+@Mixin(DrownedEntityRenderer.class)
+public class DrownedEntityRendererMixin extends ZombieBaseEntityRenderer<DrownedEntity, DrownedEntityModel<DrownedEntity>> {
 
     // * INHERITED -----------------------------------------------------------------------------------------------------
 
-    private static final Identifier TEXTURE = new Identifier("textures/entity/zombie/husk.png");
+    private static final Identifier TEXTURE = new Identifier("textures/entity/zombie/drowned.png");
 
-    public HuskEntityRendererMixin(EntityRendererFactory.Context context) {
-        super(context);
+    protected DrownedEntityRendererMixin(EntityRendererFactory.Context ctx, DrownedEntityModel<DrownedEntity> bodyModel, DrownedEntityModel<DrownedEntity> legsArmorModel, DrownedEntityModel<DrownedEntity> bodyArmorModel) {
+        super(ctx, bodyModel, legsArmorModel, bodyArmorModel);
     }
 
-    @Override
+    @Shadow
     public Identifier getTexture(ZombieEntity zombieEntity) {
         return TEXTURE;
     }

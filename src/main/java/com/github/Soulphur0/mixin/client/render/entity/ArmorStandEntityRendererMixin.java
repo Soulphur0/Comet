@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin.entityRenderer;
+package com.github.Soulphur0.mixin.client.render.entity;
 
 import com.github.Soulphur0.CometClient;
 import com.github.Soulphur0.dimensionalAlloys.client.render.entity.feature.CometArmorFeatureRenderer;
@@ -10,6 +10,7 @@ import net.minecraft.client.render.entity.model.ArmorStandArmorEntityModel;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -24,7 +25,7 @@ public class ArmorStandEntityRendererMixin extends LivingEntityRenderer<ArmorSta
     }
 
     // ! This needs to return a texture, auto generated method does not do this by default.
-    @Override
+    @Shadow
     public Identifier getTexture(ArmorStandEntity entity) {
         return new Identifier("textures/entity/armorstand/wood.png");
     }
