@@ -35,6 +35,9 @@ public class ElytraItemMixin {
             elytraChestplate.setNbt(chestplateData);
 
             user.equipStack(EquipmentSlot.CHEST, elytraChestplate);
+            
+            if (!user.isCreative())
+                elytraItem.setCount(0);
         }
     }
 }
