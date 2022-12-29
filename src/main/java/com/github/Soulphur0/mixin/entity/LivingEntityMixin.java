@@ -6,8 +6,8 @@ import com.github.Soulphur0.registries.CometBlocks;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -27,7 +27,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
@@ -175,8 +174,6 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.setNoGravity(false);
                     this.setInvulnerable(false);
 
-                    this.finishedCrystallization = false;
-
                     this.getStatusEffects().forEach(effect ->{
                         if (effect.isHiddenByCrystallization()){
                             effect.setShowParticles(true);
@@ -184,11 +181,20 @@ public abstract class LivingEntityMixin extends EntityMixin {
                         }
                     });
                     this.markEffectsDirty();
-                }
 
-                // For mobs
-                if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
-                    mobEntity.setSilent(false);
+                    // For players
+                    if (((LivingEntity)(Object)this) instanceof PlayerEntity player && (player.isInsideWall() || player.isInLava())){
+                        teleportRandomly(player);
+                        if (player.isInLava())
+                            player.setEndFireTicks(player.getFireTicks());
+                    }
+
+                    // For mobs
+                    if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
+                        mobEntity.setSilent(false);
+                    }
+
+                    this.finishedCrystallization = false;
                 }
 
                 // Tick crystallization effect counter down

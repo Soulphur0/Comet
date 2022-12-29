@@ -67,8 +67,6 @@ public abstract class EntityMixin implements EntityCometBehaviour {
 
     @Shadow public abstract @Nullable Entity getPrimaryPassenger();
 
-    // $ Comet ---------------------------------------------------------------------------------------------------------
-
     @Shadow protected abstract int getBurningDuration();
 
     @Shadow public abstract int getFireTicks();
@@ -78,6 +76,8 @@ public abstract class EntityMixin implements EntityCometBehaviour {
     @Shadow public abstract void setAir(int air);
 
     @Shadow public abstract int getAir();
+
+    // $ Comet ---------------------------------------------------------------------------------------------------------
 
     // _ Attributes.
     // ? Crystallization process' attributes
@@ -316,34 +316,37 @@ public abstract class EntityMixin implements EntityCometBehaviour {
             thisInstance.damage(DamageSource.ON_FIRE, 2.0f);
 
         if (this.endFireTicks > -20 && !thisInstance.isInLava() && thisInstance instanceof LivingEntity livingEntity) {
-            if (!world.isClient) {
-                double x = livingEntity.getX();
-                double y = livingEntity.getY();
-                double z = livingEntity.getZ();
-                for (int i = 0; i < 16; ++i) {
-                    // Get position in square.
-                    double g = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
-                    double h = MathHelper.clamp(livingEntity.getY() + (double)(livingEntity.getRandom().nextInt(16) - 8), (double)world.getBottomY(), (double)(world.getBottomY() + ((ServerWorld)world).getLogicalHeight() - 1));
-                    double j = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
+            if (!world.isClient)
+                teleportRandomly(livingEntity);
+        }
+    }
 
-                    // Dismount vehicle.
-                    if (livingEntity.hasVehicle()) {
-                        livingEntity.stopRiding();
-                    }
+    protected void teleportRandomly(LivingEntity livingEntity){
+        double x = livingEntity.getX();
+        double y = livingEntity.getY();
+        double z = livingEntity.getZ();
+        for (int i = 0; i < 16; ++i) {
+            // Get position in square.
+            double g = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
+            double h = MathHelper.clamp(livingEntity.getY() + (double)(livingEntity.getRandom().nextInt(16) - 8), (double)world.getBottomY(), (double)(world.getBottomY() + ((ServerWorld)world).getLogicalHeight() - 1));
+            double j = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
 
-                    // Get pre-teleport position
-                    Vec3d vec3d = livingEntity.getPos();
-
-                    // Try teleport
-                    if (!livingEntity.teleport(g, h, j, true)) continue;
-
-                    // Emit event in pre-teleport position & play sound
-                    world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(livingEntity));
-                    world.playSound(null, x, y, z, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                    livingEntity.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0f, 1.0f);
-                    break;
-                }
+            // Dismount vehicle.
+            if (livingEntity.hasVehicle()) {
+                livingEntity.stopRiding();
             }
+
+            // Get pre-teleport position
+            Vec3d vec3d = livingEntity.getPos();
+
+            // Try teleport
+            if (!livingEntity.teleport(g, h, j, true)) continue;
+
+            // Emit event in pre-teleport position & play sound
+            world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(livingEntity));
+            world.playSound(null, x, y, z, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            livingEntity.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0f, 1.0f);
+            break;
         }
     }
 }
