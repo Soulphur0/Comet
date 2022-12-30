@@ -44,6 +44,7 @@
     "client.render.entity.ZombieEntityRendererMixin",
     "client.render.entity.feature.ElytraFeatureRendererMixin",
     "client.render.item.BuiltinModelItemRendererMixin",
+    "client.world.ClientWorldMixin",
     "entityModel.PlayerEntityModelMixin",
     "gui.InGameHudMixin"
   ],

@@ -1,10 +1,13 @@
 package com.github.Soulphur0;
 
+import com.github.Soulphur0.dimensionalAlloys.CometClientWorldExtras;
 import com.github.Soulphur0.dimensionalAlloys.armorModel.endbriteArmor.EndbriteArmorModel;
 import com.github.Soulphur0.dimensionalAlloys.block.CreatureStatue;
 import com.github.Soulphur0.dimensionalAlloys.client.render.block.entity.CrystallizedCreatureBlockEntityRenderer;
 import com.github.Soulphur0.dimensionalAlloys.client.render.block.entity.EndIronOreBlockEntityRenderer;
 import com.github.Soulphur0.dimensionalAlloys.client.render.entity.model.PortalShieldEntityModel;
+import com.github.Soulphur0.dimensionalAlloys.client.sound.CrystallizationGrowsSoundInstance;
+import com.github.Soulphur0.mixin.client.world.ClientWorldMixin;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -17,15 +20,19 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.client.util.telemetry.TelemetrySender;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 public class CometClient implements ClientModInitializer {
@@ -87,7 +94,7 @@ public class CometClient implements ClientModInitializer {
                 player.setCrystallizedTicks(0);
         });
 
-        // _ Play decrystallization effects.
+        // _ Play decrystallization particle effects.
         ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "decrystallization_effects"), (client, handler, buf, responseSender) ->  {
             ClientWorld clientWorld = client.world;
             BlockPos pos = buf.readBlockPos();
@@ -99,6 +106,26 @@ public class CometClient implements ClientModInitializer {
                             clientWorld.addBlockBreakParticles(pos, CometBlocks.CONCENTRATED_END_MEDIUM.getDefaultState());
                         else
                             clientWorld.addBlockBreakParticles(pos.up(), CometBlocks.CONCENTRATED_END_MEDIUM.getDefaultState());
+                    }
+                }
+            });
+        });
+
+        // _ Play crystallization growing sound.
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "crystallization_grows"), (client, handler, buf, responseSender) -> {
+            String entityUUID = buf.readString();
+
+            client.execute(()->{
+                if (client.world != null){
+                    Entity source = ((CometClientWorldExtras)client.world).getEntityByUUID(UUID.fromString(entityUUID));
+
+                    if (source instanceof LivingEntity livingEntity && livingEntity.getCrystallizedTicks() == 20){
+                        if (livingEntity instanceof HostileEntity)
+                            client.getSoundManager().play(new CrystallizationGrowsSoundInstance(livingEntity, SoundCategory.HOSTILE));
+                        else if (livingEntity instanceof PlayerEntity)
+                            client.getSoundManager().play(new CrystallizationGrowsSoundInstance(livingEntity, SoundCategory.PLAYERS));
+                        else
+                            client.getSoundManager().play(new CrystallizationGrowsSoundInstance(livingEntity, SoundCategory.NEUTRAL));
                     }
                 }
             });

@@ -111,7 +111,9 @@ public abstract class LivingEntityMixin extends EntityMixin {
     @Inject(method="tickMovement", at = @At("HEAD"))
     public void updateCrystallizedTicks(CallbackInfo ci){
         if (!this.world.isClient){
+            LivingEntity thisInstance = ((LivingEntity)(Object)this);
             int crystallizedTicks = this.getCrystallizedTicks();
+            BlockPos pos = thisInstance.getBlockPos();
 
             // + Play sound if an entity has cancelled crystallization.
             // * Mainly the player, by moving.
@@ -129,6 +131,14 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 this.playBreakFreeSound(lastCrystallizedTicks);
             }
 
+            // . Play sound from the entity as crystallization grows.
+            PacketByteBuf growSoundPosPacket = PacketByteBufs.create().writeString(this.getUuidAsString());
+            if (thisInstance instanceof ServerPlayerEntity)
+                ServerPlayNetworking.send((ServerPlayerEntity) thisInstance, new Identifier("comet", "crystallization_grows"), growSoundPosPacket);
+            for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking(thisInstance)) {
+                ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "crystallization_grows"), growSoundPosPacket);
+            }
+
             // + Trigger events for fully crystallized entities.
             // * Apply only once, on crystallization.
             if (this.isCrystallized()){
@@ -136,7 +146,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.finishedCrystallization = true;
 
                     // - To mobs
-                    if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
+                    if (thisInstance instanceof MobEntity mobEntity){
                         mobEntity.setSilent(true);
                     }
 
@@ -177,7 +187,6 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 // + Undo on-crystallization effects.
                 if (this.finishedCrystallization){
                     // - Play sound and particle effects.
-                    BlockPos pos = ((LivingEntity)(Object)this).getBlockPos();
                     world.playSound(null, pos, Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, 1f, 1f);
 
                     // . Partiles require to be rendered in the client world.
@@ -200,14 +209,14 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.markEffectsDirty();
 
                     // - Special events for players
-                    if (((LivingEntity)(Object)this) instanceof PlayerEntity player && (player.isInsideWall() || player.isInLava())){
+                    if (thisInstance instanceof PlayerEntity player && (player.isInsideWall() || player.isInLava())){
                         teleportRandomly(player);
                         if (player.isInLava())
                             player.setEndFireTicks(player.getFireTicks());
                     }
 
                     // - Special events for mobs
-                    if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
+                    if (thisInstance instanceof MobEntity mobEntity){
                         mobEntity.setSilent(false);
                     }
 

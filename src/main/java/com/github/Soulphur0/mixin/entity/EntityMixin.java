@@ -78,6 +78,8 @@ public abstract class EntityMixin implements EntityCometBehaviour {
 
     @Shadow public abstract int getAir();
 
+    @Shadow public abstract String getUuidAsString();
+
     // : GENERIC IMPLEMENTATIONS ---------------------------------------------------------------------------------------
     private static final TrackedData<Byte> COMET_FLAGS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.BYTE);
 
