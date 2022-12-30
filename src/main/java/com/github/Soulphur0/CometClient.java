@@ -17,7 +17,10 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +35,7 @@ public class CometClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        //. Rendering
+        // : Rendering -------------------------------------------------------------------------------------------------
         // $ Block render layer maps
         // _ Endbrite tube
         BlockRenderLayerMap.INSTANCE.putBlock(CometBlocks.ENDBRITE_TUBE, RenderLayer.getCutout());
@@ -63,7 +66,7 @@ public class CometClient implements ClientModInitializer {
         // _ End iron ore
         BlockEntityRendererRegistry.register(CometBlocks.END_IRON_ORE_BLOCK_ENTITY, EndIronOreBlockEntityRenderer::new);
 
-        //. Networking
+        //. Networking -------------------------------------------------------------------------------------------------
         // $ Additional fire behaviour.
         ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet","soul_fire_ticks"), (client, handler, buf, responseSender) -> {
             if (MinecraftClient.getInstance().player != null){
@@ -78,11 +81,27 @@ public class CometClient implements ClientModInitializer {
         });
 
         // $ Crystallization.
+        // _ Interrupt crystallization.
         ServerPlayNetworking.registerGlobalReceiver(new Identifier("comet", "decrystallize_client"), (server, player, handler, buf, responseSender) ->{
-            if (Objects.equals(player.getUuidAsString(), buf.readString()) && !player.isCrystallizedByStatusEffect()){
+            if (Objects.equals(player.getUuidAsString(), buf.readString()) && !player.isCrystallizedByStatusEffect())
                 player.setCrystallizedTicks(0);
-                player.getWorld().playSound(null, player.getBlockPos(), Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, player.getCrystallizationScale(), 1f);
-            }
+        });
+
+        // _ Play decrystallization effects.
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "decrystallization_effects"), (client, handler, buf, responseSender) ->  {
+            ClientWorld clientWorld = client.world;
+            BlockPos pos = buf.readBlockPos();
+
+            client.execute(() -> {
+                if (clientWorld != null){
+                    for(int i = 0; i<4; i++){
+                        if (i % 2 == 0)
+                            clientWorld.addBlockBreakParticles(pos, CometBlocks.CONCENTRATED_END_MEDIUM.getDefaultState());
+                        else
+                            clientWorld.addBlockBreakParticles(pos.up(), CometBlocks.CONCENTRATED_END_MEDIUM.getDefaultState());
+                    }
+                }
+            });
         });
 
         // $ Creature statue.

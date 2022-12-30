@@ -57,9 +57,9 @@ public class CreatureStatue extends AbstractCrystallizedCreatureBlock implements
 
         Item mainHandItem = player.getMainHandStack().getItem();
         if (mainHandItem instanceof PickaxeItem || statueMaterials.stream().anyMatch(item -> item.equals(mainHandItem))){
-            PacketByteBuf posPacket = PacketByteBufs.create().writeBlockPos(pos).writeVarInt(Item.getRawId(mainHandItem.asItem()));
+            PacketByteBuf posAndItemPacket = PacketByteBufs.create().writeBlockPos(pos).writeVarInt(Item.getRawId(mainHandItem.asItem()));
             for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
-                ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "update_statue_texture"), posPacket);
+                ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "update_statue_texture"), posAndItemPacket);
             }
         }
         return super.onUse(state, world, pos, player, hand, hit);

@@ -6,6 +6,9 @@ import com.github.Soulphur0.registries.CometBlocks;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
@@ -23,8 +26,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
@@ -76,12 +83,12 @@ public abstract class LivingEntityMixin extends EntityMixin {
     }
 
     // _ Sound events.
-    private void playBreakFreeSound(){
+    private void playBreakFreeSound(int ticksWhenInterrupted){
         world.playSound(null,
                 this.getBlockPos(),
                 Comet.CRYSTALLIZATION_BREAKS,
                 SoundCategory.BLOCKS,
-                this.getCrystallizationScale(),
+                this.getCrystallizationScale(ticksWhenInterrupted),
                 1f);
     }
 
@@ -106,42 +113,50 @@ public abstract class LivingEntityMixin extends EntityMixin {
         if (!this.world.isClient){
             int crystallizedTicks = this.getCrystallizedTicks();
 
+            // + Play sound if an entity has cancelled crystallization.
+            // * Mainly the player, by moving.
+            // * Mobs immune to crystallization don't spam this when they are in medium because the flag is directly not set on them.
+            if (this.inFreshEndMedium > 0 && crystallizedTicks == 0 && lastCrystallizedTicks > 20)
+                this.playBreakFreeSound(this.lastCrystallizedTicks);
+
             // + Update ticks for entities in end medium.
-            // - Update ticks whether the entity is in, or left medium.
-            // Completely crystallized creatures (exclusively the player since others de-spawn) remain crystallized.
+            // * Update ticks whether the entity is in, or left medium.
+            // * Completely crystallized creatures (exclusively the player since others de-spawn) remain crystallized.
             if (this.inFreshEndMedium > 0)
                 setCrystallizedTicks(Math.min(this.getMaxCrystallizedTicks(), crystallizedTicks + 1));
             else if (!this.isCrystallized()) {
-                this.playBreakFreeSound();
                 this.setCrystallizedTicks(0);
+                this.playBreakFreeSound(lastCrystallizedTicks);
             }
 
-            // + Apply effects for fully crystallized entities
+            // + Trigger events for fully crystallized entities.
+            // * Apply only once, on crystallization.
             if (this.isCrystallized()){
-                // - Trigger on-crystallization events.
                 if (!this.finishedCrystallization){
                     this.finishedCrystallization = true;
 
-                    // To mobs
+                    // - To mobs
                     if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
                         mobEntity.setSilent(true);
                     }
 
-                    // To all entities.
+                    // - To all entities.
                     this.onCrystallizationBodyYaw = this.getBodyYaw();
                     this.setNoGravity(true);
                     this.setInvulnerable(true);
                     this.playFinishedCrystallizationSound();
-                }
 
-                // - Hide particle effects.
-                this.getStatusEffects().forEach(effect ->{
-                    if (effect.shouldShowParticles()){
-                        effect.setShowParticles(false);
-                        effect.setHiddenByCrystallization(true);
-                    }
-                });
-                this.markEffectsDirty();
+                    // - Hide particle effects.
+                    // Since entities can't get more effects if they are crystallized hide particles just once.
+                    // Effects can still be added with commands, showing particles, but doing this continuously is less efficient.
+                    this.getStatusEffects().forEach(effect ->{
+                        if (effect.shouldShowParticles()){
+                            effect.setShowParticles(false);
+                            effect.setHiddenByCrystallization(true);
+                        }
+                    });
+                    this.markEffectsDirty();
+                }
 
                 // - Turn non-player entities into blocks.
                 if (!this.isPlayer() && !this.isCrystallizedByStatusEffect()){
@@ -159,11 +174,23 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.discard();
                 }
             } else {
-                // - Undo on-crystallization effects.
+                // + Undo on-crystallization effects.
                 if (this.finishedCrystallization){
+                    // - Play sound and particle effects.
+                    BlockPos pos = ((LivingEntity)(Object)this).getBlockPos();
+                    world.playSound(null, pos, Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, 1f, 1f);
+
+                    // . Partiles require to be rendered in the client world.
+                    PacketByteBuf posPacket = PacketByteBufs.create().writeBlockPos(pos);
+                    for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
+                        ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "decrystallization_effects"), posPacket);
+                    }
+
+                    // - Regain gravity and vulnerability.
                     this.setNoGravity(false);
                     this.setInvulnerable(false);
 
+                    // - Un-hide particle effects.
                     this.getStatusEffects().forEach(effect ->{
                         if (effect.isHiddenByCrystallization()){
                             effect.setShowParticles(true);
@@ -172,14 +199,14 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     });
                     this.markEffectsDirty();
 
-                    // For players
+                    // - Special events for players
                     if (((LivingEntity)(Object)this) instanceof PlayerEntity player && (player.isInsideWall() || player.isInLava())){
                         teleportRandomly(player);
                         if (player.isInLava())
                             player.setEndFireTicks(player.getFireTicks());
                     }
 
-                    // For mobs
+                    // - Special events for mobs
                     if (((LivingEntity)(Object)this) instanceof MobEntity mobEntity){
                         mobEntity.setSilent(false);
                     }
@@ -187,11 +214,11 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     this.finishedCrystallization = false;
                 }
 
-                // Tick crystallization effect counter down
+                // + Tick crystallization effect counter down
                 this.crystallizationCooldown = (this.crystallizationCooldown > 0) ? this.crystallizationCooldown-1  : this.crystallizationCooldown;
             }
 
-            // Sync client
+            // ! Sync client
             scSwitch = this.inFreshEndMedium;
         } else {
             this.setInEndMedium(scSwitch);

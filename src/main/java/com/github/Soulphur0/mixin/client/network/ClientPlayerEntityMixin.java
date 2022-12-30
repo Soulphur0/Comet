@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin.client.render.network;
+package com.github.Soulphur0.mixin.client.network;
 
 import com.github.Soulphur0.Comet;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

@@ -1,6 +1,7 @@
 package com.github.Soulphur0.mixin.entity;
 
 import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
+import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
@@ -77,24 +78,40 @@ public abstract class EntityMixin implements EntityCometBehaviour {
 
     @Shadow public abstract int getAir();
 
-    // $ Comet ---------------------------------------------------------------------------------------------------------
+    // : GENERIC IMPLEMENTATIONS ---------------------------------------------------------------------------------------
+    private static final TrackedData<Byte> COMET_FLAGS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.BYTE);
 
-    // _ Attributes.
-    // ? Crystallization process' attributes
-    public int inFreshEndMedium;
+    // $ Methods
+    private boolean getCometFlag(int index) {
+        return (this.dataTracker.get(COMET_FLAGS) & 1 << index) != 0;
+    }
+
+    private void setCometFlag(int index, boolean value) {
+        byte b = this.dataTracker.get(COMET_FLAGS);
+        if (value) {
+            this.dataTracker.set(COMET_FLAGS, (byte)(b | 1 << index));
+        } else {
+            this.dataTracker.set(COMET_FLAGS, (byte)(b & ~(1 << index)));
+        }
+    }
+
+    // _ Add data trackers for comet behaviours.
+    @Inject(method="<init>", at = @At("TAIL"))
+    public void comet_addDataTrackers(EntityType<?> type, World world, CallbackInfo ci){
+        this.dataTracker.startTracking(CRYSTALLIZED_TICKS, 0);
+        this.dataTracker.startTracking(COMET_FLAGS, (byte)0);
+    }
+
+    // : CRYSTALLIZATION PROCESS ---------------------------------------------------------------------------------------
     private static final TrackedData<Integer> CRYSTALLIZED_TICKS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.INTEGER);
     private boolean crystallizedByStatusEffect;
     protected int crystallizationCooldown;
+    protected int lastCrystallizedTicks;
+    public int inFreshEndMedium;
+
     protected float onCrystallizationBodyYaw;
 
-    private String statueMaterial;
-
-    // ? Additional fire behaviour attributes
-    private int soulFireTicks =  -this.getBurningDuration();
-    private int endFireTicks = -this.getBurningDuration();
-
-
-    // _ Crystallization process' methods.
+    // $ Methods
     @Override
     public int getMaxCrystallizedTicks(){
         return 140;
@@ -106,95 +123,19 @@ public abstract class EntityMixin implements EntityCometBehaviour {
         return (float)Math.min(this.getCrystallizedTicks(), max) / (float)max;
     }
 
-    // ? Accessors
-    // * End medium switches.
-    @Override
-    public void setInEndMedium(int inFreshEndMedium){
-        this.inFreshEndMedium = inFreshEndMedium;
+    public float getCrystallizationScale(int ticks){
+        int max = this.getMaxCrystallizedTicks();
+        return (float)Math.min(ticks, max) / (float)max;
     }
 
-    @Override
-    public boolean isInFreshEndMedium() {
-        return this.inFreshEndMedium > 0;
-    }
-
-    // * Crystallization ticks accessors.
-    @Override
-    public void setCrystallizedTicks(int crystallizedTicks) {
-        this.dataTracker.set(CRYSTALLIZED_TICKS, crystallizedTicks);
-    }
-
-    @Override
-    public int getCrystallizedTicks(){
-        return this.dataTracker.get(CRYSTALLIZED_TICKS);
-    }
-
-    // * Crystallization accessors.
-    @Override
-    public boolean isCrystallized(){
-        return this.getCrystallizedTicks() >= this.getMaxCrystallizedTicks();
-    }
-
-    // * Status effect accessors.
-    public void setCrystallizedByStatusEffect(boolean crystallizedByStatusEffect) {
-        this.crystallizedByStatusEffect = crystallizedByStatusEffect;
-    }
-
-    public boolean isCrystallizedByStatusEffect() {
-        return crystallizedByStatusEffect;
-    }
-
-    // * On-crystallization attributes accessors.
-    public float getOnCrystallizationBodyYaw(){return this.onCrystallizationBodyYaw;}
-
-    public void setOnCrystallizationBodyYaw(float bodyYaw) { this.onCrystallizationBodyYaw = bodyYaw;}
-
-    // ? Statue methods.
-    public String getStatueMaterial() {
-        return statueMaterial;
-    }
-
-    // _ Fire extra behaviour methods
-    // ? Accessors
-    // * Soul fire ticks accessors
-    public void setSoulFireTicks(int ticks) {
-        this.soulFireTicks = ticks;
-    }
-
-    public int getSoulFireTicks() {
-        return this.soulFireTicks;
-    }
-
-    // * End fire ticks accessors
-    public void setEndFireTicks(int ticks) {
-        this.endFireTicks = ticks;
-    }
-
-    public int getEndFireTicks() {
-        return this.endFireTicks;
-    }
-
-    // $ Injected ------------------------------------------------------------------------------------------------------
-
-    // _ Generic injects.
-    // ? Add data tracker for comet behaviours.
-    @Inject(method="<init>", at = @At("TAIL"))
-    public void comet_addDataTrackers(EntityType type, World world, CallbackInfo ci){
-        this.dataTracker.startTracking(CRYSTALLIZED_TICKS, 0);
-        this.dataTracker.startTracking(COMET_FLAGS, (byte)0);
-    }
-
-    // _ Crystallization methods.
-    // ? Set inFreshEndMedium to false
-    // This is called every tick, in case the entity is no longer in EndMediumLayer.
-    // The inFreshEndMedium attribute is set to true by the onEntityCollision() method from the EndMediumLayer class.
+    // _ Set inFreshEndMedium to false.
     @Inject(method="baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updateWaterState()Z"))
     public void unsetInFreshEndMedium(CallbackInfo ci){
         if (!this.world.isClient)
             this.inFreshEndMedium = Math.max(this.inFreshEndMedium - 1, 0);
     }
 
-    // ? Make entities vulnerable to status effects when crystallized by a potion
+    // _ Make entities vulnerable to status effects when crystallized by a potion
     @Inject(method="isInvulnerableTo", at = @At("HEAD"), cancellable = true)
     private void vulnerableToStatusEffects(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir){
         Entity entityInstance = ((Entity)(Object)this);
@@ -206,39 +147,77 @@ public abstract class EntityMixin implements EntityCometBehaviour {
         }
     }
 
-    // ? Make crystallized entities unable to look around.
+    // _ Make crystallized entities unable to look around.
     @Inject(method="changeLookDirection", at = @At("HEAD"), cancellable = true)
     private void cancelLookDirection(double cursorDeltaX, double cursorDeltaY, CallbackInfo ci){
         if (this.isCrystallized())
             ci.cancel();
     }
 
-    // _ Statue nbt data.
+    // $ On-crystallization attribute accessors.
+    public float getOnCrystallizationBodyYaw() {
+        return this.onCrystallizationBodyYaw;
+    }
 
-    // ? Get statue material from entity NBT.
+    public void setOnCrystallizationBodyYaw(float bodyYaw) { this.onCrystallizationBodyYaw = bodyYaw;}
+
+    // $ Accessors
+    @Override
+    public void setInEndMedium(int inFreshEndMedium){
+        this.inFreshEndMedium = inFreshEndMedium;
+    }
+
+    @Override
+    public boolean isInFreshEndMedium() {
+        return this.inFreshEndMedium > 0;
+    }
+
+    @Override
+    public void setCrystallizedTicks(int crystallizedTicks) {
+        lastCrystallizedTicks = crystallizedTicks == 0 ? this.getCrystallizedTicks() : lastCrystallizedTicks;
+        this.dataTracker.set(CRYSTALLIZED_TICKS, crystallizedTicks);
+    }
+
+    @Override
+    public int getCrystallizedTicks(){
+        return this.dataTracker.get(CRYSTALLIZED_TICKS);
+    }
+
+    @Override
+    public boolean isCrystallized(){
+        return this.getCrystallizedTicks() >= this.getMaxCrystallizedTicks();
+    }
+
+    @Override
+    public void setCrystallizedByStatusEffect(boolean crystallizedByStatusEffect) {
+        this.crystallizedByStatusEffect = crystallizedByStatusEffect;
+    }
+
+    @Override
+    public boolean isCrystallizedByStatusEffect() {
+        return crystallizedByStatusEffect;
+    }
+
+    // : CREATURE STATUE ENTITY RENDERER -------------------------------------------------------------------------------
+    private String statueMaterial;
+
+    public String getStatueMaterial() {
+        return statueMaterial;
+    }
+
+    // _ Get statue material from entity NBT.
     @Inject(method="readNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/NbtList;", ordinal = 0))
     private void putStatueMaterial(NbtCompound nbt, CallbackInfo ci){
         this.statueMaterial = nbt.getString("StatueMaterial");
     }
 
-    // _ Fire additional behaviour
-    private static final TrackedData<Byte> COMET_FLAGS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.BYTE);
+    // : FIRE EXTRA BEHAVIOUR ------------------------------------------------------------------------------------------
     private static final int ON_SOUL_FIRE_FLAG_INDEX = 0;
     private static final int ON_END_FIRE_FLAG_INDEX = 1;
+    private int soulFireTicks =  -this.getBurningDuration();
+    private int endFireTicks = -this.getBurningDuration();
 
-    private void setCometFlag(int index, boolean value) {
-        byte b = this.dataTracker.get(COMET_FLAGS);
-        if (value) {
-            this.dataTracker.set(COMET_FLAGS, (byte)(b | 1 << index));
-        } else {
-            this.dataTracker.set(COMET_FLAGS, (byte)(b & ~(1 << index)));
-        }
-    }
-
-    private boolean getCometFlag(int index) {
-        return (this.dataTracker.get(COMET_FLAGS) & 1 << index) != 0;
-    }
-
+    // $ Methods
     public void setOnSoulFire(boolean onFire) {
         this.setCometFlag(ON_SOUL_FIRE_FLAG_INDEX, onFire);
     }
@@ -265,6 +244,37 @@ public abstract class EntityMixin implements EntityCometBehaviour {
         return this.isOnEndFire() && !this.isSpectator();
     }
 
+    // ? Obtained from the ChorusFruitItem class.
+    protected void teleportRandomly(LivingEntity livingEntity){
+        double x = livingEntity.getX();
+        double y = livingEntity.getY();
+        double z = livingEntity.getZ();
+        for (int i = 0; i < 16; ++i) {
+            // - Get position in square.
+            double g = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
+            double h = MathHelper.clamp(livingEntity.getY() + (double)(livingEntity.getRandom().nextInt(16) - 8), (double)world.getBottomY(), (double)(world.getBottomY() + ((ServerWorld)world).getLogicalHeight() - 1));
+            double j = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
+
+            // - Dismount vehicle.
+            if (livingEntity.hasVehicle()) {
+                livingEntity.stopRiding();
+            }
+
+            // - Get pre-teleport position
+            Vec3d vec3d = livingEntity.getPos();
+
+            // - Try teleport
+            if (!livingEntity.teleport(g, h, j, true)) continue;
+
+            // - Emit event in pre-teleport position & play sound
+            world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(livingEntity));
+            world.playSound(null, x, y, z, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            livingEntity.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0f, 1.0f);
+            break;
+        }
+    }
+
+    // _ Update ticking for the implemented fire types.
     @Inject(method="baseTick", at = @At("HEAD"))
     private void updateAdditionalFireBehaviour(CallbackInfo ci){
         if (!this.getWorld().isClient()){
@@ -291,22 +301,10 @@ public abstract class EntityMixin implements EntityCometBehaviour {
                 this.setOnSoulFire(this.soulFireTicks > 0);
                 this.setOnEndFire(this.endFireTicks > 0);
             }
-
-            //. Update ticks to client might need this for server.
-//            if (this.isPlayer()){
-//                PacketByteBuf soulFireTicks = PacketByteBufs.create();
-//                PacketByteBuf endFireTicks = PacketByteBufs.create();
-//
-//                soulFireTicks.writeInt(this.soulFireTicks);
-//                endFireTicks.writeInt(this.endFireTicks);
-//
-//                ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new Identifier("comet","soul_fire_ticks"), soulFireTicks);
-//                ServerPlayNetworking.send(((ServerPlayerEntity)(Object)this), new Identifier("comet","end_fire_ticks"), endFireTicks);
-//            }
-       }
+        }
     }
 
-    //
+    // _ Depending on what fire is the entity set on, apply its special effects.
     @Inject(method="baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
     private void applyAdditionalFireBehaviour(CallbackInfo ci){
         Entity thisInstance = ((Entity)(Object)this);
@@ -321,32 +319,22 @@ public abstract class EntityMixin implements EntityCometBehaviour {
         }
     }
 
-    protected void teleportRandomly(LivingEntity livingEntity){
-        double x = livingEntity.getX();
-        double y = livingEntity.getY();
-        double z = livingEntity.getZ();
-        for (int i = 0; i < 16; ++i) {
-            // Get position in square.
-            double g = livingEntity.getX() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
-            double h = MathHelper.clamp(livingEntity.getY() + (double)(livingEntity.getRandom().nextInt(16) - 8), (double)world.getBottomY(), (double)(world.getBottomY() + ((ServerWorld)world).getLogicalHeight() - 1));
-            double j = livingEntity.getZ() + (livingEntity.getRandom().nextDouble() - 0.5) * 16.0;
+    // $ Accessors
+    // Soul fire
+    public void setSoulFireTicks(int ticks) {
+        this.soulFireTicks = ticks;
+    }
 
-            // Dismount vehicle.
-            if (livingEntity.hasVehicle()) {
-                livingEntity.stopRiding();
-            }
+    public int getSoulFireTicks() {
+        return this.soulFireTicks;
+    }
 
-            // Get pre-teleport position
-            Vec3d vec3d = livingEntity.getPos();
+    // End fire
+    public void setEndFireTicks(int ticks) {
+        this.endFireTicks = ticks;
+    }
 
-            // Try teleport
-            if (!livingEntity.teleport(g, h, j, true)) continue;
-
-            // Emit event in pre-teleport position & play sound
-            world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(livingEntity));
-            world.playSound(null, x, y, z, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1.0f, 1.0f);
-            livingEntity.playSound(SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, 1.0f, 1.0f);
-            break;
-        }
+    public int getEndFireTicks() {
+        return this.endFireTicks;
     }
 }
