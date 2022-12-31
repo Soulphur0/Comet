@@ -170,7 +170,7 @@ public abstract class AbstractCrystallizedCreatureBlock extends BlockWithEntity 
     @Override
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity instanceof CrystallizedCreatureBlockEntity ? ((CrystallizedCreatureBlockEntity)blockEntity).getPickStack() : super.getPickStack(world, pos, state);
+        return blockEntity instanceof CrystallizedCreatureBlockEntity ? ((CrystallizedCreatureBlockEntity)blockEntity).getPickStack(state) : super.getPickStack(world, pos, state);
     }
 
     // ? Entity spawn
