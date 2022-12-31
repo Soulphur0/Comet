@@ -1,11 +1,14 @@
 package com.github.Soulphur0.mixin.client.gui.hud;
 
+import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
 import com.github.Soulphur0.dimensionalAlloys.client.gui.hud.CometHeartType;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -13,6 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,26 +26,47 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends DrawableHelper {
 
-    @Final
-    @Shadow
-    private
-    Random random;
+    @Mutable @Final @Shadow private final MinecraftClient client;
 
-    private static final Identifier COMET_GUI_ICONS = new Identifier("comet", "textures/gui/icons.png");
+    @Final @Shadow private Random random;
 
     @Shadow protected abstract PlayerEntity getCameraPlayer();
 
-//    @WrapWithCondition(method ="renderHealthBar", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawHeart(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/hud/InGameHud$HeartType;IIIZZ)V", ordinal = 0))
-//    private boolean comet_cancelHeartContainerRender(InGameHud instance, MatrixStack matrices, InGameHud.HeartType heartType, int x, int y, int v, boolean blinking, boolean halfHeart){
-//        return !getCameraPlayer().isCrystallized();
-//    }
+    @Shadow protected abstract void renderOverlay(Identifier texture, float opacity);
 
+    // : Overlay, health bar and food bar render.
+    private static final Identifier CRYSTALLIZATION_OUTLINE_1 = new Identifier("comet","textures/misc/crystallization_outline_1.png");
+    private static final Identifier CRYSTALLIZATION_OUTLINE_2 = new Identifier("comet","textures/misc/crystallization_outline_2.png");
+    private static final Identifier COMET_GUI_ICONS = new Identifier("comet", "textures/gui/icons.png");
+
+    public InGameHudMixin(MinecraftClient client) {
+        this.client = client;
+    }
+
+    // $ Render crystallization overlay.
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"))
+    public void renderOverlay(MatrixStack matrices, float tickDelta, CallbackInfo ci){
+        if (this.client.player != null){
+            int crystallizedTicks = ((EntityCometBehaviour)this.client.player).getCrystallizedTicks();
+            float crystallizationScale = ((EntityCometBehaviour)this.client.player).getCrystallizationScale();
+
+            if (crystallizedTicks > 0){
+                this.renderOverlay(CRYSTALLIZATION_OUTLINE_2, crystallizationScale);
+                this.renderOverlay(CRYSTALLIZATION_OUTLINE_1, crystallizationScale);
+            }
+        }
+    }
+
+    // $ Render comet health bar.
+    // _ Cancel the render of regular hearts and heart containers if a comet heart shape is being used.
+    // % NOTE: in the future, when hearts are not rendered but the container still is, split this injection into TWO.
     @Inject(method ="renderHealthBar", at = @At(value = "HEAD"), cancellable = true)
-    private void comet_cancelHeartContainerRender(MatrixStack matrices, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
+    private void comet_cancelHeartAndContainerDraw(MatrixStack matrices, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
         if (getCameraPlayer().isCrystallized() && !getCameraPlayer().isCrystallizedByStatusEffect())
             ci.cancel();
     }
 
+    // _ Renders comet's hearts, and containers if a comet heart shape is being used.
     @Inject(method ="renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHealthBar(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/entity/player/PlayerEntity;IIIIFIIIZ)V", shift = At.Shift.BY, by = 1), locals = LocalCapture.CAPTURE_FAILHARD)
     private void comet_renderHealthBar(MatrixStack matrices, CallbackInfo ci, PlayerEntity playerEntity, int i, boolean bl, long l, int j, HungerManager hungerManager, int k, int m, int n, int o, float f, int p, int q, int r, int s, int t, int u, int v){
         RenderSystem.setShaderTexture(0, COMET_GUI_ICONS);
@@ -49,10 +74,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
         RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
     }
 
-    // TODO: call for renderCometHealthBar() in the renderStatusBars() method, after the regular health bar was rendered.
-    //  Capture the parameter values of the last health bar render to render this one.
-
-    // ? Draws comet hearts over the regular health bar.
+    // ? Draws comet hearts and/or containers over the regular health bar.
     private void renderCometHealthBar(MatrixStack matrices, PlayerEntity player, int screenPosX, int screenPosY, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorptionHealthPoints, boolean blinking) {
         CometHeartType heartType = CometHeartType.fromPlayerState(player);
         if (heartType == null) return;
@@ -106,5 +128,42 @@ public abstract class InGameHudMixin extends DrawableHelper {
     // ? Calls the drawing process of individual hearts.
     private void drawCometHeart(MatrixStack matrices, CometHeartType type, int x, int y, int v, boolean blinking, boolean halfHeart){
         this.drawTexture(matrices, x, y, type.getTextureU(halfHeart, blinking), v, 9, 9);
+    }
+
+    // $ Methods used to render comet food bar
+    // + In the vanilla food rendering section:
+    // * The first drawTextures call is for the food containers.
+    // * The second call is for full food icons.
+    // * The third call is for half food icons.
+
+    // _ Cancels the draw of full food icons when necessary.
+    @WrapWithCondition(method = "renderStatusBars", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 4))
+    private boolean comet_cancelFullFoodIconDraw(InGameHud instance, MatrixStack matrices, int x, int y, int u, int v, int width, int height){
+        return !this.getCameraPlayer().isCrystallized();
+    }
+
+    // _ Cancels the draw of half food icons when necessary.
+    @WrapWithCondition(method = "renderStatusBars", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 5))
+    private boolean comet_cancelHalfFoodIconDraw(InGameHud instance, MatrixStack matrices, int x, int y, int u, int v, int width, int height){
+        return !this.getCameraPlayer().isCrystallized();
+    }
+
+    // _ Renders Comet's full food icon if necessary.
+    @Inject(method = "renderStatusBars", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 4, shift = At.Shift.BY, by = 1), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void comet_drawFullFoodIcon(MatrixStack matrices, CallbackInfo ci, PlayerEntity playerEntity, int i, boolean bl, long l, int j, HungerManager hungerManager, int k, int m, int n, int o, float f, int p, int q, int r, int s, int t, int u, int v, LivingEntity livingEntity, int x, int y, int z, int aa, int ab, int ac){
+        RenderSystem.setShaderTexture(0, COMET_GUI_ICONS);
+        PlayerEntity  player = getCameraPlayer();
+        if (player.isCrystallized())
+            this.drawTexture(matrices, ac, z, 0, 9, 9, 9);
+        RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
+    }
+
+    // _ Renders Comet's full food icon if necessary.
+    @Inject(method = "renderStatusBars", at =  @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 5, shift = At.Shift.BY, by = 1), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void comet_drawHalfFoodIcon(MatrixStack matrices, CallbackInfo ci, PlayerEntity playerEntity, int i, boolean bl, long l, int j, HungerManager hungerManager, int k, int m, int n, int o, float f, int p, int q, int r, int s, int t, int u, int v, LivingEntity livingEntity, int x, int y, int z, int aa, int ab, int ac){
+        RenderSystem.setShaderTexture(0, COMET_GUI_ICONS);
+        if (this.getCameraPlayer().isCrystallized())
+            this.drawTexture(matrices, ac, z, 9, 9, 9, 9);
+        RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
     }
 }
