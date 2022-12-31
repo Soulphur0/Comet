@@ -1,3 +1,6 @@
 {
-  "parent": "comet:block/crystallized_creature"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "comet:item/crystallized_creature"
+  }
 }
