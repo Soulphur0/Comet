@@ -139,4 +139,13 @@ public class EndMediumBlock extends Block {
                 world.setBlockState(pos.up(), CometBlocks.END_MEDIUM_LAYER.getDefaultState(), Block.NOTIFY_ALL);
         }
     }
+
+    // $ Spawn particles around
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if (random.nextFloat() <= 0.1)
+            world.addParticle(ParticleTypes.DRAGON_BREATH, pos.getX() + random.nextDouble()*8.0D - 4.0D, pos.getY() + random.nextDouble()*4.0D, pos .getZ() + random.nextDouble()*8.0D - 4.0D, random.nextDouble()*0.01D,random.nextDouble()*0.02D,random.nextDouble()*0.01D);
+        super.randomDisplayTick(state, world, pos, random);
+    }
 }
