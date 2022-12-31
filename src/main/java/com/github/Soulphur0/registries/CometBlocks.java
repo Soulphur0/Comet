@@ -209,7 +209,6 @@ public class CometBlocks {
             .of(Material.STONE)
             .strength(1.5f, 6.0f)
             .sounds(BlockSoundGroup.STONE));
-    public static final Item FRESH_ROOTED_ENDSTONE_BLOCK_ITEM = new BlockItem(FRESH_ROOTED_ENDSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ End medium cauldron
     public static final Block END_MEDIUM_CAULDRON = new EndMediumCauldronBlock(FabricBlockSettings
@@ -349,7 +348,6 @@ public class CometBlocks {
         Registry.register(Registry.ITEM, new Identifier("comet", "dry_rooted_endstone"), DRY_ROOTED_ENDSTONE_BLOCK_ITEM);
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "fresh_rooted_endstone"), FRESH_ROOTED_ENDSTONE);
-        Registry.register(Registry.ITEM, new Identifier("comet", "fresh_rooted_endstone"), FRESH_ROOTED_ENDSTONE_BLOCK_ITEM);
 
         Registry.register(Registry.BLOCK, new Identifier("comet", "end_medium_cauldron"), END_MEDIUM_CAULDRON);
 

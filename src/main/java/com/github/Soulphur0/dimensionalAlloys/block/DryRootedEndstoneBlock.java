@@ -20,7 +20,7 @@ public class DryRootedEndstoneBlock extends Block {
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         if (hasSourceAround(ctx.getWorld(), ctx.getBlockPos()))
             ctx.getWorld().setBlockState(ctx.getBlockPos(), CometBlocks.FRESH_ROOTED_ENDSTONE.getDefaultState(),3);
-        return ctx.getWorld().getBlockState(ctx.getBlockPos());
+        return this.getDefaultState();
     }
 
     @Override

@@ -84,7 +84,7 @@ public class EndbriteTube extends Block {
     }
 
     private boolean isUnderDripFillCircumstances(World world, BlockPos pos){
-        return world.getBlockState(pos.up()).getBlock() == CometBlocks.END_END_MEDIUM_DRENCHSTONE || world.getBlockState(pos.up()).getBlock() == CometBlocks.FRESH_ROOTED_ENDSTONE;
+        return world.getBlockState(pos.up()).getBlock() == CometBlocks.FRESH_ROOTED_ENDSTONE;
     }
 
     // + Particle display
