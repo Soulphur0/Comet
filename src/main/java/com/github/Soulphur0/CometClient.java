@@ -131,6 +131,21 @@ public class CometClient implements ClientModInitializer {
             });
         });
 
+        // $ Crystallization effect
+
+        // _ Notify crystallization ended.
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "crystallization_effect_ended"), (client, handler, buf, responseSender) -> {
+            String entityUUID = buf.readString();
+
+            client.execute(() ->{
+                if (client.world != null){
+                    Entity listener = client.world.getEntityByUUID(UUID.fromString(entityUUID));
+
+                    listener.setCrystallizedByStatusEffect(false);
+                }
+            });
+        });
+
         // $ Creature statue.
         ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "update_statue_texture"), (client, handler, buf, responseSender) -> {
             BlockPos posToUpdate = buf.readBlockPos();

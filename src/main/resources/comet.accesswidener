@@ -17,3 +17,5 @@ accessible field net/minecraft/client/render/Camera$Projection center Lnet/minec
 
 accessible class net/minecraft/client/render/BackgroundRenderer$FogData
 
+accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
+

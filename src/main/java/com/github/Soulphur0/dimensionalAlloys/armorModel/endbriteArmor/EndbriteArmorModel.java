@@ -45,10 +45,6 @@ public class EndbriteArmorModel<T extends LivingEntity> extends BipedEntityModel
         this.left_foot = root.getChild("left_foot");
     }
 
-
-    // TODO: Scale's the helmet and antennae properly so enchantments don't glitch out.
-    // TODO: Add to the project's schema all learned & used with the Endbrite Helmet
-    // TODO: Add extra attributes and special behaviour to armor.
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();

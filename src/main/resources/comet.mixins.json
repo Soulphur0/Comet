@@ -26,6 +26,7 @@
     "InGameOverlayRendererMixin",
     "ModelLoaderAccessor",
     "PersistentProjectileEntityMixin",
+    "client.gui.hud.InGameHudMixin",
     "client.network.ClientPlayerEntityMixin",
     "client.render.BackgroundRendererMixin",
     "client.render.CameraMixin",
