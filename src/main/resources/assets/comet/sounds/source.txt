@@ -1,1 +1,9 @@
-crystallization_grows - https://freesound.org/people/kyles/sounds/452645/
+crystallization_grows; bucket_empty; bucket_fill; bottle_empty; bottle_fill;
+https://freesound.org/people/kyles/sounds/452645/
+
+statue scrap
+https://freesound.org/people/Garuda1982/sounds/560310/
+
+thorned root's thorn break
+https://freesound.org/people/IENBA/sounds/607910/
+https://freesound.org/people/cupido-1/sounds/617471/

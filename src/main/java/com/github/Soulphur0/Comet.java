@@ -54,6 +54,26 @@ public class Comet implements ModInitializer {
 	public static final SoundEvent CRYSTALLIZATION_GROWS = new SoundEvent(new Identifier("comet", "crystallization_grows"));
 	public static final SoundEvent CRYSTALLIZATION_BREAKS = new SoundEvent(new Identifier("comet", "crystallization_breaks"));
 
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BUCKET_FILL_1 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bucket_fill_1"));
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BUCKET_FILL_2 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bucket_fill_2"));
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BUCKET_EMPTY_1 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bucket_empty_1"));
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BUCKET_EMPTY_2 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bucket_empty_2"));
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BUCKET = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bucket"));
+
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BOTTLE_FILL_1 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bottle_fill_1"));
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BOTTLE_FILL_2 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bottle_fill_2"));
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BOTTLE_EMPTY_1 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bottle_empty_1"));
+	public static final SoundEvent CONCENTRATED_END_MEDIUM_BOTTLE_EMPTY_2 = new SoundEvent(new Identifier("comet", "concentrated_end_medium_bottle_empty_2"));
+
+	public static final SoundEvent CREATURE_STATUE_SCRAP_1 = new SoundEvent(new Identifier("comet", "creature_statue_scrap_1"));
+	public static final SoundEvent CREATURE_STATUE_SCRAP_2 = new SoundEvent(new Identifier("comet", "creature_statue_scrap_2"));
+	public static final SoundEvent CREATURE_STATUE_SCRAP_3 = new SoundEvent(new Identifier("comet", "creature_statue_scrap_3"));
+
+	public static final SoundEvent THORNED_ROOTS_BREAK_1 = new SoundEvent(new Identifier("comet", "thorned_roots_break_1"));
+	public static final SoundEvent THORNED_ROOTS_BREAK_2 = new SoundEvent(new Identifier("comet", "thorned_roots_break_2"));
+	public static final SoundEvent THORNED_ROOTS_BREAK_3 = new SoundEvent(new Identifier("comet", "thorned_roots_break_3"));
+	public static final SoundEvent THORNED_ROOTS_BREAK_4 = new SoundEvent(new Identifier("comet", "thorned_roots_break_4"));
+
 	// Crafting recipes
 	public static final RecipeSerializer<CreatureStatueRecipe> CREATURE_STATUE = RecipeSerializer.register("crafting_special_creaturestatue", new SpecialRecipeSerializer<CreatureStatueRecipe>(CreatureStatueRecipe::new));
 	public static final RecipeSerializer<EndbriteElytraChestplateItemRecipe> ENDBRITE_ELYTRA_CHESTPLATE_RECIPE = RecipeSerializer.register("crafting_special_endbriteelytrachestplate", new SpecialRecipeSerializer<EndbriteElytraChestplateItemRecipe>(EndbriteElytraChestplateItemRecipe::new));
@@ -105,6 +125,26 @@ public class Comet implements ModInitializer {
 		// Sounds
 		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_grows"), CRYSTALLIZATION_GROWS);
 		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "crystallization_breaks"), CRYSTALLIZATION_BREAKS);
+
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bucket_fill_1"), CONCENTRATED_END_MEDIUM_BUCKET_FILL_1);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bucket_fill_2"), CONCENTRATED_END_MEDIUM_BUCKET_FILL_2);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bucket_empty_1"), CONCENTRATED_END_MEDIUM_BUCKET_EMPTY_1);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bucket_empty_2"), CONCENTRATED_END_MEDIUM_BUCKET_EMPTY_2);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bucket"), CONCENTRATED_END_MEDIUM_BUCKET);
+
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bottle_fill_1"), CONCENTRATED_END_MEDIUM_BOTTLE_FILL_1);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bottle_fill_2"), CONCENTRATED_END_MEDIUM_BOTTLE_FILL_2);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bottle_empty_1"),CONCENTRATED_END_MEDIUM_BOTTLE_EMPTY_1);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "concentrated_end_medium_bottle_empty_2"), CONCENTRATED_END_MEDIUM_BOTTLE_EMPTY_2);
+
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "creature_statue_scrap_1"), CREATURE_STATUE_SCRAP_1);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "creature_statue_scrap_2"), CREATURE_STATUE_SCRAP_2);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "creature_statue_scrap_3"), CREATURE_STATUE_SCRAP_3);
+
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "thorned_roots_break_1"), THORNED_ROOTS_BREAK_1);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "thorned_roots_break_2"), THORNED_ROOTS_BREAK_2);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "thorned_roots_break_3"), THORNED_ROOTS_BREAK_3);
+		Registry.register(Registry.SOUND_EVENT,new Identifier("comet", "thorned_roots_break_4"), THORNED_ROOTS_BREAK_4);
 
 		// Status effects
 		Registry.register(Registry.STATUS_EFFECT, new Identifier("comet", "crystallized"), CRYSTALLIZED);
