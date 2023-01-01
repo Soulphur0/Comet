@@ -1,15 +1,26 @@
 package com.github.Soulphur0.mixin.entity.projectile;
 
 import com.github.Soulphur0.Comet;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.mob.GhastEntity;
 import net.minecraft.entity.projectile.*;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,6 +39,7 @@ public class ProjectileEntityMixin {
             if (projectileReflector.getActiveItem().isOf(Comet.PORTAL_SHIELD) && projectileReflector.isUsingItem()){
                 // ? If the projectile is being deflected by a portal shield, save the projectile entity and react to it.
                 ProjectileEntity thisProjectile = ((ProjectileEntity)(Object)this);
+                projectileReflector.getActiveItem().damage(1,projectileReflector, p -> p.sendToolBreakStatus(projectileReflector.getActiveHand()));
 
                 // ? If the projectile has an owner, react to it depending on the type of projectile.
                 if (owner != null){
@@ -39,6 +51,7 @@ public class ProjectileEntityMixin {
                         // * This will make the resultant explosion teleport inside its owner.
 
                         thisProjectile.setPosition(owner.getPos());
+                        playProjectileTeleportationEffects(thisProjectile.getWorld(), thisProjectile.getBlockPos(), projectileReflector, false);
                     } else {
                         // + Generic projectile behaviour.
                         // * Projectiles like arrows will teleport above their target, and around it, hitting them at a raptor's attack angle.
@@ -72,14 +85,29 @@ public class ProjectileEntityMixin {
                         // - Get the vector from the tp position to the owner position and multiply its magnitude by 2.
                         Vec3d newDirection = tpPosition.subtract(ownerPosition).multiply(2.0D);
 
-                        // - Set the projectile at the TP position and give it a velocity equal to the vector that points to its owner.
+                        // - Set the projectile at the TP position, play effects and give it a velocity equal to the vector that points to its owner.
                         thisProjectile.setPosition(tpPosition);
+                        playProjectileTeleportationEffects(thisProjectile.getWorld(), thisProjectile.getBlockPos(), projectileReflector, false);
                         thisProjectile.setVelocity(newDirection);
                     }
                 // ? If the projectile has no owner, discard it.
                 } else {
+                    playProjectileTeleportationEffects(thisProjectile.getWorld(), thisProjectile.getBlockPos(), projectileReflector, true);
                     thisProjectile.discard();
                 }
+            }
+        }
+    }
+
+    // ? Displays particle effects and plays sound when the projectile is teleported.
+    private void playProjectileTeleportationEffects(World world, BlockPos pos, LivingEntity reflector, boolean discarded){
+        world.playSound(reflector.getX(), reflector.getY(), reflector.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS,1.0f,1.0f,true);
+
+        // . Send teleport position to the client world to display teleport particles.
+        if (!world.isClient() && !discarded){
+            PacketByteBuf posBuf = PacketByteBufs.create().writeBlockPos(pos);
+            for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
+                ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "projectile_teleportation_effects"), posBuf);
             }
         }
     }

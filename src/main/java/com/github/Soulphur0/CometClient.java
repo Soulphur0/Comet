@@ -27,9 +27,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -132,7 +134,6 @@ public class CometClient implements ClientModInitializer {
         });
 
         // $ Crystallization effect
-
         // _ Notify crystallization ended.
         ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "crystallization_effect_ended"), (client, handler, buf, responseSender) -> {
             String entityUUID = buf.readString();
@@ -154,6 +155,22 @@ public class CometClient implements ClientModInitializer {
             client.execute(() -> {
                 CreatureStatue.updateNBT(client, posToUpdate, material);
             });
+        });
+
+        // $ Portal shield
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "projectile_teleportation_effects"), (client, handler, buf, responseSender) -> {
+           BlockPos pos = buf.readBlockPos();
+
+           client.execute(() ->{
+               if (client.world != null){
+                   Random random = Random.create();
+                   random.nextDouble();
+
+                   for (int i = 0; i< 64; i++){
+                       client.world.addParticle(ParticleTypes.PORTAL, pos.getX() + random.nextDouble()*0.5D - 0.25D, pos.getY() + random.nextDouble()*0.5D - 0.25D, pos.getZ() + random.nextDouble()*0.5D - 0.25D,  random.nextDouble()*0.01D,random.nextDouble()*0.01D,random.nextDouble()*0.01D);
+                   }
+               }
+           });
         });
     }
 }

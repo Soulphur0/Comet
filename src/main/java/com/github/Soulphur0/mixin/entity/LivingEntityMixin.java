@@ -189,7 +189,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                     // - Play sound and particle effects.
                     world.playSound(null, pos, Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, 1f, 1f);
 
-                    // . Partiles require to be rendered in the client world.
+                    // . Particles require to be rendered in the client world.
                     PacketByteBuf posPacket = PacketByteBufs.create().writeBlockPos(pos);
                     for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
                         ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "decrystallization_effects"), posPacket);
