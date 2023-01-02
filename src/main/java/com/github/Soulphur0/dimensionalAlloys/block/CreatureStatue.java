@@ -54,9 +54,42 @@ public class CreatureStatue extends AbstractCrystallizedCreatureBlock implements
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient()) return super.onUse(state, world, pos, player, hand, hit);
+        Item mainHandItem = player.getStackInHand(hand).getItem();
+        AtomicBoolean applyBlockChange = new AtomicBoolean(false);
 
-        Item mainHandItem = player.getMainHandStack().getItem();
-        if (mainHandItem instanceof PickaxeItem || statueMaterials.stream().anyMatch(item -> item.equals(mainHandItem))){
+        // + Damage or decrement itemstack.
+        world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent(blockEntity ->{
+            // * If there's no material applied.
+            if (blockEntity.getMobData().getString("StatueMaterial").equals("none")) {
+                // - Empty bottle.
+                if (mainHandItem == Comet.CONCENTRATED_END_MEDIUM_BOTTLE){
+                    if (!player.isCreative())
+                        player.getMainHandStack().decrement(1);
+                    if (player.getMainHandStack().isEmpty()){
+                        player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                    } else if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE))) {
+                        player.dropItem(new ItemStack(Items.GLASS_BOTTLE), false);
+                    }
+                    applyBlockChange.set(true);
+                // - Consume item.
+                } else if (statueMaterials.stream().anyMatch(item -> item.equals(mainHandItem))){
+                    player.getMainHandStack().decrement(1);
+                    applyBlockChange.set(true);
+                }
+            // * If there's material applied.
+            } else {
+                // - Damage pickaxe.
+                if(mainHandItem instanceof PickaxeItem && !blockEntity.getMobData().getString("StatueMaterial").equals("none")){
+                    player.getMainHandStack().damage(1,  player, playerEntity -> {
+                        playerEntity.sendToolBreakStatus(playerEntity.getActiveHand());
+                    });
+                    applyBlockChange.set(true);
+                }
+            }
+        });
+
+        // + Send material update to the client, which also plays sound effects.
+        if (applyBlockChange.get() && (mainHandItem instanceof PickaxeItem || statueMaterials.stream().anyMatch(item -> item.equals(mainHandItem)))){
             PacketByteBuf posAndItemPacket = PacketByteBufs.create().writeBlockPos(pos).writeVarInt(Item.getRawId(mainHandItem.asItem()));
             for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
                 ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "update_statue_texture"), posAndItemPacket);
