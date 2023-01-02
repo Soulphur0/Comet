@@ -96,8 +96,36 @@ public class Comet implements ModInitializer {
 	public static final DamageSource END_MEDIUM_DROWN_RARE = new DamageSource("end_medidum_drown_rare").setBypassesArmor();
 
 	// Cauldron behaviour
-	public static final Map<Item, CauldronBehavior> END_MEDIUM_CAULDRON_BEHAVIOR = CauldronBehavior.createMap();
-	public static final CauldronBehavior FILL_WITH_END_MEDIUM = (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(world, pos, player, hand, stack, (BlockState) CometBlocks.END_MEDIUM_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL, 3), SoundEvents.ITEM_BUCKET_EMPTY);
+	public static final CauldronBehavior FILL_WITH_END_MEDIUM = (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(world, pos, player, hand, stack, (BlockState) CometBlocks.END_MEDIUM_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL, 3), Comet.CONCENTRATED_END_MEDIUM_BUCKET_EMPTY);
+	public static final CauldronBehavior EMPTY_WITH_BUCKET = (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(state, world, pos, player, hand, stack, new ItemStack(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET), predicateState -> predicateState.getBlock() instanceof LeveledCauldronBlock && predicateState.get(LeveledCauldronBlock.LEVEL) == 3, Comet.CONCENTRATED_END_MEDIUM_BUCKET_FILL);
+
+	public static final CauldronBehavior FILL_WITH_END_MEDIUM_BOTTLE = (state2, world, pos, player, hand, stack) -> {
+		if (!world.isClient()){
+			Item item = stack.getItem();
+			player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
+			player.incrementStat(Stats.USE_CAULDRON);
+			player.incrementStat(Stats.USED.getOrCreateStat(item));
+			if (world.getBlockState(pos).isOf(CometBlocks.END_MEDIUM_CAULDRON) && world.getBlockState(pos).get(LeveledCauldronBlock.LEVEL) < 3)
+				world.setBlockState(pos, CometBlocks.END_MEDIUM_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL,world.getBlockState(pos).get(LeveledCauldronBlock.LEVEL) + 1));
+			else
+				world.setBlockState(pos, CometBlocks.END_MEDIUM_CAULDRON.getDefaultState().with(LeveledCauldronBlock.LEVEL,1));
+			world.playSound(null, pos, Comet.CONCENTRATED_END_MEDIUM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);
+		}
+		return ActionResult.success(world.isClient);
+	};
+	public static final CauldronBehavior EMPTY_WITH_BOTTLE = (state, world, pos, player, hand, stack) -> {
+		if (!world.isClient() && state.getBlock() instanceof LeveledCauldronBlock){
+			Item item = stack.getItem();
+			player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Comet.CONCENTRATED_END_MEDIUM_BOTTLE)));
+			player.incrementStat(Stats.USE_CAULDRON);
+			player.incrementStat(Stats.USED.getOrCreateStat(item));
+			LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
+			world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			world.emitGameEvent(null, GameEvent.FLUID_PICKUP, pos);
+		}
+		return ActionResult.success(world.isClient);
+	};
 
 	@Override
 	public void onInitialize() {
