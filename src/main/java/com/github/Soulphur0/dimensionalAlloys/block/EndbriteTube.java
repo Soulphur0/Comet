@@ -1,10 +1,20 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
+import com.github.Soulphur0.Comet;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -12,14 +22,19 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.DimensionTypes;
+import net.minecraft.world.explosion.Explosion;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EndbriteTube extends Block {
     public static final IntProperty TUBES = IntProperty.of("tubes", 1, 7);
@@ -63,6 +78,64 @@ public class EndbriteTube extends Block {
             return Blocks.AIR.getDefaultState();
 
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    }
+
+    // $ Block destruction behaviour
+    @Override
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
+        World world = builder.getWorld();
+        Vec3d pos = builder.getNullable(LootContextParameters.ORIGIN);
+        Entity entity = builder.getNullable(LootContextParameters.THIS_ENTITY);
+
+        if (world != null && pos != null){
+
+            // ? If a player mined this block.
+            if (entity instanceof PlayerEntity player){
+                ItemStack mainHandItemStack = player.getMainHandStack();
+
+                if (mainHandItemStack.getItem() instanceof PickaxeItem){
+                    // + Set a drop count depending on blockstate property.
+                    AtomicInteger droppedStackCount = new AtomicInteger(state.get(TUBES));
+                    AtomicBoolean usingSilkTouch = new AtomicBoolean(false);
+
+                    // + Apply enchantments.
+                    EnchantmentHelper.get(mainHandItemStack).forEach((enchantment, key) -> {
+                        // - Apply fortune.
+                        // / One roll per potential item.
+                        if (enchantment.equals(Enchantments.FORTUNE)){
+                            int fortuneExtraCount = 0;
+                            for (int i = 0; i < state.get(TUBES); i++){
+                                fortuneExtraCount += 1 + Math.round(Math.random() * 0.5 * EnchantmentHelper.getLevel(Enchantments.FORTUNE, mainHandItemStack) + 0.05);
+                            }
+                            droppedStackCount.addAndGet(fortuneExtraCount);
+                        }
+                        // - Apply silk touch.
+                        else if (enchantment.equals(Enchantments.SILK_TOUCH)){
+                            usingSilkTouch.set(true);
+                        }
+                    });
+
+                    // + Build stack based on obtained data.
+                    ItemStack droppedStack = usingSilkTouch.get() ? new ItemStack(CometBlocks.ENDBRITE_TUBE) : new ItemStack(Comet.ENDBRITE_SHARD);
+                    droppedStack.setCount(droppedStackCount.get());
+
+                    world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),droppedStack));
+                }
+            }
+            // ? If the block was broken by other means.
+            else {
+                ItemStack droppedTubes = new ItemStack(CometBlocks.ENDBRITE_TUBE);
+                droppedTubes.setCount(state.get(TUBES));
+
+                world.spawnEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(),droppedTubes));
+            }
+        }
+        return super.getDroppedStacks(state, builder);
+    }
+
+    @Override
+    public boolean shouldDropItemsOnExplosion(Explosion explosion) {
+        return true;
     }
 
     // $ Block shape
