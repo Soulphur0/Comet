@@ -4,8 +4,10 @@ import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,5 +38,10 @@ public class FreshRootedEndstoneBlock extends Block {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state) {
+        return new ItemStack(CometBlocks.DRY_ROOTED_ENDSTONE_BLOCK_ITEM);
     }
 }
