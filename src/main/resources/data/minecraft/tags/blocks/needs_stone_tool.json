@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+	"comet:end_iron_ore",
+	"comet:end_medium",
+	"comet:end_medium_layer"
+  ]
+}

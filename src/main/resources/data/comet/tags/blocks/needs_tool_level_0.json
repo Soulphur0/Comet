@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "comet:chorus_humus",
+	"comet:fresh_chorus_humus",
+	"comet:creature_statue",
+	"comet:end_drenchstone",
+	"comet:end_water_drenchstone",
+	"comet:end_lava_drenchstone",
+	"comet:end_end_medium_drenchstone",
+	"comet:dry_rooted_endstone",
+	"comet:fresh_rooted_endstone"
+  ]
+}

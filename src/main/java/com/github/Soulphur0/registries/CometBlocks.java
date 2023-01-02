@@ -21,59 +21,69 @@ import net.minecraft.world.biome.Biome;
 
 public class CometBlocks {
 
-    // $ End iron ore
+    // $ End iron ore.
+    // Default block state.
     public static final Block END_IRON_ORE = new EndIronOre(FabricBlockSettings
             .of(Material.STONE)
-            .hardness(3f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final BlockItem END_IRON_ORE_BLOCK_ITEM = new BlockItem(END_IRON_ORE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // Revealed block
+    // Revealed block state, used exclusively for render.
     public static final Block END_IRON_ORE_REVEALED = new Block(FabricBlockSettings
             .of(Material.STONE)
             .hardness(3f)
             .sounds(BlockSoundGroup.STONE));
 
-    // Block entity
+    // Block entity.
     public static final BlockEntityType<EndIronOreBlockEntity> END_IRON_ORE_BLOCK_ENTITY = Registry.register(
             Registry.BLOCK_ENTITY_TYPE,
             new Identifier("comet", "end_iron_ore"),
             FabricBlockEntityTypeBuilder.create(EndIronOreBlockEntity::new, END_IRON_ORE).build()
     );
 
-    // $ Endbrite tube
+    // $ Endbrite tube.
     public static final Block ENDBRITE_TUBE = new EndbriteTube(FabricBlockSettings
-            .of(Material.STONE)
-            .hardness(5f)
+            .of(Material.METAL)
+            .requiresTool()
+            .strength(30.0f, 1200.0f)
             .sounds(BlockSoundGroup.ANCIENT_DEBRIS)
             .ticksRandomly());
     public static final BlockItem ENDBRITE_TUBE_BLOCK_ITEM = new BlockItem(ENDBRITE_TUBE, new Item.Settings().group(ItemGroup.MISC));
 
-    // $ Chorus humus
+    // $ Chorus humus.
+    //  Inert state.
     public static final Block CHORUS_HUMUS = new Block(FabricBlockSettings
             .of(Material.STONE)
-            .hardness(3f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final BlockItem CHORUS_HUMUS_BLOCK_ITEM = new BlockItem(CHORUS_HUMUS, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
+    //  Active state.
     public static final Block FRESH_CHORUS_HUMUS = new Block(FabricBlockSettings
             .of(Material.STONE)
-            .hardness(3f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final BlockItem FRESH_CHORUS_HUMUS_ITEM = new BlockItem(FRESH_CHORUS_HUMUS, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // $ End medium
+    // $ End medium.
+    // End medium block.
     public static final Block END_MEDIUM = new EndMediumBlock(FabricBlockSettings
             .of(Material.METAL, MapColor.PURPLE)
-            .strength(1.25f, 4.2f)
+            .requiresTool()
+            .strength(7.5f, 4.2f)
             .sounds(BlockSoundGroup.GILDED_BLACKSTONE)
             .dynamicBounds()
             .ticksRandomly());
     public static final BlockItem END_MEDIUM_BLOCK_ITEM = new BlockItem(END_MEDIUM, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // End medium layer
+    // End medium layer.
     public static final Block END_MEDIUM_LAYER = new EndMediumLayer(FabricBlockSettings
             .of(Material.SNOW_LAYER, MapColor.PALE_PURPLE)
+            .requiresTool()
             .strength(0.3f)
             // velocityMultiplier(0.9f)
             .sounds(BlockSoundGroup.GLASS)
@@ -81,6 +91,7 @@ public class CometBlocks {
     public static final BlockItem END_MEDIUM_LAYER_BLOCK_ITEM = new BlockItem(END_MEDIUM_LAYER, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ Crystallized creature
+    // Default state.
     public static final Block CRYSTALLIZED_CREATURE = new CrystallizedCreature(FabricBlockSettings
             .of(Material.GLASS, MapColor.PALE_PURPLE)
             .strength(0.3f)
@@ -88,7 +99,7 @@ public class CometBlocks {
             .nonOpaque());
     public static final BlockItem CRYSTALLIZED_CREATURE_BLOCK_ITEM = new BlockItem(CRYSTALLIZED_CREATURE, new Item.Settings().group(ItemGroup.DECORATIONS));
 
-    // Trimmed version
+    // Trimmed state.
     public static final Block TRIMMED_CRYSTALLIZED_CREATURE = new TrimmedCrystallizedCreature(FabricBlockSettings
             .of(Material.GLASS, MapColor.PALE_PURPLE)
             .strength(0.3f)
@@ -96,15 +107,16 @@ public class CometBlocks {
             .nonOpaque());
     public static final BlockItem TRIMMED_CRYSTALLIZED_CREATURE_BLOCK_ITEM = new BlockItem(TRIMMED_CRYSTALLIZED_CREATURE, new Item.Settings().group(ItemGroup.DECORATIONS));
 
-    // Mob statue
+    // Mob statue.
     public static final Block CREATURE_STATUE = new CreatureStatue(FabricBlockSettings
             .of(Material.STONE, MapColor.LIGHT_BLUE)
-            .strength(0.3f)
+            .requiresTool()
+            .strength(1.5f, 6.0f)
             .sounds(BlockSoundGroup.STONE)
             .nonOpaque());
     public static final BlockItem CREATURE_STATUE_BLOCK_ITEM = new BlockItem(CREATURE_STATUE, new Item.Settings().group(ItemGroup.DECORATIONS));
 
-    // Block entity
+    // Block entity.
     public static final BlockEntityType<CrystallizedCreatureBlockEntity> CRYSTALLIZED_CREATURE_BLOCK_ENTITY = Registry.register(
             Registry.BLOCK_ENTITY_TYPE,
             new Identifier("comet", "crystallized_creature"),
@@ -120,23 +132,27 @@ public class CometBlocks {
             .sounds(BlockSoundGroup.WOOL));
 
     // $ Pumice stone
+    // Default state.
     public static final Block PUMICE_STONE = new Block(FabricBlockSettings
             .of(Material.STONE)
             .strength(0.4f)
             .sounds(BlockSoundGroup.NETHERRACK));
     public static final Item PUMICE_STONE_BLOCK_ITEM = new BlockItem(PUMICE_STONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
+    // Water state.
     public static final Block WATER_PUMICE_STONE = new Block(FabricBlockSettings
             .of(Material.STONE)
             .strength(0.4f)
             .sounds(BlockSoundGroup.NETHERRACK));
 
+    // Lava state.
     public static final Block LAVA_PUMICE_STONE = new Block(FabricBlockSettings
             .of(Material.STONE)
             .strength(0.4f)
             .sounds(BlockSoundGroup.NETHERRACK));
 
     // $ Drenchstone
+    // Default state.
     public static final Block DRENCHSTONE = new DrenchstoneBlock(FabricBlockSettings
             .of(Material.STONE)
             .strength(1.5f, 6.0f)
@@ -156,13 +172,14 @@ public class CometBlocks {
             .sounds(BlockSoundGroup.STONE));
 
     // $ Nether Drenchstone
+    // Default state.
     public static final Block NETHER_DRENCHSTONE = new NetherDrenchstoneBlock(FabricBlockSettings
             .of(Material.STONE)
             .strength(0.4f)
             .sounds(BlockSoundGroup.NETHERRACK));
     public static final Item NETHER_DRENCHSTONE_BLOCK_ITEM = new BlockItem(NETHER_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // Water state
+    // Water state.
     public static final Block TEAR_BLOCK = new TearBlock(FabricBlockSettings
             .of(Material.STONE)
             .strength(0.4f)
@@ -170,44 +187,52 @@ public class CometBlocks {
     public static final Item TEAR_BLOCK_ITEM = new BlockItem(TEAR_BLOCK, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // $ End Drenchstone
+    // Default state.
     public static final Block END_DRENCHSTONE = new EndDrenchstoneBlock(FabricBlockSettings
             .of(Material.STONE)
-            .strength(1.5f, 6.0f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final Item END_DRENCHSTONE_BLOCK_ITEM = new BlockItem(END_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // Water state
+    // Water state.
     public static final Block END_WATER_DRENCHSTONE = new EndWaterDrenchstoneBlock(FabricBlockSettings
             .of(Material.STONE)
-            .strength(1.5f, 6.0f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final Item END_WATER_DRENCHSTONE_BLOCK_ITEM = new BlockItem(END_WATER_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // Lava state
+    // Lava state.
     public static final Block END_LAVA_DRENCHSTONE = new EndLavaDrenchstoneBlock(FabricBlockSettings
             .of(Material.STONE)
-            .strength(1.5f, 6.0f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final Item END_LAVA_DRENCHSTONE_BLOCK_ITEM = new BlockItem(END_LAVA_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
     // End medium state
     public static final Block END_END_MEDIUM_DRENCHSTONE = new EndEndMediumDrenchstoneBlock(FabricBlockSettings
             .of(Material.STONE)
-            .strength(1.5f, 6.0f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final Item END_END_MEDIUM_DRENCHSTONE_BLOCK_ITEM = new BlockItem(END_END_MEDIUM_DRENCHSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // $ Dry Rooted endstone
+    // $ Rooted endstone
+    // Inert state.
     public static final Block DRY_ROOTED_ENDSTONE = new DryRootedEndstoneBlock(FabricBlockSettings
             .of(Material.STONE)
-            .strength(1.5f, 6.0f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
     public static final Item DRY_ROOTED_ENDSTONE_BLOCK_ITEM = new BlockItem(DRY_ROOTED_ENDSTONE, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS));
 
-    // $ Fresh Rooted endstone
+    // Active state.
     public static final Block FRESH_ROOTED_ENDSTONE = new FreshRootedEndstoneBlock(FabricBlockSettings
             .of(Material.STONE)
-            .strength(1.5f, 6.0f)
+            .requiresTool()
+            .strength(3.0f, 9.0f)
             .sounds(BlockSoundGroup.STONE));
 
     // $ End medium cauldron
@@ -229,6 +254,7 @@ public class CometBlocks {
     public static final Item CONCENTRATED_END_MEDIUM_BUCKET = new ConcentratedEndMediumBucket(CONCENTRATED_END_MEDIUM, new Item.Settings().group(ItemGroup.MISC).maxCount(1));
 
     // $ Thorned roots
+    // Head block/Plant stem.
     public static final Block THORNED_ROOTS = new ThornedRootsHeadBlock(FabricBlockSettings
             .of(Material.PLANT)
             .ticksRandomly()
@@ -237,6 +263,7 @@ public class CometBlocks {
             .breakInstantly()
             .sounds(BlockSoundGroup.CAVE_VINES));
 
+    // Body block/Plant body.
     public static final Block THORNED_ROOTS_PLANT = new ThornedRootsBodyBlock(FabricBlockSettings
             .of(Material.PLANT)
             .noCollision()
