@@ -11,7 +11,6 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,6 +20,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -29,7 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CreatureStatue extends AbstractCrystallizedCreatureBlock implements BlockEntityProvider, Waterloggable {
 
@@ -108,19 +109,22 @@ public class CreatureStatue extends AbstractCrystallizedCreatureBlock implements
         if (material == null) return;
 
         world.getBlockEntity(posToUpdate, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent(blockEntity ->{
-            if (material instanceof PickaxeItem){
+            if (material instanceof PickaxeItem && !blockEntity.getMobData().getString("StatueMaterial").equals("none")){
                 NbtCompound mobData = blockEntity.getMobData();
                 mobData.putString("StatueMaterial","none");
+                world.playSound(posToUpdate.getX(), posToUpdate.getY(), posToUpdate.getZ(), Comet.CREATURE_STATUE_SCRAP, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
             }
 
-            if (material == Comet.CONCENTRATED_END_MEDIUM_BOTTLE){
+            if (material == Comet.CONCENTRATED_END_MEDIUM_BOTTLE && !blockEntity.getMobData().getString("StatueMaterial").equals("end_medium")){
                 NbtCompound mobData = blockEntity.getMobData();
                 mobData.putString("StatueMaterial","end_medium");
+                world.playSound(posToUpdate.getX(), posToUpdate.getY(), posToUpdate.getZ(), Comet.CONCENTRATED_END_MEDIUM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
             }
 
-            if (material == Items.QUARTZ){
+            if (material == Items.QUARTZ && !blockEntity.getMobData().getString("StatueMaterial").equals("quartz")){
                 NbtCompound mobData = blockEntity.getMobData();
                 mobData.putString("StatueMaterial","quartz");
+                world.playSound(posToUpdate.getX(), posToUpdate.getY(), posToUpdate.getZ(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
             }
         });
     }

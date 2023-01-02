@@ -1,5 +1,7 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
+import com.github.Soulphur0.Comet;
+import com.github.Soulphur0.dimensionalAlloys.sound.CometSoundUtilities;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -9,11 +11,11 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -43,12 +45,13 @@ public class ThornedRootsBodyBlock extends AbstractPlantBlock implements Fertili
     // _ Self-Defense mechanism when loaded.
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (!world.isClient()){
-            if (state.get(LOADED) && entity instanceof LivingEntity livingEntity){
+        if (state.get(LOADED) && entity instanceof LivingEntity livingEntity){
+            if (!world.isClient()){
                 livingEntity.addStatusEffect(pickRandomStatusEffect());
                 livingEntity.damage(DamageSource.CACTUS, 1);
                 world.setBlockState(pos, state.with(LOADED, false));
             }
+            world.playSound(pos.getX(), pos.getY(), pos.getZ(), Comet.THORNED_ROOTS_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
         }
         super.onEntityCollision(state, world, pos, entity);
     }

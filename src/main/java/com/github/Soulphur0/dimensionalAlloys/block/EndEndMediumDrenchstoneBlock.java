@@ -1,11 +1,13 @@
 package com.github.Soulphur0.dimensionalAlloys.block;
 
 import com.github.Soulphur0.Comet;
+import com.github.Soulphur0.dimensionalAlloys.sound.CometSoundUtilities;
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -30,6 +32,7 @@ public class EndEndMediumDrenchstoneBlock extends EndDrenchstoneBlock{
                 player.dropItem(new ItemStack(CometBlocks.CONCENTRATED_END_MEDIUM_BUCKET), false);
             }
             world.setBlockState(pos, CometBlocks.END_DRENCHSTONE.getDefaultState());
+            world.playSound(pos.getX(), pos.getY(), pos.getZ(), Comet.CONCENTRATED_END_MEDIUM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
         }
         return ActionResult.PASS;
     }

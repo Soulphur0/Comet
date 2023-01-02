@@ -10,6 +10,8 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -51,6 +53,8 @@ public class TrimmedCrystallizedCreature extends AbstractCrystallizedCreatureBlo
             world.getBlockEntity(pos, CometBlocks.CRYSTALLIZED_CREATURE_BLOCK_ENTITY).ifPresent((blockEntity) -> {
                 blockEntity.writeData(oldBlockNBT);
             });
+
+            world.playSound(pos.getX(), pos.getY(), pos.getZ(), Comet.CONCENTRATED_END_MEDIUM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f, true);
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }

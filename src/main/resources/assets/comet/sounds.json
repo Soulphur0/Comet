@@ -1,12 +1,71 @@
 {
-  "crystallization_grows": {
+  "mob.crystallization.grows": {
     "sounds": [
       "comet:crystallization_grows"
     ]
   },
-  "crystallization_breaks": {
+  "mob.crystallization.breaks": {
     "sounds": [
       "comet:crystallization_breaks"
+    ]
+  },
+  "item.concentrated_end_medium_bucket.fill": {
+    "sounds": [
+      "comet:concentrated_end_medium_bucket_fill_1",
+	  "comet:concentrated_end_medium_bucket_fill_2",
+	  "comet:concentrated_end_medium_bucket"
+    ]
+  },
+  "item.concentrated_end_medium_bucket.empty": {
+    "sounds": [
+      "comet:concentrated_end_medium_bucket_empty_1",
+	  "comet:concentrated_end_medium_bucket_empty_2",
+	  "comet:concentrated_end_medium_bucket"
+    ]
+  },
+  "item.concentrated_end_medium_bottle.fill": {
+    "sounds": [
+	 {
+		"name":"comet:concentrated_end_medium_bottle_fill_1",
+		"weight": 1
+	 },
+	 {
+		"name":"comet:concentrated_end_medium_bottle_fill_2",
+		"weight": 2
+	 }
+    ]
+  },
+  "item.concentrated_end_medium_bottle.empty": {
+    "sounds": [
+      "comet:concentrated_end_medium_bottle_empty_1",
+	  "comet:concentrated_end_medium_bottle_empty_2"
+    ]
+  },
+  "block.creature_statue_scrap": {
+    "sounds": [
+      "comet:creature_statue_scrap_1",
+	  "comet:creature_statue_scrap_2",
+	  "comet:creature_statue_scrap_3"
+    ]
+  },
+  "block.thorned_roots.break": {
+    "sounds": [
+	 {
+		"name":"comet:thorned_roots_break_1",
+		"weight": 1
+	 },
+	 {
+		"name":"comet:thorned_roots_break_2",
+		"weight": 1
+	 },
+	 {
+		"name":"comet:thorned_roots_break_3",
+		"weight": 1
+	 },
+	 {
+		"name":"comet:thorned_roots_break_4",
+		"weight": 3
+	 }
     ]
   }
 }

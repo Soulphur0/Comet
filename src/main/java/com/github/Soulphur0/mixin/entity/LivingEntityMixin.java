@@ -187,7 +187,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 // + Undo on-crystallization effects.
                 if (this.finishedCrystallization){
                     // - Play sound and particle effects.
-                    world.playSound(null, pos, Comet.CRYSTALLIZATION_BREAKS, SoundCategory.BLOCKS, 1f, 1f);
+                    playBreakFreeSound(thisInstance.getMaxCrystallizedTicks());
 
                     // . Particles require to be rendered in the client world.
                     PacketByteBuf posPacket = PacketByteBufs.create().writeBlockPos(pos);

@@ -211,7 +211,7 @@ public class CometBlocks {
             .sounds(BlockSoundGroup.STONE));
 
     // $ End medium cauldron
-    public static final Block END_MEDIUM_CAULDRON = new EndMediumCauldronBlock(FabricBlockSettings
+    public static final Block END_MEDIUM_CAULDRON = new ConcentratedEndMediumCauldronBlock(FabricBlockSettings
             .of(Material.METAL, MapColor.STONE_GRAY)
             .requiresTool()
             .strength(2.0f)
