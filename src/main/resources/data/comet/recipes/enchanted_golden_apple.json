@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "comet:endbrite_shard"
-  },
-  "result": "minecraft:totem_of_undying",
-  "experience": 500,
-  "cookingtime": 100
-}
