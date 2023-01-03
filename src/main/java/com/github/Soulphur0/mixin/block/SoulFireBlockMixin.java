@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin;
+package com.github.Soulphur0.mixin.block;
 
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;

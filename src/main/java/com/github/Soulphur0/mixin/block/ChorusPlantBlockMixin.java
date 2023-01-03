@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin;
+package com.github.Soulphur0.mixin.block;
 
 import com.github.Soulphur0.registries.CometBlocks;
 import net.minecraft.block.*;

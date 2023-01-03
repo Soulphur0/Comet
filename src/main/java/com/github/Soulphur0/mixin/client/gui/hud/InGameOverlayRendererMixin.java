@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin;
+package com.github.Soulphur0.mixin.client.gui.hud;
 
 import com.github.Soulphur0.Comet;
 import net.minecraft.client.MinecraftClient;

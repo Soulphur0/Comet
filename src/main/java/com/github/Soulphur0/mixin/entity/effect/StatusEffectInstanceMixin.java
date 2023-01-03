@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin;
+package com.github.Soulphur0.mixin.entity.effect;
 
 import com.github.Soulphur0.dimensionalAlloys.StatusEffectInstanceMethods;
 import net.minecraft.entity.LivingEntity;

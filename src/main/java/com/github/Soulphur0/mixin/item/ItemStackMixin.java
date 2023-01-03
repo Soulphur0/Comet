@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin;
+package com.github.Soulphur0.mixin.item;
 
 import com.github.Soulphur0.Comet;
 import com.llamalad7.mixinextras.injector.WrapWithCondition;

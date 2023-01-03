@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin;
+package com.github.Soulphur0.mixin.item;
 
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;

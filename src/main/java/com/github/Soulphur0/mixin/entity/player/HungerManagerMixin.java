@@ -1,4 +1,4 @@
-package com.github.Soulphur0.mixin;
+package com.github.Soulphur0.mixin.entity.player;
 
 import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
 import net.minecraft.entity.player.HungerManager;
