@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "minecraft:shield"
+  },
+  "addition": {
+    "item": "comet:endbrite_fiber"
+  },
+  "result": {
+    "item": "comet:portal_shield"
+  }
+}

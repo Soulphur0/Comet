@@ -1,33 +1,14 @@
-{{
-  "type": "minecraft:crafting_shapeless"
-  "ingredients": [
-    {
-      "item": "comet:endbrite_shard"
-    },
-    {
-      "item": "comet:endbrite_shard"
-    },
-    {
-      "item": "comet:endbrite_shard"
-    },
-    {
-      "item": "comet:endbrite_shard"
-    },
-    {
-      "item": "comet:endbrite_shard"
-    },
-    {
-      "item": "comet:endbrite_shard"
-    },
-    {
-      "item": "comet:endbrite_shard"
-    },
-    {
-      "item": "comet:endbrite_shard"
-    },
-	{
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
       "item": "comet:endbrite_shard"
     }
+  },
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
   ],
   "result": {
     "item": "comet:endbrite_tube"

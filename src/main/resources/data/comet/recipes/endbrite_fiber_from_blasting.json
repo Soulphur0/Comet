@@ -1,6 +1,6 @@
 {
   "type": "minecraft:smelting",
-  "cookingtime": 200,
+  "cookingtime": 100,
   "experience": 2.0,
   "ingredient": {
     "item": "comet:endbrite_shard"
