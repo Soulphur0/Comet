@@ -1,0 +1,50 @@
+{
+  "type": "minecraft:root_system",
+  "config": {
+    "required_vertical_space_for_tree": 3,
+    "root_radius": 4,
+    "root_placement_attempts": 20,
+    "root_column_max_height": 100,
+    "hanging_root_radius": 6,
+    "hanging_roots_vertical_span": 2,
+    "hanging_root_placement_attempts": 20,
+    "allowed_vertical_water_for_tree": 2,
+    "root_replaceable": "#minecraft:dragon_immune",
+    "root_state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 1,
+          "data": {
+            "Name": "comet:end_end_medium_drenchstone"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "comet:fresh_rooted_endstone"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "minecraft:end_stone"
+          }
+        }
+      ]
+    },
+    "hanging_root_state_provider": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "comet:fresh_rooted_endstone"
+      }
+    },
+    "allowed_tree_position": {
+      "type": "minecraft:true"
+    },
+    "feature": {
+      "feature": "minecraft:chorus_plant",
+      "placement": []
+    }
+  }
+}
