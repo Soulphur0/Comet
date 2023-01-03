@@ -13,6 +13,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTracker;
@@ -359,6 +360,13 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 if (!player.getInventory().insertStack(elytraItem)) {
                     player.dropItem(elytraItem, false);
                 }
+            }
+
+            // - If the entity is not a player, drop the elytra on the ground.
+            if (!(livingEntity instanceof PlayerEntity)){
+                ItemStack elytraItem = new ItemStack(Items.ELYTRA);
+                elytraItem.setNbt(elytraData);
+                world.spawnEntity(new ItemEntity(world, livingEntity.getPos().getX(), livingEntity.getPos().getY(), livingEntity.getPos().getZ(), elytraItem));
             }
         }
     }
