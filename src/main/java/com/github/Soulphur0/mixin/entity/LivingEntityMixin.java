@@ -22,6 +22,7 @@ import net.minecraft.entity.mob.ElderGuardianEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.RavagerEntity;
 import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -290,7 +291,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
             cir.setReturnValue(false);
         }
 
-        if (thisLivingEntity instanceof ElderGuardianEntity || thisLivingEntity instanceof RavagerEntity || thisLivingEntity instanceof WardenEntity){
+        if (thisLivingEntity instanceof ElderGuardianEntity || thisLivingEntity instanceof RavagerEntity || thisLivingEntity instanceof WardenEntity || thisLivingEntity instanceof IronGolemEntity){
             effect.setDuration(effect.getDuration()/3);
         }
     }
