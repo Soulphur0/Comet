@@ -6,6 +6,7 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.util.Identifier;
 
 import java.util.Objects;
@@ -23,6 +24,9 @@ public class CrystallizationFeatureRenderer extends FeatureRenderer {
 
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+        // TODO: Fix allay entity renderer.
+        if (entity instanceof AllayEntity) return;
+
         // * Get crystallization scale for not crystallized/statue entities.
         float scale = ((EntityCometBehaviour)entity).getCrystallizationScale();
 
