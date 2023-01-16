@@ -172,6 +172,8 @@ public abstract class LivingEntityMixin extends EntityMixin {
 
                 // - Turn non-player entities into blocks.
                 if (!this.isPlayer() && !this.isCrystallizedByStatusEffect()){
+                    thisInstance.addScoreboardTag("finishedCrystallization");
+
                     NbtCompound nbtCompound = new NbtCompound();
 
                     NbtCompound mobDataCompound = new NbtCompound();
@@ -187,7 +189,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                 }
             } else {
                 // + Undo on-crystallization effects.
-                if (this.finishedCrystallization){
+                if (this.finishedCrystallization || this.getScoreboardTags().contains("finishedCrystallization")){
                     // - Play sound and particle effects.
                     playBreakFreeSound(thisInstance.getMaxCrystallizedTicks());
 
@@ -222,6 +224,7 @@ public abstract class LivingEntityMixin extends EntityMixin {
                         mobEntity.setSilent(false);
                     }
 
+                    this.removeScoreboardTag("finishedCrystallization");
                     this.finishedCrystallization = false;
                 }
 

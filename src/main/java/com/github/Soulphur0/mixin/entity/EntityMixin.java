@@ -34,6 +34,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Set;
+
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityCometBehaviour {
 
@@ -79,6 +81,10 @@ public abstract class EntityMixin implements EntityCometBehaviour {
     @Shadow public abstract int getAir();
 
     @Shadow public abstract String getUuidAsString();
+
+    @Shadow public abstract Set<String> getScoreboardTags();
+
+    @Shadow public abstract boolean removeScoreboardTag(String tag);
 
     // : GENERIC IMPLEMENTATIONS ---------------------------------------------------------------------------------------
     private static final TrackedData<Byte> COMET_FLAGS = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.BYTE);
