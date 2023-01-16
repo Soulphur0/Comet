@@ -2,6 +2,9 @@ package com.github.Soulphur0.dimensionalAlloys.block;
 
 import com.github.Soulphur0.dimensionalAlloys.EntityCometBehaviour;
 import com.github.Soulphur0.registries.CometBlocks;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.*;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -15,10 +18,13 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
@@ -26,6 +32,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 public class EndMediumBlock extends Block {
     public EndMediumBlock(Settings settings) {
@@ -49,6 +56,28 @@ public class EndMediumBlock extends Block {
     @Override
     public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return VoxelShapes.empty();
+    }
+
+    // $ Vaporize when it touches water
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        if (!world.isClient() && touchingWater(world, pos)){
+            world.setBlockState(pos,Blocks.AIR.getDefaultState(), 3);
+
+            PacketByteBuf posPacket = PacketByteBufs.create().writeBlockPos(pos);
+            for (ServerPlayerEntity serverPlayer : PlayerLookup.tracking((ServerWorld) world, pos)) {
+                ServerPlayNetworking.send((ServerPlayerEntity) serverPlayer, new Identifier("comet", "end_medium_block_destroy"), posPacket);
+            }
+        }
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    }
+
+    private boolean touchingWater(WorldAccess world, BlockPos pos){
+        for(Direction direction : DIRECTIONS){
+            if (world.getBlockState(pos.offset(direction)).getBlock() == Blocks.WATER)
+                return true;
+        }
+        return false;
     }
 
     // $ Disallow mobs from pathfinding though.

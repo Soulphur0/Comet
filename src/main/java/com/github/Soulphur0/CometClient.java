@@ -89,6 +89,19 @@ public class CometClient implements ClientModInitializer {
             }
         });
 
+        // $ End Medium.
+        ClientPlayNetworking.registerGlobalReceiver(new Identifier("comet", "end_medium_block_destroy"), (client, handler, buf, responseSender) ->  {
+            ClientWorld clientWorld = client.world;
+            BlockPos pos = buf.readBlockPos();
+
+            client.execute(() -> {
+                if (clientWorld != null){
+                    for(int i = 0; i<105; i++)
+                        clientWorld.addParticle(ParticleTypes.DRAGON_BREATH, pos.getX() + Math.random(), pos.getY() + Math.random(), pos.getZ() + Math.random(), 0.0D, 0.035D, 0.0D);
+                }
+            });
+        });
+
         // $ Crystallization.
         // _ Interrupt crystallization.
         ServerPlayNetworking.registerGlobalReceiver(new Identifier("comet", "decrystallize_client"), (server, player, handler, buf, responseSender) ->{
