@@ -663,7 +663,9 @@ https://freesound.org/people/Garuda1982/sounds/560310/
 </details>
 
 Sound effects:
+
 https://freesound.org/people/IENBA/sounds/607910/
+
 https://freesound.org/people/cupido-1/sounds/617471/
 
 <details>
