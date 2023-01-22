@@ -49,6 +49,12 @@ It still hurts though, you better be careful…
 ___
 
 ## The mod in-depth
+I've made a video showcasing the mod's design philosohpy and some of its main features, if you have some time to spare, you can check it out!
+
+[](INSERT VIDEO)
+
+The full list of features, compleately detailed and with comments on design choices can be found below.
+I will later remove the list below and replace it with the GitHub wiki page when I finish making it, so you don't need to sail through an endless text file.
 
 <details>
   <summary>Game Mechanics</summary>
