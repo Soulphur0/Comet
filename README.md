@@ -1,3 +1,4 @@
+![imagen](https://user-images.githubusercontent.com/75187144/214413931-eb104440-8357-4170-8c5d-40b5f6084eb4.png)
 # Comet 1.0.0
 
 Comet is a mod that aims to give more life to those parts of the game that feel undeveloped, in a vanilla-friendly way, following logical design choices and trying to respect Vanilla Minecraft's design tendencies.
@@ -64,6 +65,8 @@ Crystallization is the shining star of this first Comet update. This game mechan
 
 ### Crystallization by a block.
 
+![imagen](https://user-images.githubusercontent.com/75187144/214414041-1ddc3a11-bd06-4142-841f-6b0113b36002.png)
+
 **Design choices**
 
 The End dimension, like any other part of a well thought out game, works around its own specific theme in the gameplay's lifecycle, in this particular case that theme is transport.
@@ -80,17 +83,23 @@ Crystallization by a block occurs when a mob gets in contact with an End Medium 
 
 When the entity finishes turning purple it will successfully crystallize, turning into a block known as a Crystallized Creature block. This block can be gathered with any tool or your bare hand, and can be placed anywhere in the ground as long as the block has a hitbox in its center (i.e: fences, walls; but not a cauldron or a composter).
 
+![imagen](https://user-images.githubusercontent.com/75187144/214415298-888ddc35-2433-4c4b-83b3-197fe1618199.png)
+
 You can de-crystallize an entity by placing water inside of the crystallized creature block which can be waterlogged. Name, status effects, villager trades, collar color, and any data that is stored in an entity's NBT tag is preserved. The entity that got crystallized and then released back is in fact the same one, so much so that their UUID is kept and duping the block and releasing two copies of the same entity makes the new copy disappear because Minecraft itself doesn't allow two entities of the same UUID.
 
 Bosses (Enderdragon and Wither), semi-bosses (Elder Guardian, Ravager, Warden) and Iron Golems cannot be crystallized, although I have plans to make them crystallizable in the future under certain circumstances, like last-hitting them with a special weapon.
 
 Crystallized creature blocks have a crystal base that can be removed by right-clicking them with a pickaxe, this will give you a 'cleaner' version of your crystallized mob, but if what you want is a decorative statue, you can go a step further.
 
+![imagen](https://user-images.githubusercontent.com/75187144/214413522-82e03d2e-cc02-4022-bcdf-d145fe701367.png)
+
 With a crystallized creature block and four amethyst shards you can craft a Creature Statue, a block that will permanently seal the crystallized mob, and remove the crystallized overlay off it, leaving what looks like the regular version of the mob. You can then, if you want, right click it with quartz to turn it into a quartz statue, or remove the quartz by right-clicking it with a pickaxe if you weren't convinced by the finishing touch. I'll make more materials for statues in the future.
 
 End mobs are naturally immune to crystallization by regular means, but they can still get crystallized.
 
 <ins>**_Crystallizing players_**</ins>
+
+![imagen](https://user-images.githubusercontent.com/75187144/214416828-1c0d497c-fa31-49c7-8729-973522a1398c.png)
 
 When players crystallize they don't turn into blocks, instead, they become unmovable, un-pushable and invulnerable, almost like a block. In this state the player is theoretically invincible, they cannot be hit, their health doesn't lower, their food bar won't deplete and their status effects' timers will freeze in place; these three things are all respectively indicated in a graphic manner by: 
 
@@ -105,6 +114,8 @@ If the player moves, tries to use an item, or tries to attack they will break ou
 Bear in mind that crystallization is not instant and won't begin on an entity that has recently received damage, so it can't be used to cheat death, at least not with this method…
 
 ### Crystallization by status effect.
+
+![imagen](https://user-images.githubusercontent.com/75187144/214418471-39f8951c-9d52-4fe9-8a4d-4ad0801bcab4.png)
 
 **Design choices**
 
@@ -139,6 +150,8 @@ To avoid the spam of crystallization potions that could be very annoying for pla
 The duration of the cooldown is regardless of the time that the actual effect lasted, which means that if you got hit by a 16 seconds crystallization potion but only got the effect for 5 seconds because you were not hit point-blank, you can't be crystallized by other players for 32 seconds. 
 **Notice:** this cooldown mechanic doesn't apply if you are the one crystallizing yourself, but in case this leads to unbalance, the cooldown may apply to self-crystallization as well in the future.
 
+![imagen](https://user-images.githubusercontent.com/75187144/214418825-6739572b-fdf6-424c-b69f-7147af6dae51.png)
+
 For more balance purposes, mini bosses (Elder Guardians, Ravagers, Wardens) and Iron Golems, although they can be crystallized by a potion, its effect will last for only ⅓ of what is supposed to last and the full cooldown if the effect will still apply, so you can use a potion of crystallization to freeze a Warden for 4 seconds at maximum, but you better run fast the next 32…
 
 The Ender Dragon and Wither bosses are immune to all status effects by default, and, by following these design principles they should be immune to the crystallization effect too, so no changes were made to these mobs.
@@ -161,6 +174,8 @@ Finally, for anti-exploit purposes, if a player is surrounded by lava or buried 
 
 ### End medium
 
+![imagen](https://user-images.githubusercontent.com/75187144/214419371-fe120f96-eb2c-4b7a-bfb3-26b379e0b8d3.png)
+
 ### Lore
 This substance is an extremely dense liquid that forms crystals when it gets in contact with air, growing upwards and giving shape to large vertical crystal columns that take millions of years to form.
 
@@ -174,6 +189,8 @@ Along with crystallization, End Medium is the main protagonist of this first rel
 This block was designed with the idea in mind that it should be the equivalent to water in The End, like some sort of anti-water, much like end stone is anti-cobblestone; giving origin to all the shared properties that the living creatures of The End present though its own properties.
 
 It's a polar opposite to its overworld equivalent, WITHOUT recurring to a simple 1:1 design by simply being "purple water" or "purple water that flows upwards", much like Striders were added accounting for the properties of unburnable boats, without recurring to repetitive, lazy or oversimplified design, that some mods added in the past through obsidian/iron and alike boats, in order to supply the need for a lava-based transport method.
+
+![imagen](https://user-images.githubusercontent.com/75187144/214419804-be94bd09-0d75-4882-b523-c8b1599ab5c2.png)
 
 ### Mechanics
 This block acts similarly to powder snow, since you can sink into it, but, since end medium is based on Non-Newtonian fluids, whenever an entity is moving with enough speed, it won't be able to sink into it, but if you stay still on top of it or sneak very slowly towards it, you will begin to very slowly sink on it.
@@ -207,6 +224,8 @@ It can be gathered with a shovel, it's a bit hard to mine, since it is a viscous
   
 ### End medium layer
 
+![imagen](https://user-images.githubusercontent.com/75187144/214421399-c193c5ef-0f1e-40b1-a867-1ab09359d5c7.png)
+
 ### Lore
 End medium sometimes releases a thin layer of substance on top of it, over thousands of years, it builds up, drying in the process, producing a new block of end medium on top, making vertical puddles grow.
 
@@ -216,6 +235,8 @@ These fresh layers of medium are more brittle than regular medium, but equally r
 Originally, end medium was going to be a solid block, and this layer would be a single-level fluid that would have the crystallization mechanics; midway through development I decided to change end medium to the way it is now and repurpose this layer as a you-don't-sink-in crystallization catalyst, in other words, staying on top of this block also crystallizes you, but you won't be shoved into a viscous block, also it is easier to renew than end medium itself, more on that later.
 
 Lore-wise, these blocks build up and dry to form new medium, but I didn't want to make them do this in-game since vertical lakes would grow to the build limit if you stood enough time near them, breaking immersion a little and ruining the views of the landscape of The End; since vertical lakes are supposed to grow over millions of years, I decided not to include this mechanic, I am open to revisit it sometime though.
+
+![imagen](https://user-images.githubusercontent.com/75187144/214422164-edd793e9-a2ae-41c6-9f23-9742e9412d1c.png)
 
 ### Mechanics
 It will crystallize entities that are on top of it, replacing the block with the crystallized entity, unless it is a player.
@@ -235,6 +256,8 @@ This block might get some more mechanics in the future.
   
 ### End Fire
 
+![imagen](https://user-images.githubusercontent.com/75187144/214423745-40862a51-d187-44dc-b6ce-696c148060e2.png)
+
 ### Lore
 When dragons freely roamed The End's skies, it was common for them to gulp large amounts of end medium, this substance helped keep their scales hard and stiff and its digestion produced a very corrosive acid, so strong that it was compared with fire, it was known as dragon breath, when dragons still existed that is…
 
@@ -247,6 +270,8 @@ I always thought purple fire was very fitting for The End, I am not sure if purp
 When developing Comet, I decided to tamper a bit with the game's code and made Soul Fire render blue in the screen overlay and on entities set on fire by it, something that doesn't happen in vanilla Minecraft.
 
 Another thing that doesn't happen in vanilla Minecraft is that, when you are set on fire by soul fire, you don't lose 1 heart per tick, you just lose half a heart, while, if you stay on top of soul fire you will lose 1 heart per tick; I changed so if you were set on fire BY soul fire, you will keep losing 1 heart until you are put out or you get set on fire by a different fire.
+
+![imagen](https://user-images.githubusercontent.com/75187144/214425467-c8406ae0-0e72-4ea8-aebe-a766ede7fba1.png)
 
 ### Mechanics
 When set on end fire, you will begin to teleport to a random nearby location every time you get damaged by the fire, similar to how an enderman teleports when it is set on fire.
