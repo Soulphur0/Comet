@@ -342,7 +342,7 @@ This block will also automatically store any fluid adjacent to it if said fluid 
 Some chorus plants have roots that pierce the outer End Island they inhabit down to their very bottom, around these roots you will find end drenchstone blocks, usually filled with concentrated end medium.
 
 ### Known issues and what to expect in future versions.
-- No issues found, nor planned features so far with this block.
+- It is possible to dupe fluids under certain conditions, this bug is set in high priority for fixing next release.
 - I've tried making it store modded fluids but it didn't work out very well, in the very far future I might revisit the idea.
 </details>
 
