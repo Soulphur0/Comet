@@ -484,7 +484,6 @@ Also, The End is very reminiscent of an asteroid field, I always believed that i
 
 ![imagen](https://user-images.githubusercontent.com/75187144/214435240-bf1d103c-000d-48dd-9d7a-7d946a8b979f.png)
 
-
 End iron ore looks exactly like end stone, unless you have the Night Vision status effect on, in that case, end iron ore will show pink spots that reveal its position and ferrous composition.
 
 ### Where to find it and how to gather it
@@ -499,6 +498,8 @@ On the surface and inside the outer End Islands, you can mine it with the same p
   <summary>Chorus humus</summary>
   
 ### Chorus Humus
+
+![imagen](https://user-images.githubusercontent.com/75187144/214435456-d9fd9692-78d0-4c22-afb8-f6cb6c543564.png)
 
 ### Lore
 Chorus Flower petals that fall from their plants build up in the ground to form this podzol-like humus, it comes in fresh and dryed out versions.
@@ -525,6 +526,8 @@ Anywhere on the surface of the End Highlands biome (the center of The End's oute
 
 ### Endbrite shard
 
+![imagen](https://user-images.githubusercontent.com/75187144/214435798-124c27b2-d70a-4a13-aeb9-0c39dab3e3cd.png)
+ 
 ### Lore
 These shards are smaller pieces of endbrite tubes and can be used to craft stuff with.
 Design choices
@@ -550,6 +553,8 @@ You can get them by mining endbrite tubes without silk touch, with a diamond or 
   <summary>Endbrite fibers</summary>
 ### Endbrite fibers
 
+![imagen](https://user-images.githubusercontent.com/75187144/214435991-398d2d0f-ad2f-48d6-b0a4-a6c79217cf38.png)
+
 ### Lore
 When exposed to high temperatures, endbrite shards disassemble into very resistant fibers that form a fabric which can be used to forge endbrite ingots.
 
@@ -563,6 +568,9 @@ I decided to include dragon breath in the crafting recipe to further increase th
 And also I liked the lore implications it had regarding being so resistant that only a dragon can melt it.
 
 ### Mechanics
+    
+![imagen](https://user-images.githubusercontent.com/75187144/214436158-30243082-a9c8-4cb4-87c8-3bee9783b094.png)
+    
 It is used to craft endbrite ingots with 4 iron ingots and 1 bottle of dragon breath in shapeless crafting.
 
 It is also used in the smithing table to craft the portal shield.
@@ -578,6 +586,8 @@ It is obtained by smelting an endbrite shard.
   <summary>Endbrite ingot</summary>
   
 ### Endbrite ingot
+    
+![imagen](https://user-images.githubusercontent.com/75187144/214436256-9a30f61b-6c67-4fc3-82df-8b3e96b07c3e.png)
 
 ### Lore
 This dimensional alloy is the apex of supermaterials, at least regarding anything that can be found in The End dimension. Forged with the breath of a dragon it is not only durable, but it is also very lightweight.
@@ -609,6 +619,8 @@ It can be crafted using 4 endbrite fibers, 4 iron ingots and 1 dragon's breath i
   <details>
   <summary>Endbrite Armor</summary>
 ### Endbrite Armor
+
+![imagen](https://user-images.githubusercontent.com/75187144/214436640-ab45c2db-77d2-4b8d-bab7-b070980e59c4.png)
 
 ### Lore
 This armor is made of the ultra-resistant, ultra-lightweight endbrite material, which provides a protection equivalent to netherite, while allowing you to run faster and even fly with it.
@@ -642,18 +654,23 @@ It can be crafted on a smithing table using endbrite ingots in diamond armor jus
   <summary>Portal Shield</summary>
 ### Portal Shield
 
+![imagen](https://user-images.githubusercontent.com/75187144/214436730-fb090a17-5664-431e-895a-2178cfe2cb07.png)
+
 ### Lore
 This shield holds the teleportation powers of The End.
 
 ### Design choices
 I wanted to make a special shield that reflected arrows back like a mirror, then I got a better idea :)
 
-### Mechanics
+### Mechanics    
 Projectiles blocked with this shield will be teleported back to their owner, from a random point above, and around them.
 
 If the thrower of the projectile is immune to their own projectile, or the thrower is not an entity, the projectile will be consumed by the shield and disappear.
 
 ### Where to find it and how to gather it
+
+![imagen](https://user-images.githubusercontent.com/75187144/214436859-01491cbb-f3db-416a-9b36-66e961e36fd0.png)
+    
 It can be crafted with endbrite fibers and a shield on the smithing table.
 
 ### Known issues and what to expect in future versions
@@ -666,7 +683,12 @@ It can be crafted with endbrite fibers and a shield on the smithing table.
   <summary>Concentrated End Medium Bottle and Crystallization Potions</summary>
 ### Concentrated End Medium Bottle and Crystallization Potions
 
+![imagen](https://user-images.githubusercontent.com/75187144/214437136-330e4c36-f39e-4af9-aeb2-c27480ebe958.png)
+
 ### Mechanics
+    
+![imagen](https://user-images.githubusercontent.com/75187144/214437273-6ab3ab78-4c86-4b40-866c-1e5a12487495.png)
+
 Concentrated End Medium Bottles can be obtained from a cauldron filled with concentrated end medium, that can be obtained by placing a bucket of concentrated end medium in a cauldron or by letting an endbrite tube drip over a cauldron under the right circumstances and then retrieving the product.
 
 This bottle of concentrated end medium can be used to brew crystallization potions mixing it with an awkward potion. You can make the effect longer with redstone, and make splash, lingering potions and tipped arrows with it.
