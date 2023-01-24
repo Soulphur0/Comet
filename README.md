@@ -190,9 +190,10 @@ This block was designed with the idea in mind that it should be the equivalent t
 
 It's a polar opposite to its overworld equivalent, WITHOUT recurring to a simple 1:1 design by simply being "purple water" or "purple water that flows upwards", much like Striders were added accounting for the properties of unburnable boats, without recurring to repetitive, lazy or oversimplified design, that some mods added in the past through obsidian/iron and alike boats, in order to supply the need for a lava-based transport method.
 
+### Mechanics
+
 ![imagen](https://user-images.githubusercontent.com/75187144/214419804-be94bd09-0d75-4882-b523-c8b1599ab5c2.png)
 
-### Mechanics
 This block acts similarly to powder snow, since you can sink into it, but, since end medium is based on Non-Newtonian fluids, whenever an entity is moving with enough speed, it won't be able to sink into it, but if you stay still on top of it or sneak very slowly towards it, you will begin to very slowly sink on it.
 
 This block generates layers of end medium on top of itself.
@@ -236,9 +237,10 @@ Originally, end medium was going to be a solid block, and this layer would be a 
 
 Lore-wise, these blocks build up and dry to form new medium, but I didn't want to make them do this in-game since vertical lakes would grow to the build limit if you stood enough time near them, breaking immersion a little and ruining the views of the landscape of The End; since vertical lakes are supposed to grow over millions of years, I decided not to include this mechanic, I am open to revisit it sometime though.
 
+### Mechanics
+
 ![imagen](https://user-images.githubusercontent.com/75187144/214422164-edd793e9-a2ae-41c6-9f23-9742e9412d1c.png)
 
-### Mechanics
 It will crystallize entities that are on top of it, replacing the block with the crystallized entity, unless it is a player.
 
 ### Where to find it and how to gather it
@@ -271,9 +273,10 @@ When developing Comet, I decided to tamper a bit with the game's code and made S
 
 Another thing that doesn't happen in vanilla Minecraft is that, when you are set on fire by soul fire, you don't lose 1 heart per tick, you just lose half a heart, while, if you stay on top of soul fire you will lose 1 heart per tick; I changed so if you were set on fire BY soul fire, you will keep losing 1 heart until you are put out or you get set on fire by a different fire.
 
+### Mechanics
+
 ![imagen](https://user-images.githubusercontent.com/75187144/214425467-c8406ae0-0e72-4ea8-aebe-a766ede7fba1.png)
 
-### Mechanics
 When set on end fire, you will begin to teleport to a random nearby location every time you get damaged by the fire, similar to how an enderman teleports when it is set on fire.
 
 When a recently de-crystallized entity touches lava, it will be set on End fire, teleporting it to safety, but receiving the fire's burn damage.
@@ -290,6 +293,8 @@ You can get this block by setting End Medium on fire.
   <summary>Concentrated End medium</summary>
   
 ### Concentrated End Medium
+
+![imagen](https://user-images.githubusercontent.com/75187144/214431911-0a7a247e-deea-4b6e-b595-511e86bd31cc.png)
 
 ### Lore
 This substance is pure end medium, or more like adulterated end medium; so strong that creatures that are usually immune to the crystallization effect of end medium will be affected by this substance; being pure end medium though, it dries out very quickly, oxidizing within seconds and turning into regular end medium.
@@ -322,6 +327,8 @@ Concentrated end medium can be obtained through farming or by picking it up from
   
 ### End Drenchstone
 
+![imagen](https://user-images.githubusercontent.com/75187144/214432240-d3ad35cd-e77f-4e23-8f70-9e40973bf568.png)
+
 ### Lore
 When a chorus plant roots grow far enough into end stone, it is not uncommon to find this type of rock around them, with hollow cavities once occupied by roots that decayed long ago.
 Design choices
@@ -334,6 +341,9 @@ While the first two can only be found in the creative inventory since they are n
 Its mechanics keep building upon the already established theme: The End's place in the game's progression is the facilitation of transport.
 
 ### Mechanics
+
+![imagen](https://user-images.githubusercontent.com/75187144/214432384-3117359c-d892-4df1-9268-5c396d491188.png)
+
 End drenchstone allows you to easily transport fluids, you can fill this stone with a single bucket of water, lava, or concentrated end medium. If you right click it with an empty bucket, you can pick back the fluid it stores, you can also mine this block while it holds a fluid and stack it up to 64 blocks, so you can carry in a single slot way more than just a bucket of fluid.
 
 This block will also automatically store any fluid adjacent to it if said fluid block is a source block; removing that block in the process.
@@ -351,6 +361,8 @@ Some chorus plants have roots that pierce the outer End Island they inhabit down
 
 ### Rooted End Stone
 
+![imagen](https://user-images.githubusercontent.com/75187144/214433189-7485e192-9038-4252-967b-3631fe128574.png)
+
 ### Lore
 Chorus Plants not only grow tall, but they grow deep too, some plants in particular have roots that go as deep as the island they inhabit can provide, and they are a key factor for the formation of Endbrite Tubes, which is a supermaterial comparable to the legendary netherite.
 
@@ -362,6 +374,9 @@ They provide a source of food for endermen - if we follow commonly accepted theo
 These roots, when in contact with the concentrated end medium that they naturally gather, they get overstimulated and begin to work harder in their duty, not only that but they inevitably drip excess medium below them, making the formation of endbrite tubes theoretically possible.
 
 ### Mechanics
+
+![imagen](https://user-images.githubusercontent.com/75187144/214433282-23b8f65e-c30b-4a9a-b3bd-c7227eb16055.png)
+
 Rooted end stone blocks will get overstimulated when they are adjacent to end drenchstone that holds concentrated end medium inside, these blocks then can be used to gather more concentrated end medium with the use of endbrite tubes.
 
 ### Where to find it and how to gather it
@@ -375,6 +390,8 @@ Some chorus plants have roots that pierce their host End Island down to their ve
   <summary>Thorny roots</summary>
 
 ### Thorny roots
+
+![imagen](https://user-images.githubusercontent.com/75187144/214433353-442febd6-bd2c-4c9e-8e3d-60f75125347f.png)
 
 ### Lore
 Thorny roots are a kind of root that hangs from below the outer End Islands, and, contrary to popular belief, they don't belong to chorus plants but to a yet to identify plant-like organism that inhabits the islands.
@@ -391,6 +408,9 @@ I wanted endbrite tubes to be gathered in a different way from other ores, these
 They also serve as a support for placing blocks when the player spots endbrite tubes when flying with an elytra.
 
 ### Mechanics
+
+![imagen](https://user-images.githubusercontent.com/75187144/214433521-a9ef385c-f51e-4ff6-88b5-318ba5562b1a.png)
+
 These roots act like vines, they are climbable and they grow with time, their spikes emit light just like glow berries do, but unlike glow berries, these grow back after a while when broken.
 
 When an entity touches them, a random malicious status effect will be applied to them; the most likely to be applied are Poison and Wither, but if you are lucky you might just get poisoned with Hunger; and if you are very unlucky, there is a small chance you can get the Blindness effect, and trust me, that is the worst thing you can get when flying with elytra just above the void looking for Endbrite Tubes.
@@ -406,6 +426,8 @@ They grow below the outer End Islands, when broken they might drop their block i
   <summary>Endbrite tube</summary>
 
 ### Endbrite tube
+
+![imagen](https://user-images.githubusercontent.com/75187144/214433926-84d33d66-4b31-4749-b396-bad42603b76c.png)
 
 ### Lore
 When end medium drips from rooted endstone over the Thorny Roots it may have below, it begins to crystallize them, these roots serve as a support for the emerging endbrite tubes, structures that form over very long periods of time and are shaped like tubes that grow one next to the other, 'older' tubes are longer that 'younger' tubes, since they've been growing ever since they first 'sprouted'. 
@@ -423,6 +445,9 @@ In order to find it, you will have to fly beneath The End's outer islands, and l
 I also made their dripping mechanic, only able to happen at The End, and below a certain altitude. This is to decentralize the farming of concentrated end medium, a design philosophy trend that Minecraft started with monster spawners and has revisited with budding amethyst blocks and that I really like.
 
 ### Mechanics
+
+![imagen](https://user-images.githubusercontent.com/75187144/214434078-482a5c11-64ef-4e2f-a09f-ee331209f988.png)
+
 If endbrite tubes are placed below Y=25 in The End, they will start to drip some liquid, if you place these tubes beneath a fresh rooted end stone block - which is a dry rooted end stone block next to an end drenchstone filled with concentrated end medium - it will drip even more, and this time, you can put a cauldron below the tubes to gather concentrated end medium.
 
 ### Where to find it and how to gather it
@@ -444,6 +469,8 @@ Using fortune can give you more endbrite shards.
 
 ### End Iron Ore
 
+![imagen](https://user-images.githubusercontent.com/75187144/214434348-3834a1e7-a16c-4d07-85bd-920c1bd6d053.png)
+
 ### Lore
 Iron hides within the stone of these floating islands, but it is not visible to the naked eye. Life from this place sees their home world from a different point of view quite literally since their eyes are very different, they can see this iron, but we cannot, if only there was a way to see it...
 Design choices
@@ -454,6 +481,10 @@ Not only that but iron is a very used material in crafting and it is very useful
 Also, The End is very reminiscent of an asteroid field, I always believed that it was in fact some sort of broken world or asteroid field where life managed sprout or carry on, and asteroids are known to be oftenly composed of a lot of metals including iron, so I projected that little scientific fact into the more fantasy-like world of Minecraft and made end iron ore very common in these islands.
 
 ### Mechanics
+
+![imagen](https://user-images.githubusercontent.com/75187144/214435240-bf1d103c-000d-48dd-9d7a-7d946a8b979f.png)
+
+
 End iron ore looks exactly like end stone, unless you have the Night Vision status effect on, in that case, end iron ore will show pink spots that reveal its position and ferrous composition.
 
 ### Where to find it and how to gather it
