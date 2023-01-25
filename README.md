@@ -50,8 +50,7 @@ I've made a video showcasing the mod's design philosohpy and some of its main fe
 
 [](INSERT VIDEO)
 
-The full list of features, compleately detailed and with comments on design choices can be found below.
-I will later remove the list below and replace it with the GitHub wiki page when I finish making it, so you don't need to sail through an endless text file.
+If you don't want to watch a video, the full list of features compleately detailed, with pictures and with comments on design choices can be found below.
 
 [-→ LINK TO THE PATCH NOTES ←-](https://github.com/Soulphur0/Comet/blob/main/PATCH_NOTES.md)
 
