@@ -37,7 +37,7 @@ I've made a video showcasing the mod's design philosohpy and some of its main fe
 Be warned that this video has more of a 'Minecraft Lore Theories' format, if you just want to <ins>get to the point</ins> and see what the mod adds, click the link I provide to you below the embedded video, or visit the <ins>'Images'</ins> section of this page for a <ins>even quicker overview.</ins>
 </details>
 
-[![LINK TO THE VIDEO](https://img.youtube.com/vi/6egN9DBdxKE/0.jpg)](https://www.youtube.com/watch?v=6egN9DBdxKE)
+[![LINK TO THE VIDEO](https://user-images.githubusercontent.com/75187144/215266035-b62f1465-8470-4e7f-af0e-b19a615a5961.png)](https://www.youtube.com/watch?v=6egN9DBdxKE)
 
 If you don't want to watch a video, the full list of features compleately detailed, with pictures and with comments on design choices can be found below.
 
