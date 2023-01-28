@@ -32,7 +32,12 @@ While in most cases the worst thing that could happen is losing this mod's items
 ## The mod in-depth
 I've made a video showcasing the mod's design philosohpy and some of its main features, if you have some time to spare, you can check it out!
 
-[](INSERT VIDEO)
+<details>
+<summary>Before you watch this video</summary>
+Be warned that this video has more of a 'Minecraft Lore Theories' format, if you just want to <ins>get to the point</ins> and see what the mod adds, click the link I provide to you below the embedded video, or visit the <ins>'Images'</ins> section of this page for a <ins>even quicker overview.</ins>
+</details>
+
+[![LINK TO THE VIDEO](https://img.youtube.com/vi/6egN9DBdxKE/0.jpg)](https://www.youtube.com/watch?v=6egN9DBdxKE)
 
 If you don't want to watch a video, the full list of features compleately detailed, with pictures and with comments on design choices can be found below.
 
