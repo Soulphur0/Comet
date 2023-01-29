@@ -30,6 +30,7 @@ While in most cases the worst thing that could happen is losing this mod's items
 5. Much more content that you can check in the details below!
 
 **Download links**
+
 https://www.curseforge.com/minecraft/mc-mods/comet
 
 https://modrinth.com/mod/comet
