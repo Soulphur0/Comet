@@ -29,6 +29,11 @@ While in most cases the worst thing that could happen is losing this mod's items
 
 5. Much more content that you can check in the details below!
 
+**Download links**
+https://www.curseforge.com/minecraft/mc-mods/comet
+
+https://modrinth.com/mod/comet
+
 ## The mod in-depth
 I've made a video showcasing the mod's design philosohpy and some of its main features, if you have some time to spare, you can check it out!
 
