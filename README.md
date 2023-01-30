@@ -45,9 +45,9 @@ Be warned that this video has more of a 'Minecraft Lore Theories' format, if you
 
 [![LINK TO THE VIDEO](https://user-images.githubusercontent.com/75187144/215266035-b62f1465-8470-4e7f-af0e-b19a615a5961.png)](https://www.youtube.com/watch?v=6egN9DBdxKE)
 
-If you don't want to watch a video, the full list of features compleately detailed, with pictures and with comments on design choices can be found below.
+If you don't want to watch a video, you can check all this mod adds in its wiki with the link below:
 
-[-→ LINK TO THE PATCH NOTES ←-](https://github.com/Soulphur0/Comet/blob/main/PATCH_NOTES.md)
+[-→ LINK TO THE WIKI ←-](https://github.com/Soulphur0/Comet/wiki)
 
 ## FAQ
 ### Can I modify or redistribute the mod?
